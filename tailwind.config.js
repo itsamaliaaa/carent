@@ -5,8 +5,12 @@ export default {
       "./resources/**/*.js",
       "./resources/**/*.vue",
   ],
-  theme: {
-      extend: {},
+theme: {
+  extend: {
+    fontFamily: {
+      inter: ['Inter', 'sans-serif'],
+    },
   },
+},
   plugins: [],
 }
