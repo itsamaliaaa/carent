@@ -93,3 +93,7 @@ Route::middleware('auth')->prefix('api')->group(function () {
         ]);
     });
 });
+
+Route::get('/tes-admin', function () {
+    return view('admin.dashboard');
+});
