@@ -3,38 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Carent</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-white">
+<body class="bg-white overflow-y-auto">
 
-<div class="flex h-screen w-full">
-    <div class="w-1/2 relative overflow-hidden flex flex-col"
-         style="background: linear-gradient(135deg, #0f1f6e 0%, #1a3a8f 40%, #2d5be3 100%);">
-        <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] rounded-full opacity-20"
-             style="background: radial-gradient(circle, #4f7fff, transparent)"></div>
-        <div class="absolute top-1/3 -right-24 w-[350px] h-[350px] rounded-full opacity-20"
-             style="background: radial-gradient(circle, #7fa8ff, transparent)"></div>
+<div class="flex flex-col lg:flex-row min-h-screen w-full">
 
-        <div class="absolute bottom-40 left-10 right-10 flex flex-col gap-4">
+    {{-- SISI KIRI / ATAS --}}
+    <div class="w-full lg:w-1/2 min-h-[280px] lg:min-h-screen relative overflow-hidden flex flex-col lg:sticky lg:top-0"
+        style='background-image: url("{{ asset("images/banner/bakcground.png") }}"); background-size: cover; background-position: center;'>
+
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+
+        {{-- Tombol Kembali --}}
+        <div class="absolute top-5 left-6 z-10 ">
+            <a href="{{ route('beranda') }}"
+            class="flex items-center gap-2 text-white text-sm font-medium hover:opacity-80 transition">
+                <img src="{{ asset('images/icons/arrow-left.svg') }}" alt="Kembali" class="w-4 h-4">
+                Kembali
+            </a>
+        </div>
+
+        {{-- Logo --}}
+        <div class="absolute top-14 left-6 z-10">
+            <img src="{{ asset('images/logo/logo-white.png') }}" alt="Carent" class="h-8 w-auto">
+        </div>
+
+        {{-- Teks - Desktop (kiri bawah) --}}
+        <div class="hidden lg:flex absolute bottom-40 left-10 right-10 flex-col gap-4 z-10">
             <div>
                 <h1 class="text-white text-5xl font-semibold leading-tight">Halo!</h1>
                 <h2 class="text-white text-2xl font-semibold">Selamat Datang di CARENT</h2>
             </div>
-            <p class="text-blue-200 text-lg font-medium leading-relaxed">
+            <p class="text-white text-lg leading-relaxed">
                 Siap untuk perjalananmu hari ini?<br>
                 Masuk dan temukan mobil terbaik untuk kebutuhanmu.
             </p>
         </div>
+
+        {{-- Teks - Mobile (kiri bawah banner) --}}
+        <div class="flex lg:hidden absolute bottom-8 left-6 right-6 flex-col gap-1 z-10">
+            <h1 class="text-white text-3xl font-semibold">Halo!</h1>
+            <h2 class="text-white text-base font-semibold">Selamat Datang di CARENT</h2>
+        </div>
     </div>
-    <div class="w-1/2 flex items-center justify-center px-16">
-        <div class="w-full max-w-md flex flex-col gap-5">
-            <div class="flex flex-col gap-1.5 mb-4">
+
+    {{-- SISI KANAN / BAWAH --}}
+    <div class="w-full lg:w-1/2 flex items-center justify-center px-6 lg:px-16">
+        <div class="w-full max-w-md flex flex-col gap-5 py-10">
+
+            {{-- Judul --}}
+            <div class="flex flex-col gap-1.5 mb-2">
                 <h2 class="text-3xl font-bold text-gray-900">Login</h2>
                 <p class="text-gray-500 text-sm">Masuk untuk melanjutkan ke akun kamu</p>
             </div>
-            <form action="{{ route('login') }}" method="POST" class="flex flex-col gap-4">
 
-                <div class="flex flex-col gap-1.5">
+            {{-- Form --}}
+            <form action="{{ route('login') }}" method="POST" class="flex flex-col gap-4">
+                @csrf
+
+                {{-- Email --}}
+                <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Email</label>
                     <input
                         type="email"
@@ -43,11 +73,14 @@
                         value="{{ old('email') }}"
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm
                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                               @error('email') border-red-400 @enderror"
-                    >
+                               @error('email') border-red-400 bg-red-50 @enderror">
+                    @error('email')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
 
-                <div class="flex flex-col gap-1.5">
+                {{-- Password --}}
+                <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Password</label>
                     <div class="relative">
                         <input
@@ -55,28 +88,40 @@
                             name="password"
                             id="passwordInput"
                             placeholder="Masukkan Password"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm pr-12
+                            class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm
                                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                                   @error('password') border-red-400 @enderror">
+                                   @error('password') border-red-400 bg-red-50 @enderror">
                         <button type="button" onclick="togglePassword()"
                                 class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7
-                                         -1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                            </svg>
+                            <img id="eyeIcon" src="{{ asset('images/icons/eye.svg') }}" alt="Toggle Password" class="w-5 h-5">
                         </button>
                     </div>
+                    @error('password')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
+
+                {{-- Remember & Lupa Password --}}
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                        <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600">
+                        Ingat Saya
+                    </label>
+                    <a href=""
+                       class="text-sm text-blue-700 font-medium hover:underline">
+                        Lupa Password?
+                    </a>
+                </div>
+
+                {{-- Tombol Login --}}
                 <button type="submit"
                         class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold
                                py-3 rounded-lg transition duration-200 mt-2">
                     Login
                 </button>
             </form>
+
+            {{-- Link Register --}}
             <p class="text-center text-sm text-gray-500">
                 Belum punya akun?
                 <a href="{{ route('register') }}" class="text-blue-900 font-bold hover:underline">Daftar</a>
@@ -84,13 +129,20 @@
 
         </div>
     </div>
-
 </div>
 
 <script>
     function togglePassword() {
         const input = document.getElementById('passwordInput');
-        input.type = input.type === 'password' ? 'text' : 'password';
+        const icon  = document.getElementById('eyeIcon');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.src   = '{{ asset("images/icons/eye-off.svg") }}';
+        } else {
+            input.type = 'password';
+            icon.src   = '{{ asset("images/icons/eye.svg") }}';
+        }
     }
 </script>
 
