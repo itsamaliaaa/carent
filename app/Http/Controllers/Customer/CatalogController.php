@@ -25,4 +25,19 @@ class CatalogController extends Controller
 
         return view('customer.beranda', compact('mobilTerbaru', 'rentalAktif'));
     }
+
+    public function index()
+    {
+        return view('customer.katalog');
+    }
+
+    public function detail($id)
+    {
+        return view('customer.detail-mobil');
+    }
+
+    public function profileRental($id)
+    {
+        return view('customer.profil-rental');
+    }
 }
