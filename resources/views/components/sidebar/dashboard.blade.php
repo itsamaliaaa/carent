@@ -1,12 +1,12 @@
 @php
-    $role = 'admin_rental'; // atau 'super_admin'
+    $role = auth()->user()->role;
     $active = request()->segment(2);
 
     $activeClass = 'bg-[#E7E9F2] text-[#0B1F67] font-semibold';
     $hoverClass  = 'text-gray-600 hover:bg-[#E7E9F2] hover:text-[#0B1F67] hover:font-semibold';
 
     $iconActive = 'brightness-0 saturate-100 invert-[13%] sepia-[61%] saturate-[1400%] hue-rotate-[210deg] brightness-[95%] contrast-[95%]';
-    $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:invert-[13%] group-hover:sepia-[61%] group-hover:saturate-[1400%] group-hover:hue-rotate-[210deg] group-hover:brightness-[95%] group-hover:contrast-[95%]';
+    $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:invert-[13%] group-hover:sepia-[61%] group-hover:saturate-[1400%] group-hover:hue-rotate-[210deg] group-hover:brightness-[95%] contrast-[95%]';
 @endphp
 
 <aside id="sidebar"
@@ -119,16 +119,16 @@
     <div class="p-5 border-t flex flex-col gap-2">
 
         @if($role == 'admin_rental')
-        <form action="/settings" method="POST">
-            @csrf
-            <button class="group flex items-center gap-3 px-4 py-3 rounded-lg w-full text-left
-                           {{ $hoverClass }}">
+        <a href="{{ route('admin.profil') }}"
+            class="group flex items-center gap-3 px-4 py-3 rounded-lg
+            {{ $active == 'profil' ? $activeClass : $hoverClass }}">
 
                 <img src="{{ asset('images/icons/setting-01.svg') }}"
-                     class="w-5 h-5 transition {{ $iconHover }}">
+                    class="w-5 h-5 transition
+                    {{ $active == 'profil' ? $iconActive : $iconHover }}">
+
                 Setting
-            </button>
-        </form>
+        </a>
         @endif
 
         <form action="/logout" method="POST">

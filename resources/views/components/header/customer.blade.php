@@ -12,24 +12,34 @@
         <!-- MENU DESKTOP -->
         <div class="hidden md:flex items-center gap-10 text-sm font-medium">
 
-            <a href="/"
-               class="{{ request()->is('/') ? 'text-[#0B1F67] border-b-2 border-[#0B1F67]' : 'text-gray-600' }}
-                      hover:text-[#0B1F67] pb-1 transition">
-                Beranda
-            </a>
+        <a href="{{ route('beranda') }}"
+            class="{{ request()->routeIs('beranda') 
+                    ? 'text-[#0B1F67] border-b-2 border-[#0B1F67] font-semibold' 
+                    : 'text-gray-600' }}
+                    hover:text-[#0B1F67] pb-1 transition">
 
-            <a href="/katalog"
-               class="{{ request()->is('katalog') ? 'text-[#0B1F67] border-b-2 border-[#0B1F67]' : 'text-gray-600' }}
-                      hover:text-[#0B1F67] pb-1 transition">
+                Beranda
+         </a>
+
+        <!-- KATALOG -->
+        <a href="{{ route('katalog') }}"
+            class="{{ request()->routeIs('katalog') 
+                    ? 'text-[#0B1F67] border-b-2 border-[#0B1F67] font-semibold' 
+                    : 'text-gray-600' }}
+                    hover:text-[#0B1F67] pb-1 transition">
+
                 Katalog Mobil
-            </a>
+        </a>
 
             @auth
-                <a href="/customer/riwayat"
-                   class="{{ request()->is('customer/riwayat') ? 'text-[#0B1F67] border-b-2 border-[#0B1F67]' : 'text-gray-600' }}
-                          hover:text-[#0B1F67] pb-1 transition">
+             <a href="{{ route('customer.booking.riwayat') }}"
+                class="{{ request()->routeIs('customer.booking.riwayat') 
+                        ? 'text-[#0B1F67] border-b-2 border-[#0B1F67] font-semibold' 
+                        : 'text-gray-600' }}
+                        hover:text-[#0B1F67] pb-1 transition">
+
                     Riwayat Booking
-                </a>
+            </a>
             @endauth
 
         </div>

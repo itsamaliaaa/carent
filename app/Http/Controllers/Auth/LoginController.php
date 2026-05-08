@@ -103,13 +103,20 @@ class LoginController extends Controller
     }
 
     // LOGOUT
-
     public function logout(Request $request)
     {
-        Auth::logout();
+        $role = auth()->user()->role;
+
+        auth()->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+
+        if ($role == 'admin_rental' || $role == 'super_admin') {
+            return redirect()->route('admin.login');
+        }
+
+        return redirect()->route('beranda');
     }
 
     // REDIRECT BY ROLE
