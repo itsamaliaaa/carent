@@ -26,9 +26,13 @@ class CatalogController extends Controller
         return view('customer.beranda', compact('mobilTerbaru', 'rentalAktif'));
     }
 
-    public function index()
+public function index()
     {
-        return view('customer.katalog');
+        // 1. Fetch all cars along with their primary photos and rentals
+        $mobils = Mobil::with(['fotoPrimary', 'rental'])->get();
+
+        // 2. Return the view and pass the $mobils data to it
+        return view('customer.katalog', compact('mobils'));
     }
 
     public function detail($id)
