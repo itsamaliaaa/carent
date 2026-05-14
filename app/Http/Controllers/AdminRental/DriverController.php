@@ -5,36 +5,45 @@ namespace App\Http\Controllers\AdminRental;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Driver;
+use App\Models\Rental;
 
 class DriverController extends Controller
 {
-    // Untuk menampilkan halaman utama driver
     public function index()
     {
-        return view('admin.driver.index');
+        // Cari rental yang dimiliki admin yang login
+        $rental = Rental::where('admin_id', auth()->id())->first();
+
+        // Ambil driver khusus milik rental tersebut
+        $drivers = $rental ? Driver::where('rental_id', $rental->rental_id)->get() : collect();
+
+        return view('admin.driver.index', compact('drivers'));
     }
 
-    // Fungsi ini KHUSUS untuk memproses penyimpanan data dari modal
     public function store(Request $request)
     {
-        // 1. Cari data rental yang dimiliki oleh admin yang sedang login
-        $rental = \App\Models\Rental::where('admin_id', auth()->id())->first();
+        $request->validate([
+            'nama_driver' => 'required',
+            'umur' => 'required|numeric',
+            'foto' => 'required|image|max:2048',
+            'tarif_harian' => 'required|numeric',
+        ]);
 
-        // 2. Pastikan rental ketemu supaya tidak error null
+        $rental = Rental::where('admin_id', auth()->id())->first();
+
         if (!$rental) {
-            return redirect()->back()->with('error', 'Anda belum memiliki data rental!');
+            return redirect()->back()->with('error', 'Data rental tidak ditemukan!');
         }
 
         $lokasiFoto = $request->file('foto')->store('drivers', 'public');
 
-        // 3. Simpan data driver
         Driver::create([
             'nama_driver' => $request->nama_driver,
             'umur'        => $request->umur,
-            'foto'        => $lokasiFoto, // pastikan variabel ini sudah ada dari proses upload
-            'tarif_harian' => $request->tarif_harian,
+            'foto'        => $lokasiFoto,
+            'tarif_harian'=> $request->tarif_harian,
             'status'      => 'tersedia',
-            'rental_id'   => $rental->rental_id, // Ambil ID dari hasil pencarian di atas
+            'rental_id'   => $rental->rental_id,
         ]);
 
         return redirect()->back()->with('success', 'Driver berhasil ditambahkan');

@@ -82,4 +82,53 @@
     </div>
 
 </div>
+
+{{-- Bagian Tabel (Ditaruh di luar div header) --}}
+<div class="bg-white rounded-[32px] px-7 py-6 shadow-sm border border-gray-100 max-w-full mx-5 mt-5">
+    
+    {{-- Header Tabel --}}
+    <div class="grid grid-cols-6 bg-[#E8EAF6] rounded-xl py-3 px-6 mb-4 items-center">
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Nama Driver</div>
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Foto</div>
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Umur</div>
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Tarif</div>
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Status</div>
+        <div class="text-[13px] font-bold text-black font-['Inter'] text-left">Aksi</div>
+    </div>
+
+    @foreach ($drivers as $driver)
+    <div class="grid grid-cols-6 items-center border border-[#E0E4EC] rounded-2xl p-4 mb-4 transition-none">
+        <div class="text-[14px] font-bold text-black font-['Inter'] text-left">
+            {{ $driver->nama_driver }}
+        </div>
+        
+        <div class="flex justify-start">
+            <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg shadow-sm">
+        </div>
+
+        <div class="text-[14px] font-bold text-black font-['Inter'] text-left">
+            {{ $driver->umur }} tahun
+        </div>
+
+        <div class="text-[14px] font-bold text-black font-['Inter'] text-left">
+            Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}
+        </div>
+
+        <div class="flex justify-start text-left">
+            <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} px-4 py-1 rounded-full text-[12px] font-bold">
+                {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
+            </span>
+        </div>
+
+        <div class="flex justify-start gap-2">
+            <a href="#" class="w-9 h-9 bg-[#8BC34A] flex justify-center items-center rounded-lg">
+                <img src="{{ asset('images/icons/pencil-edit-01.svg') }}" class="w-5 h-5 brightness-0 invert">
+            </a>
+            <button class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg">
+                <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
+            </button>
+        </div>
+    </div>
+    @endforeach
+</div>
 @endsection
