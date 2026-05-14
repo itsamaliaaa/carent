@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
+<script defer src="[https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js](https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js)"></script>
     <h1 class="text-2xl font-semibold">Detail Booking</h1>
 <div class="flex min-h-screen bg-gray-100 font-inter">
     <!-- Sidebar (Hidden on mobile, usually integrated via @include) -->
@@ -13,7 +14,7 @@
                 <span>Dashboard</span>
             </a>
             <a href="#" class="flex items-center gap-3 p-3 rounded-lg bg-blue-50 text-blue-900 font-semibold">
-                <span>Manajemen Booking</span>
+                <span>Riwayat Booking</span>
             </a>
         </nav>
     </aside>
@@ -93,6 +94,90 @@
                 <button type="submit" class="w-full mt-10 bg-[#0b1f67] text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg transition-all">
                     Simpan Perubahan
                 </button>
+                <div x-data="{ showForm: false, showConfirm: false, showPolicy: false }">
+
+                    <!-- Tombol Batalkan di Card Detail -->
+                    <div class="flex justify-end">
+                        <button @click="showForm = true" class="bg-[#a32a3e] hover:bg-[#852232] text-white px-8 py-2.5 rounded-lg font-semibold transition">
+                            Batalkan
+                        </button>
+                    </div>
+
+                    <!-- MODAL 1: Form Batal Pesanan -->
+                    <div x-show="showForm" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50" x-cloak>
+                        <div class="bg-white rounded-2xl p-8 max-w-md w-full relative shadow-xl">
+                            <button @click="showForm = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✕</button>
+
+                            <div class="text-center mb-6">
+                                <h3 class="text-xl font-bold text-[#0b1f67] mb-2">Yakin ingin membatalkan booking ini?</h3>
+                                <p class="text-xs text-gray-500 px-4">Pembatalan akan diproses sesuai kebijakan rental. Biaya mungkin dipotong tergantung waktu pembatalan.</p>
+                            </div>
+
+                            <div class="mb-6 text-left">
+                                <label class="block text-xs font-semibold text-gray-700 mb-2">Alasan Pembatalan *</label>
+                                <textarea id="cancelReason" placeholder="Masukkan alasan pembatalan" class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-900 outline-none h-24"></textarea>
+                            </div>
+
+                            <div class="space-y-4">
+                                <button @click="showForm = false; showConfirm = true" class="w-full bg-[#0b1f67] text-white py-3 rounded-lg font-bold">
+                                    Batalkan Booking
+                                </button>
+                                <button @click="showPolicy = true" class="block w-full text-center text-xs font-bold text-blue-900 underline">
+                                    Lihat kebijakan pembatalan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODAL 2: Konfirmasi (Ya/Tidak) -->
+                    <div x-show="showConfirm" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50" x-cloak>
+                        <div class="bg-white rounded-2xl p-10 max-w-sm w-full text-center shadow-2xl">
+                            <h3 class="text-lg font-bold text-[#0b1f67] mb-8 px-4">Apakah kamu yakin ingin membatalkan booking ini?</h3>
+                            <div class="flex gap-4">
+                                <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="flex-1">
+                                    @csrf @method('PATCH')
+                                    <input type="hidden" name="reason" x-ref="finalReason">
+                                    <button type="submit" @click="$refs.finalReason.value = document.getElementById('cancelReason').value" class="w-full bg-[#7ab356] text-white py-2.5 rounded-lg font-bold">Ya</button>
+                                </form>
+                                <button @click="showConfirm = false" class="flex-1 bg-[#be2e44] text-white py-2.5 rounded-lg font-bold">Tidak</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODAL 3: Kebijakan Pembatalan -->
+                    <div x-show="showPolicy" class="fixed inset-0 z-[70] flex items-center justify-center bg-black/50" x-cloak>
+                        <div class="bg-white rounded-2xl p-8 max-w-lg w-full relative max-h-[90vh] overflow-y-auto">
+                            <button @click="showPolicy = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✕</button>
+                            <h2 class="text-center text-2xl font-bold text-[#0b1f67] mb-6">Kebijakan Pembatalan</h2>
+
+                            <div class="space-y-6 text-sm text-gray-800">
+                                <section>
+                                    <h4 class="font-bold mb-2 text-base">Syarat Pembatalan</h4>
+                                    <ul class="list-disc ml-5 space-y-1 text-gray-600">
+                                        <li>Pembatalan hanya dapat dilakukan jika status booking belum selesai.</li>
+                                        <li>Pengguna wajib mengisi alasan pembatalan pada form yang tersedia.</li>
+                                        <li>Pembatalan tidak dapat dilakukan setelah waktu sewa dimulai.</li>
+                                    </ul>
+                                </section>
+                                <!-- Tambahkan isi kebijakan lainnya sesuai teks di image_86c714.png -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODAL 4: Sukses (Muncul via Session Laravel) -->
+                @if(session('success_cancel'))
+                <div class="fixed inset-0 z-[80] flex items-center justify-center bg-black/50">
+                    <div class="bg-white rounded-2xl p-12 max-w-md w-full text-center shadow-2xl">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-[#0b1f67] mb-2">Pembatalan Berhasil!</h3>
+                        <p class="text-gray-500">Permintaan pembatalan Anda sedang diproses.</p>
+                        <button onclick="window.location.reload()" class="mt-8 text-blue-900 font-bold underline">Tutup</button>
+                    </div>
+                </div>
+                @endif
             </form>
         </div>
     </main>

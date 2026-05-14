@@ -20,16 +20,18 @@ class BookingController extends Controller
 
         return view('bookings.check', compact('booking'));
     }
-    public function cancel($id)
+    public function cancel(Request $request, $id)
     {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
         $booking = Booking::findOrFail($id);
+        $booking->update([
+            'status' => 'cancelled',
+            'cancellation_reason' => $request->reason
+        ]);
 
-        // Logika: Hanya bisa batal jika status masih pending
-        if ($booking->status == 'pending') {
-            $booking->update(['status' => 'cancelled']);
-            return redirect()->back()->with('success', 'Booking berhasil dibatalkan.');
-        }
-
-        return redirect()->back()->with('error', 'Booking tidak dapat dibatalkan.');
+        return redirect()->back()->with('success_cancel', true);
     }
 }
