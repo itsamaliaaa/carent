@@ -29,6 +29,14 @@ return new class extends Migration
             $table->string('driver_name')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'success', 'cancelled'])->default('pending');
         });
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('booking_id')->constrained()->onDelete('cascade');
+            $table->integer('rating'); // 1-5
+            $table->text('comment');
+            $table->string('photo')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
