@@ -4,7 +4,6 @@
 <script defer src="[https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js](https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js)"></script>
     <h1 class="text-2xl font-semibold">Detail Booking</h1>
 <div class="flex min-h-screen bg-gray-100 font-inter">
-    <!-- Sidebar (Hidden on mobile, usually integrated via @include) -->
     <aside class="w-72 bg-white border-r hidden lg:flex flex-col fixed h-full">
         <div class="p-6">
             <img src="{{ asset('assets/images/logo.svg') }}" alt="Logo">
@@ -159,7 +158,6 @@
                                         <li>Pembatalan tidak dapat dilakukan setelah waktu sewa dimulai.</li>
                                     </ul>
                                 </section>
-                                <!-- Tambahkan isi kebijakan lainnya sesuai teks di image_86c714.png -->
                             </div>
                         </div>
                     </div>
