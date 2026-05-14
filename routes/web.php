@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Customer\CatalogController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\AdminRental;
