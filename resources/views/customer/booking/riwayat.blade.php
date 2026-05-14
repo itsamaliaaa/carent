@@ -34,51 +34,102 @@
     </section>
 
     @if($booking)
-        <!-- Result Card -->
-        <section class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-            <div class="flex justify-between items-start mb-6">
+    <section class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm relative">
+        <!-- Header: Title & Status Tag -->
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Detail Booking Anda</h3>
+                <p class="text-sm text-gray-500">Berikut informasi pemesanan Anda</p>
+            </div>
+            <!-- Status Badge (Menunggu Konfirmasi) -->
+            <span class="px-6 py-2 rounded-full text-sm font-medium bg-[#fef9c3] text-[#713f12]">
+                Menunggu Konfirmasi
+            </span>
+        </div>
+
+        <div class="border-t border-gray-100 my-4"></div>
+
+        <!-- Mobil & Driver Info -->
+        <div class="flex justify-between items-center py-4 mb-4">
+            <div class="flex items-center gap-4">
+                <img src="{{ asset('assets/images/car.png') }}" class="w-24 h-14 object-cover rounded-lg border" alt="car">
                 <div>
-                    <h3 class="font-bold text-lg">Detail Booking Anda</h3>
-                    <p class="text-sm text-gray-500">Berikut informasi pemesanan Anda</p>
+                    <p class="text-xs text-gray-400">Nama Mobil:</p>
+                    <p class="font-bold text-gray-900 text-lg">{{ $booking->car_name }}</p>
                 </div>
-                <span class="px-4 py-1 rounded-full text-xs font-medium
-                    {{ $booking->status == 'success' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                    {{ ucfirst($booking->status) }}
-                </span>
             </div>
 
-            <div class="flex items-center gap-4 py-4 border-t border-gray-100 mb-4">
-                <img src="{{ asset('assets/images/car.png') }}" class="w-20 h-12 object-cover rounded-md" alt="car">
-                <div>
-                    <p class="text-[10px] text-gray-400 uppercase">Nama Mobil:</p>
-                    <p class="font-bold text-gray-900">{{ $booking->car_name }}</p>
-                </div>
-            </div>
-
-            <!-- Detail Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 py-4">
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase">Kode Booking</label>
-                    <p class="font-semibold text-gray-800">{{ $booking->booking_code }}</p>
-                </div>
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase">Nama Penyewa</label>
-                    <p class="font-semibold text-gray-800">{{ $booking->customer_name }}</p>
-                </div>
-                <!-- ... Repeat for other fields ... -->
-            </div>
-
-            <div class="flex justify-between items-end border-t border-gray-100 pt-6 mt-4">
-                <div>
-                    <label class="block text-[10px] text-gray-400 uppercase">Durasi</label>
-                    <p class="font-semibold text-gray-800">{{ $booking->duration }} Hari</p>
-                </div>
+            <!-- Driver Info (Sesuai gambar) -->
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('assets/images/driver-placeholder.jpg') }}" class="w-12 h-12 rounded-full object-cover border-2 border-gray-100" alt="driver">
                 <div class="text-right">
-                    <label class="block text-[10px] text-gray-400 uppercase">Total Harga</label>
-                    <p class="text-xl font-bold text-gray-900 text-blue-900">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                    <p class="text-xs text-gray-400">Nama Driver:</p>
+                    <p class="font-bold text-gray-900 text-sm">Doki Marsel</p>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- Info Grid (5 Columns sesuai image_86d53d.png) -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-y-8 gap-x-4 mb-8">
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Kode Booking:</label>
+                <p class="font-bold text-gray-900">{{ $booking->booking_code }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Nama Penyewa:</label>
+                <p class="font-bold text-gray-900">{{ $booking->customer_name }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Email:</label>
+                <p class="font-bold text-gray-900 break-all">{{ $booking->email }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">No Telepon:</label>
+                <p class="font-bold text-gray-900">{{ $booking->phone }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Durasi:</label>
+                <p class="font-bold text-gray-900">{{ $booking->duration }} Hari</p>
+            </div>
+
+            <!-- Baris Kedua Grid -->
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Tanggal Pengambilan:</label>
+                <p class="font-bold text-gray-900">{{ $booking->pickup_date }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Tanggal Pengembalian:</label>
+                <p class="font-bold text-gray-900">{{ $booking->return_date }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Waktu Pengambilan:</label>
+                <p class="font-bold text-gray-900">{{ $booking->pickup_time }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Waktu Pengembalian:</label>
+                <p class="font-bold text-gray-900">{{ $booking->return_time }}</p>
+            </div>
+            <div>
+                <label class="block text-xs text-gray-400 mb-1">Total Harga:</label>
+                <p class="font-bold text-gray-900 text-lg">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-100 mb-6"></div>
+
+        <!-- Action Button (Batalkan) -->
+        <div class="flex justify-end">
+            @if($booking->status == 'pending')
+            <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="bg-[#a32a3e] hover:bg-[#852232] text-white px-8 py-2.5 rounded-lg font-semibold transition-colors">
+                    Batalkan
+                </button>
+            </form>
+            @endif
+        </div>
+    </section>
     @elseif(request()->has('booking_code'))
         <div class="text-center py-10 bg-gray-50 rounded-xl">
             <p class="text-gray-500">Data tidak ditemukan. Periksa kembali Email dan Kode Booking Anda.</p>

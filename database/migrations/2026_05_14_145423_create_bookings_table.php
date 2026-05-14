@@ -26,6 +26,8 @@ return new class extends Migration
             $table->decimal('total_price', 12, 2);
             $table->enum('status', ['pending', 'confirmed', 'success'])->default('pending');
             $table->timestamps();
+            $table->string('driver_name')->nullable();
+            $table->enum('status', ['pending', 'confirmed', 'success', 'cancelled'])->default('pending');
         });
     }
 
