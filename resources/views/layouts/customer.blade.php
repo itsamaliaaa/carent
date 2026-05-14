@@ -8,7 +8,7 @@
 
     <title>Carent</title>
     
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/search-loading.js'])
 </head>
 <body class="font-inter">
 
