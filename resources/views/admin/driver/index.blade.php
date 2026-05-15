@@ -100,7 +100,7 @@
                     {{-- Modal Edit --}}
                     <div x-show="openEdit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-cloak style="display: none;">
                         <div class="bg-white rounded-[20px] w-full max-w-lg p-10 shadow-lg" @click.away="openEdit = false">
-                            <h2 class="text-[#1D2B6B] text-2xl font-bold mb-6">Edit Driver</h2>
+                            <h2 class="text-[#1D2B6B] text-3xl font-bold mb-8">Edit Driver</h2>
 
                             <form action="{{ route('admin.driver.update', $driver) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -159,7 +159,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class=" w-full bg-[#0b1f67] hover:bg-[#0e2781]  text-white px-4 py-2 rounded-lg flex items-center gap-2 transition">Edit</button>
+                                <button type="submit" class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Edit</button>
                             </form>
                         </div>
                     </div>
