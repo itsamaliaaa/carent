@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    //
     public function check(Request $request)
     {
         $booking = null;
