@@ -4,9 +4,23 @@
 <div class="flex flex-col gap-4 py-5 px-5" x-data="{ popUpTambah: false }">
 
     @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-        {{ session('success') }}
-    </div>
+        <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            {{ session('success') }}
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }
+            }, 2000); 
+        </script>
     @endif
 
     {{-- Card Header & Search --}}
