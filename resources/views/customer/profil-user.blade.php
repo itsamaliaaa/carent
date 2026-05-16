@@ -6,7 +6,7 @@
               <div class="car-card">
                 <div class="card-image">
                   <img
-                    src="{{ $mobil->fotoPrimary ? asset('storage/' . $mobil->fotoPrimary->path) : asset('assets/images/default-car.jpg') }}"
+                    src="{{ $mobil->fotoPrimary ? asset('storage/' . $mobil->fotoPrimary->path) : asset('../../../public/images/logo/logo.png') }}"
                     alt="{{ $mobil->nama_mobil }}"
                   />
                   <span class="badge {{ strtolower($mobil->status) === 'tersedia' ? '' : 'badge-rent' }}">
