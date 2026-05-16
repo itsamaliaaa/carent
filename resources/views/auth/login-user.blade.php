@@ -107,7 +107,7 @@
                         <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600">
                         Ingat Saya
                     </label>
-                    <a href=""
+                    <a href="{{ route('password.request') }}"
                        class="text-sm text-blue-700 font-medium hover:underline">
                         Lupa Password?
                     </a>

@@ -9,13 +9,28 @@ use Illuminate\Http\Request;
 
 class CatalogController extends Controller
 {
-    public function beranda()
+    public function beranda(Request $request)
     {
-        $mobilTerbaru = Mobil::with(['fotoPrimary', 'rental'])
-            ->where('status', 'tersedia')
-            ->latest()
-            ->take(8)
-            ->get();
+        $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->where('status', 'tersedia');
+
+        // Filter lokasi
+        if ($request->filled('lokasi')) {
+            $query->whereHas('rental', function ($q) use ($request) {
+                $q->where('kota', 'like', '%' . $request->lokasi . '%');
+            });
+        }
+
+        // Filter ketersediaan berdasarkan tanggal
+        if ($request->filled('tanggal_sewa') && $request->filled('tanggal_kembali')) {
+            $query->whereDoesntHave('bookings', function ($q) use ($request) {
+                $q->whereIn('status_booking', ['dikonfirmasi', 'berjalan'])
+                  ->where('tanggal_sewa', '<=', $request->tanggal_kembali)
+                  ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
+            });
+        }
+
+        $mobilTerbaru = $query->latest()->take(8)->get();
 
         $rentalAktif = Rental::where('status', 'aktif')
             ->withCount('mobils')
@@ -23,25 +38,63 @@ class CatalogController extends Controller
             ->take(6)
             ->get();
 
-        return view('customer.beranda', compact('mobilTerbaru', 'rentalAktif'));
+        return view('customer.beranda', compact(
+            'mobilTerbaru',
+            'rentalAktif'
+        ));
     }
 
-public function index()
+    public function index(Request $request)
     {
-        // 1. Fetch all cars along with their primary photos and rentals
-        $mobils = Mobil::with(['fotoPrimary', 'rental'])->get();
+        $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->where('status', 'tersedia');
 
-        // 2. Return the view and pass the $mobils data to it
+        // Filter lokasi
+        if ($request->filled('lokasi')) {
+            $query->whereHas('rental', function ($q) use ($request) {
+                $q->where('kota', 'like', '%' . $request->lokasi . '%');
+            });
+        }
+
+        // Filter ketersediaan berdasarkan tanggal
+        if ($request->filled('tanggal_sewa') && $request->filled('tanggal_kembali')) {
+            $query->whereDoesntHave('bookings', function ($q) use ($request) {
+                $q->whereIn('status_booking', ['dikonfirmasi', 'berjalan'])
+                  ->where('tanggal_sewa', '<=', $request->tanggal_kembali)
+                  ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
+            });
+        }
+
+        // Filter transmisi
+        if ($request->filled('transmisi')) {
+            $query->where('transmisi', $request->transmisi);
+        }
+
+        // Filter kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter kapasitas
+        if ($request->filled('kapasitas')) {
+            $query->where('kapasitas_penumpang', '>=', $request->kapasitas);
+        }
+
+        // Filter harga
+        if ($request->filled('harga_min')) {
+            $query->where('harga_per_hari', '>=', $request->harga_min);
+        }
+        if ($request->filled('harga_max')) {
+            $query->where('harga_per_hari', '<=', $request->harga_max);
+        }
+
+        // Pencarian nama mobil
+        if ($request->filled('cari')) {
+            $query->where('nama_mobil', 'like', '%' . $request->cari . '%');
+        }
+
+        $mobils = $query->latest()->paginate(12)->withQueryString();
+
         return view('customer.katalog', compact('mobils'));
-    }
-
-    public function detail($id)
-    {
-        return view('customer.detail-mobil');
-    }
-
-    public function profileRental($id)
-    {
-        return view('customer.profil-rental');
     }
 }
