@@ -1,15 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="flex flex-col gap-4 py-5 px-5" x-data="{ popUpTambah: false }">
 
-    @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
+<div class="flex flex-col gap-4 py-2 px-2" x-data="{ popUpTambah: false }">
 
-    {{-- Card Header & Search --}}
+    {{-- Card --}}
     <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50">
         <div class="flex justify-between items-center mb-5">
             <h1 class="text-[#1D2B6B] text-2xl font-bold">Manajemen Driver</h1>
@@ -19,6 +14,7 @@
             </button>
         </div>
         <hr class="border-t border-gray-200 mb-6">
+        {{-- Search --}}
         <div class="flex gap-4">
             <div class="relative flex-1">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -30,7 +26,7 @@
         </div>
     </div>
 
-    {{-- Tambah Driver --}}
+    {{-- Form Tambah Driver --}}
     <div x-show="popUpTambah" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-cloak style="display: none;">
         <div class="bg-white rounded-[20px] w-full max-w-lg p-10 shadow-lg" @click.away="popUpTambah = false">
             <h2 class="text-[#1D2B6B] text-3xl font-bold mb-8">Tambah Driver</h2>
@@ -46,7 +42,10 @@
                 </div>
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">Foto</label>
-                    <input type="file" name="foto" required class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none">
+                    <input type="file" name="foto" required
+                        class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden 
+                        file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none
+                        file:hover:bg-[#E5E7EB] file:hover:text-gray-800 file:transition-colors file:duration-200">
                 </div>
                 <div class="mb-6">
                     <label class="text-gray-600 text-sm mb-2">Tarif</label>
@@ -57,9 +56,10 @@
         </div>
     </div>
 
-    {{-- Tabel Data --}}
+    {{-- Tabel Driver --}}
     <div class="bg-white rounded-[20px] p-7 shadow-sm border border-gray-50">
-        <div class="grid grid-cols-[1.1fr_0.9fr_0.9fr_1fr_1.3fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-6 mb-4 items-center gap-x-4 font-bold text-[13px]">
+        <!-- Header Tabel -->
+        <div class="grid grid-cols-[1.1fr_0.9fr_0.9fr_1fr_1.3fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
             <div>Nama Driver</div>
             <div>Foto</div>
             <div>Umur</div>
@@ -67,20 +67,21 @@
             <div>Status</div>
             <div>Aksi</div>
         </div>
+        <!-- Data Tabel -->
         <div class="flex flex-col gap-3">
             @foreach ($drivers as $driver)
             <div class="grid grid-cols-[1.1fr_0.9fr_0.9fr_1fr_1.3fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
-                <div class="text-[14px]">{{ $driver->nama_driver }}</div>
+                <div class="text-[14px] font-semibold">{{ $driver->nama_driver }}</div>
                 <div class="flex justify-start">
                     <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
                 </div>
-                <div class="text-[14px]">{{ $driver->umur }} tahun</div>
-                <div class="text-[14px]">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
+                <div class="text-[14px] font-semibold">{{ $driver->umur }} tahun</div>
+                <div class="text-[14px] font-semibold">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
                 <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
                     {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
                 </span>
 
-                {{-- AREA AKSI --}}
+                {{-- Aksi --}}
                 <div class="flex justify-start gap-2" x-data="{ openEdit: false }">
 
                     {{-- Tombol Edit --}}
@@ -88,16 +89,7 @@
                         <img src="{{ asset('images/icons/pencil-edit-01.svg') }}" class="w-5 h-5 brightness-0 invert">
                     </button>
 
-                    {{-- Form Hapus --}}
-                    <form action="{{ route('admin.driver.destroy', $driver) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg">
-                            <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
-                        </button>
-                    </form>
-
-                    {{-- Modal Edit --}}
+                    {{-- Form Edit --}}
                     <div x-show="openEdit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-cloak style="display: none;">
                         <div class="bg-white rounded-[20px] w-full max-w-lg p-10 shadow-lg" @click.away="openEdit = false">
                             <h2 class="text-[#1D2B6B] text-3xl font-bold mb-8">Edit Driver</h2>
@@ -114,10 +106,30 @@
                                     <label class="text-sm text-gray-600 block mb-1">Umur</label>
                                     <input type="number" name="umur" value="{{ $driver->umur }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                 </div>
+                                <div class="mb-4" x-data="{ fileName: '{{ $driver->foto ? basename($driver->foto) : 'Tidak ada file yang dipilih' }}' }">
+                                    <label class="text-gray-600 text-sm mb-2 block">Foto</label>
+
+                                    <div class="relative flex items-center border border-gray-200 rounded-lg overflow-hidden h-[40px] group transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-100">
+
+                                        <div class="bg-[#F3F4F6] text-gray-600 px-4 h-full flex items-center border-r border-gray-200 text-[14px] transition-colors duration-200 group-hover:bg-[#E5E7EB] group-hover:text-gray-800">
+                                            Pilih File
+                                        </div>
+
+                                        <div class="px-4 text-gray-400 text-[14px] truncate flex-1 bg-white" x-text="fileName">
+                                            {{ $driver->foto }}
+                                        </div>
+
+                                        <input type="file" name="foto"
+                                            @change="fileName = $event.target.files[0].name"
+                                            class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                                    </div>
+                                </div>
                                 <div class="mb-4 text-left">
                                     <label class="text-sm text-gray-600 block mb-1">Tarif</label>
                                     <input type="number" name="tarif_harian" value="{{ $driver->tarif_harian }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                 </div>
+
+                                {{-- Dropdown status driver --}}
                                 <div class="mb-4 text-left">
                                     <div class="mb-6 text-left" x-data="{ open: false, selected: '{{ $driver->status }}' }">
                                         <input type="hidden" name="status" :value="selected">
@@ -135,16 +147,15 @@
                                             </button>
 
                                             <div x-show="open" @click.away="open = false"
-                                                class="absolute left-0 z-10 w-full rounded-b-lg overflow-hidden"
+                                                class="absolute left-0 z-10 w-full rounded-b-lg overflow-hidden pt-4"
                                                 style="top: 50%; background-color: white; border-left: 1px solid #d1d5db; border-right: 1px solid #d1d5db; border-bottom: 1px solid #d1d5db;"
                                                 x-cloak>
-                                                <div style="height: 20px; background-color: white;"></div>
                                                 <div x-show="selected != 'tersedia'"
                                                     @click="selected = 'tersedia'; open = false"
                                                     style="background-color: white;"
                                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
                                                     onmouseover="this.style.backgroundColor='#E8EAF6'; this.style.color='#1D2B6B'; this.closest('.absolute').style.borderColor='#1D2B6B';"
-                                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#6b7280'; this.closest('.absolute').style.borderColor='#d1d5db';">
+                                                    onmouseout="this.style.backgroundColor='white'; this.closest('.absolute').style.borderColor='#d1d5db';">
                                                     Tersedia
                                                 </div>
                                                 <div x-show="selected != 'tidak_tersedia'"
@@ -152,7 +163,7 @@
                                                     style="background-color: white;"
                                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
                                                     onmouseover="this.style.backgroundColor='#E8EAF6'; this.style.color='#1D2B6B'; this.closest('.absolute').style.borderColor='#1D2B6B';"
-                                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#6b7280'; this.closest('.absolute').style.borderColor='#d1d5db';">
+                                                    onmouseout="this.style.backgroundColor='white'; this.closest('.absolute').style.borderColor='#d1d5db';">
                                                     Tidak Tersedia
                                                 </div>
                                             </div>
@@ -163,9 +174,22 @@
                             </form>
                         </div>
                     </div>
+
+                    {{-- Form Hapus --}}
+                    <form action="{{ route('admin.driver.destroy', $driver) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg">
+                            <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
+                        </button>
+                    </form>
                 </div>
             </div>
             @endforeach
+        </div>
+        <!-- Pagination -->
+        <div class="mt-6 flex justify-end">
+            {{ $drivers->links() }}
         </div>
     </div>
 </div>
