@@ -10,57 +10,62 @@ use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
-    /**
-     * Tampilkan daftar driver
-     */
     public function index()
     {
-        // Cari rental yang dimiliki admin yang login
+        // Cari data rental milik admin yang sedang login
         $rental = Rental::where('admin_id', auth()->id())->first();
 
         // Ambil driver milik rental 
-        $drivers = $rental ? Driver::where('rental_id', $rental->rental_id)->get() : collect();
+        $drivers = Driver::where('rental_id', $rental ? $rental->rental_id : 0)->paginate(3)->onEachSide(1);
 
         return view('admin.driver.index', compact('drivers'));
     }
 
-    /**
-     * Simpan driver baru (Ubah dari 'lihat' ke 'store')
-     */
     public function store(Request $request)
     {
+        // Validasi data yang dikirim dari form
         $request->validate([
             'nama_driver' => 'required',
             'umur' => 'required|numeric',
             'foto' => 'required|image|max:2048',
             'tarif_harian' => 'required|numeric',
         ]);
-
+        
+        // Cari data rental milik admin yang sedang login
         $rental = Rental::where('admin_id', auth()->id())->first();
 
+        // Kalau rental tidak ditemukan
         if (!$rental) {
             return redirect()->back()->with('error', 'Data rental tidak ditemukan!');
         }
 
+        // Upload foto ke folder drivers
         $lokasiFoto = $request->file('foto')->store('drivers', 'public');
 
+        // Simpan data driver ke database
         Driver::create([
             'nama_driver' => $request->nama_driver,
             'umur'         => $request->umur,
             'foto'         => $lokasiFoto,
-            'tarif_harian'=> $request->tarif_harian,
+            'tarif_harian' => $request->tarif_harian,
             'status'      => 'tersedia',
             'rental_id'   => $rental->rental_id,
         ]);
 
+        // Kalau rental berhasil ditambahkan
         return redirect()->back()->with('success', 'Driver berhasil ditambahkan');
     }
 
-    /**
-     * Perbarui data driver (Edit)
-     */
     public function update(Request $request, $id)
     {
+        // Cari driver berdasarkan id
+        $driver = Driver::find($id);
+
+        if ($request->hasFile('foto')) {
+            // Kalau ada foto baru, hapus foto lama lalu upload yang baru
+            $path = $request->file('foto')->store('drivers');
+            $driver->foto = $path;
+        }
 
         $request->validate([
             'nama_driver' => 'required',
@@ -70,36 +75,27 @@ class DriverController extends Controller
             'status' => 'required'
         ]);
 
-        $driver = Driver::findOrFail($id);
-        
+        // Update data driver
         $driver->nama_driver = $request->nama_driver;
         $driver->umur = $request->umur;
         $driver->tarif_harian = $request->tarif_harian;
         $driver->status = $request->status;
-
-        if ($request->hasFile('foto')) {
-            if ($driver->foto) {
-                Storage::disk('public')->delete($driver->foto);
-            }
-            $driver->foto = $request->file('foto')->store('drivers', 'public');
-        }
 
         $driver->save();
 
         return redirect()->back()->with('success', 'Data driver berhasil diperbarui');
     }
 
-    /**
-     * Hapus data driver (Ubah dari 'hapus' ke 'destroy')
-     */
     public function destroy($id)
     {
         $driver = Driver::findOrFail($id);
 
+        // Hapus foto
         if ($driver->foto) {
             Storage::disk('public')->delete($driver->foto);
         }
 
+        // Hapus data driver
         $driver->delete();
 
         return redirect()->back()->with('success', 'Driver berhasil dihapus');
