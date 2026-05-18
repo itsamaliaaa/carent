@@ -20,19 +20,19 @@
     <div class="p-5">
         <div class="flex flex-col gap-1">
 
-            <!-- DASHBOARD -->
-            <a href="{{ route('admin.dashboard') }}"
-               class="group flex items-center gap-3 px-4 py-3 rounded-lg
-               {{ $active == 'dashboard' ? $activeClass : $hoverClass }}">
-
-                <img src="{{ asset('images/icons/menu-square.svg') }}"
-                     class="w-5 h-5 transition
-                     {{ $active == 'dashboard' ? $iconActive : $iconHover }}">
-                Dashboard
-            </a>
-
             {{-- ADMIN RENTAL --}}
             @if($role == 'admin_rental')
+
+                <!-- DASHBOARD -->
+                <a href="{{ route('admin.dashboard') }}"
+                class="group flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ $active == 'dashboard' ? $activeClass : $hoverClass }}">
+
+                    <img src="{{ asset('images/icons/menu-square.svg') }}"
+                        class="w-5 h-5 transition
+                        {{ $active == 'dashboard' ? $iconActive : $iconHover }}">
+                    Dashboard
+                </a>
 
                 <a href="{{ route('admin.driver.index') }}"
                    class="group flex items-center gap-3 px-4 py-3 rounded-lg
@@ -79,6 +79,17 @@
 
             {{-- SUPER ADMIN --}}
             @if($role == 'super_admin')
+
+                <!-- DASHBOARD -->
+                <a href="{{ route('superadmin.dashboard') }}"
+                class="group flex items-center gap-3 px-4 py-3 rounded-lg
+                {{ $active == 'dashboard' ? $activeClass : $hoverClass }}">
+
+                    <img src="{{ asset('images/icons/menu-square.svg') }}"
+                        class="w-5 h-5 transition
+                        {{ $active == 'dashboard' ? $iconActive : $iconHover }}">
+                    Dashboard
+                </a>
 
                 <a href="{{ route('superadmin.rental.index') }}"
                    class="group flex items-center gap-3 px-4 py-3 rounded-lg

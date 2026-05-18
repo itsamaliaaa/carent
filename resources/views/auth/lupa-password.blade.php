@@ -60,8 +60,9 @@
             </div>
 
             {{-- Form --}}
-            <form action= "{{ route ('password.request') }}" method="POST" class="flex flex-col gap-4">
-                @csrf
+            <form action="{{ route('password.email') }}" method="POST">                
+                
+            @csrf
 
                 {{-- Email --}}
                 <div class="flex flex-col gap-1">
@@ -71,7 +72,7 @@
                         name="email"
                         placeholder="Masukkan Email"
                         value="{{ old('email') }}"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-10 text-sm
                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                                @error('email') border-red-400 bg-red-50 @enderror">
                     @error('email')

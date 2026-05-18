@@ -4,6 +4,26 @@
 
 <div class="flex flex-col gap-4 py-2 px-2" x-data="{ popUpTambah: false }">
 
+    @if(session('success'))
+        <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+            {{ session('success') }}
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                if (alert) {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }
+            }, 2000); 
+        </script>
+    @endif
+
     {{-- Card --}}
     <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50">
         <div class="flex justify-between items-center mb-5">
