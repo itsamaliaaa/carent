@@ -11,23 +11,20 @@ class CatalogController extends Controller
 {
     public function beranda(Request $request)
     {
-        // Berdasarkan ERD: kolom status di tabel mobil bernama 'status_ketersediaan'
-        // Relasi foto di ERD bernama 'foto_mobil' (bukan fotoPrimary)
-        $query = Mobil::with(['fotoMobil', 'rental'])
-            ->where('status_ketersediaan', 'tersedia');
+        $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->where('status', 'tersedia');
 
-        // Filter lokasi (Berdasarkan ERD: tabel rental menggunakan kolom 'alamat', bukan 'kota')
+        // Filter lokasi
         if ($request->filled('lokasi')) {
             $query->whereHas('rental', function ($q) use ($request) {
-                $q->where('alamat', 'like', '%' . $request->lokasi . '%');
+                $q->where('kota', 'like', '%' . $request->lokasi . '%');
             });
         }
 
-        // Filter ketersediaan berdasarkan tanggal booking
+        // Filter ketersediaan berdasarkan tanggal
         if ($request->filled('tanggal_sewa') && $request->filled('tanggal_kembali')) {
-            $query->whereDoesntHave('booking', function ($q) use ($request) {
-                // Di ERD: typo 'dkonfirmasi' atau 'dikonfirmasi' disesuaikan dengan isi ENUM database
-                $q->whereIn('status_booking', ['dkonfirmasi', 'berjalan'])
+            $query->whereDoesntHave('bookings', function ($q) use ($request) {
+                $q->whereIn('status_booking', ['dikonfirmasi', 'berjalan'])
                   ->where('tanggal_sewa', '<=', $request->tanggal_kembali)
                   ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
             });
@@ -35,9 +32,8 @@ class CatalogController extends Controller
 
         $mobilTerbaru = $query->latest()->take(8)->get();
 
-        // Berdasarkan ERD: Tabel rental tidak memiliki kolom status_ketersediaan.
-        // Jadi kita hanya mengambil rental aktif dan menghitung jumlah mobilnya menggunakan relasi 'mobils'.
-        $rentalAktif = Rental::withCount('mobils')
+        $rentalAktif = Rental::where('status', 'aktif')
+            ->withCount('mobils')
             ->latest()
             ->take(6)
             ->get();
@@ -50,43 +46,41 @@ class CatalogController extends Controller
 
     public function index(Request $request)
     {
-        // Menyesuaikan kolom 'status_ketersediaan' sesuai ERD
-        $query = Mobil::with(['fotoMobil', 'rental'])
-            ->where('status_ketersediaan', 'tersedia');
+        $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->where('status', 'tersedia');
 
-        // Filter lokasi (kolom 'alamat' di tabel rental)
+        // Filter lokasi
         if ($request->filled('lokasi')) {
             $query->whereHas('rental', function ($q) use ($request) {
-                $q->where('alamat', 'like', '%' . $request->lokasi . '%');
+                $q->where('kota', 'like', '%' . $request->lokasi . '%');
             });
         }
 
-        // Filter ketersediaan berdasarkan tanggal booking
+        // Filter ketersediaan berdasarkan tanggal
         if ($request->filled('tanggal_sewa') && $request->filled('tanggal_kembali')) {
-            $query->whereDoesntHave('booking', function ($q) use ($request) {
-                $q->whereIn('status_booking', ['dkonfirmasi', 'berjalan'])
+            $query->whereDoesntHave('bookings', function ($q) use ($request) {
+                $q->whereIn('status_booking', ['dikonfirmasi', 'berjalan'])
                   ->where('tanggal_sewa', '<=', $request->tanggal_kembali)
                   ->where('tanggal_kembali', '>=', $request->tanggal_sewa);
             });
         }
 
-        // Filter transmisi (ENUM di ERD: 'manual', 'matic')
+        // Filter transmisi
         if ($request->filled('transmisi')) {
             $query->where('transmisi', $request->transmisi);
         }
 
-        /*
-           CATATAN: Filter Kategori dihapus karena di ERD tabel `mobil`
-           tidak memiliki kolom `kategori`. Jika ingin dipakai, kolom `kategori`
-           harus ditambahkan terlebih dahulu ke skema SQL tabel `mobil`.
-        */
+        // Filter kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
 
-        // Filter kapasitas (Berdasarkan ERD: nama kolomnya 'kapasitas_penumpang')
+        // Filter kapasitas
         if ($request->filled('kapasitas')) {
             $query->where('kapasitas_penumpang', '>=', $request->kapasitas);
         }
 
-        // Filter harga (Berdasarkan ERD: nama kolomnya 'harga_per_hari')
+        // Filter harga
         if ($request->filled('harga_min')) {
             $query->where('harga_per_hari', '>=', $request->harga_min);
         }
@@ -94,7 +88,7 @@ class CatalogController extends Controller
             $query->where('harga_per_hari', '<=', $request->harga_max);
         }
 
-        // Pencarian nama mobil (Berdasarkan ERD: 'nama_mobil')
+        // Pencarian nama mobil
         if ($request->filled('cari')) {
             $query->where('nama_mobil', 'like', '%' . $request->cari . '%');
         }
