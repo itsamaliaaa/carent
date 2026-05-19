@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             RentalSeeder::class,
             MobilSeeder::class,
-            // KebijakanSeeder::class,
+            KebijakanSeeder::class,
         ]);
     }
 }

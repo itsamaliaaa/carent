@@ -108,7 +108,7 @@
                     <img src="{{ asset('images/icons/task-01.svg') }}"
                          class="w-5 h-5 transition
                          {{ $active == 'kebijakan' ? $iconActive : $iconHover }}">
-                    Kebijakan Pembatalan
+                    Kebijakan
                 </a>
 
                 <a href="{{ route('superadmin.review.index') }}"
