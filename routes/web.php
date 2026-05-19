@@ -88,6 +88,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::get('/laporan', [SuperAdmin\LaporanController::class, 'index'])->name('laporan');
     Route::get('/profil', [SuperAdmin\ProfilController::class, 'index'])->name('profil');
     Route::put('/profil', [SuperAdmin\ProfilController::class, 'update'])->name('profil.update');
+    Route::put('/profil/password', [SuperAdmin\ProfilController::class, 'updatePassword'])->name('profil.password');
 });
 
 // API NOTIFIKASI (Polling)

@@ -183,8 +183,8 @@
 
             <!-- Avatar -->
             <div class="flex flex-col items-center">
-
-            <div class="relative">
+            //perbaiki edit foto profil
+            <div class="relative"> 
 
                 <!-- FOTO -->
                 @if(auth()->user()->foto_profile)
@@ -232,7 +232,7 @@
             <!-- FORM -->
             <form
                 id="editProfileForm"
-                action="{{ route('customer.profil.update') }}"
+                action="{{ route('superadmin.profil.update') }}"
                 method="POST"
                 enctype="multipart/form-data"
                 class="mt-8 space-y-5">
@@ -448,7 +448,7 @@
 
             <form
                 id="passwordForm"
-                action="{{ route('customer.profil.password') }}"
+                action="{{ route('superadmin.profil.password') }}"
                 method="POST"
                 class="mt-10 space-y-5"
             >
