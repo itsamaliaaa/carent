@@ -16,17 +16,8 @@
 
         <div class="absolute inset-0 bg-black opacity-20"></div>
 
-        {{-- Tombol Kembali --}}
-        <div class="absolute top-5 left-6 z-10 ">
-            <a href="{{ route('beranda') }}"
-            class="flex items-center gap-2 text-white text-sm font-medium hover:opacity-80 transition">
-                <img src="{{ asset('images/icons/arrow-left.svg') }}" alt="Kembali" class="w-4 h-4">
-                Kembali
-            </a>
-        </div>
-
         {{-- Logo --}}
-        <div class="absolute top-14 left-6 z-10">
+        <div class="absolute top-6 left-6 z-10">
             <img src="{{ asset('images/logo/logo-white.png') }}" alt="Carent" class="h-8 w-auto">
         </div>
 
@@ -56,7 +47,7 @@
             {{-- Judul --}}
             <div class="flex flex-col gap-1.5 mb-2">
                 <h2 class="text-3xl font-bold text-gray-900">Login</h2>
-                <p class="text-gray-500 text-sm">Masuk untuk melanjutkan ke akun kamu</p>
+                <p class="text-gray-500 text-sm">Kamu memiliki akses tertinggi di sistem ini. Gunakan dengan bijak dan bertanggung jawab.</p>
             </div>
 
             {{-- Form --}}
