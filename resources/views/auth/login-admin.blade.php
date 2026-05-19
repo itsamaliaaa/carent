@@ -33,12 +33,12 @@
         {{-- Teks - Desktop (kiri bawah) --}}
         <div class="hidden lg:flex absolute bottom-40 left-10 right-10 flex-col gap-4 z-10">
             <div>
-                <h1 class="text-white text-5xl font-semibold leading-tight">Selamat Datang Admin!</h1>
+                <h1 class="text-white text-5xl font-semibold leading-tight">Halo Admin!</h1>
                 <h2 class="text-white text-2xl font-semibold">Selamat Datang di CARENT</h2>
             </div>
             <p class="text-white text-lg leading-relaxed">
-                Siap untuk perjalananmu hari ini?<br>
-                Masuk dan temukan mobil terbaik untuk kebutuhanmu.
+                Siap mengelola rental hari ini?<br>
+                Pantau data mobil, booking, dan aktivitas penyewa dengan mudah.
             </p>
         </div>
 
