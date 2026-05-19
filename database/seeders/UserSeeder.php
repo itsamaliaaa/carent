@@ -27,6 +27,22 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
+            'nama_lengkap' => 'Admin Mobilio Rental',
+            'email'        => 'adminmobilio@carent.com',
+            'no_telp'      => '+6281234567890',
+            'password'     => Hash::make('PasswordMobilio1#'),
+            'role'         => 'admin_rental',
+        ]);
+
+        User::create([
+            'nama_lengkap' => 'Admin KeRental',
+            'email'        => 'adminkerental@carent.com',
+            'no_telp'      => '+6281122233344',
+            'password'     => Hash::make('PasswordKeRental1#'),
+            'role'         => 'admin_rental',
+        ]);
+        
+        User::create([
             'nama_lengkap' => 'Miskah Indah',
             'email'        => 'miskah@gmail.com',
             'no_telp'      => '+6285711223344',

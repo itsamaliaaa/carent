@@ -59,6 +59,16 @@
                 <p class="text-gray-500 text-sm">Masukkan email Anda untuk reset password</p>
             </div>
 
+            {{-- Pesan Sukses --}}
+            @if (session('success'))
+                <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
             {{-- Form --}}
             <form action="{{ route('password.email') }}" method="POST">                
                 
@@ -72,7 +82,7 @@
                         name="email"
                         placeholder="Masukkan Email"
                         value="{{ old('email') }}"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-10 text-sm
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 mb-5 text-sm
                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                                @error('email') border-red-400 bg-red-50 @enderror">
                     @error('email')

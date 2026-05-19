@@ -59,6 +59,16 @@
                 <p class="text-gray-500 text-sm">Masukkan email dan password baru Anda</p>
             </div>
 
+            {{-- Pesan Sukses Reset Password --}}
+            @if (session('success'))
+                <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {{ session('success') }}
+                </div>
+            @endif
+
             {{-- Form --}}
             <form action="{{ route('password.update') }}" method="POST" class="flex flex-col gap-4">
                 @csrf

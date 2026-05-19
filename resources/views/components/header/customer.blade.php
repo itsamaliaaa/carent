@@ -4,9 +4,9 @@
     <div class="px-8 py-4 flex justify-between items-center">
 
         <!-- LEFT: LOGO -->
-        <div class="flex items-center gap-2">
+        <a href="{{ route('beranda') }}" class="flex items-center gap-2">
             <img src="{{ asset('images/logo/logo.png') }}" alt="Logo" class="h-9">
-        </div>
+        </a>
 
         <!-- MENU DESKTOP -->
         <div class="hidden md:flex items-center gap-10 text-sm font-medium">

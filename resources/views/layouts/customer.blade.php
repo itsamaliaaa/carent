@@ -300,101 +300,101 @@
         }
 
         const confirmPasswordBtn = document.getElementById('confirmPasswordBtn');
-const passwordForm = document.getElementById('passwordForm');
+        const passwordForm = document.getElementById('passwordForm');
 
-if(confirmPasswordBtn){
+        if(confirmPasswordBtn){
 
-    confirmPasswordBtn.addEventListener('click', () => {
+            confirmPasswordBtn.addEventListener('click', () => {
 
-        passwordConfirmModal.classList.add('hidden');
+                passwordConfirmModal.classList.add('hidden');
 
-        loadingModal.classList.remove('hidden');
-        loadingModal.classList.add('flex');
+                loadingModal.classList.remove('hidden');
+                loadingModal.classList.add('flex');
 
-        let progress = 0;
+                let progress = 0;
 
-        const progressCircle = document.getElementById('progressCircle');
-        const progressText = document.getElementById('progressText');
+                const progressCircle = document.getElementById('progressCircle');
+                const progressText = document.getElementById('progressText');
 
-        const interval = setInterval(() => {
+                const interval = setInterval(() => {
 
-            progress += 10;
+                    progress += 10;
 
-            const offset = 314 - (314 * progress / 100);
+                    const offset = 314 - (314 * progress / 100);
 
-            progressCircle.style.strokeDashoffset = offset;
+                    progressCircle.style.strokeDashoffset = offset;
 
-            progressText.innerText = progress + '%';
+                    progressText.innerText = progress + '%';
 
-            if(progress >= 100){
+                    if(progress >= 100){
 
-                clearInterval(interval);
+                        clearInterval(interval);
 
-                passwordForm.submit();
+                        passwordForm.submit();
 
-            }
+                    }
 
-        }, 300);
+                }, 300);
 
-    });
-}
+            });
+        }
 
- // PREVIEW FOTO PROFILE
-const fotoProfilInput = document.getElementById('fotoProfilInput');
+        // PREVIEW FOTO PROFILE
+        const fotoProfilInput = document.getElementById('fotoProfilInput');
 
-if(fotoProfilInput){
+        if(fotoProfilInput){
 
-    fotoProfilInput.addEventListener('change', function(e){
+            fotoProfilInput.addEventListener('change', function(e){
 
-        const file = e.target.files[0];
+                const file = e.target.files[0];
 
-        if(file){
+                if(file){
 
-            const reader = new FileReader();
+                    const reader = new FileReader();
 
-            reader.onload = function(event){
+                    reader.onload = function(event){
 
-                let previewFoto = document.getElementById('previewFoto');
-                if(!previewFoto){
+                        let previewFoto = document.getElementById('previewFoto');
+                        if(!previewFoto){
 
-                    const previewDefault = document.getElementById('previewDefault');
+                            const previewDefault = document.getElementById('previewDefault');
 
-                    previewDefault.outerHTML = `
-                        <img
-                            id="previewFoto"
-                            src="${event.target.result}"
-                            class="w-28 h-28 rounded-full object-cover"
-                        >
-                    `;
+                            previewDefault.outerHTML = `
+                                <img
+                                    id="previewFoto"
+                                    src="${event.target.result}"
+                                    class="w-28 h-28 rounded-full object-cover"
+                                >
+                            `;
 
-                } else {
+                        } else {
 
-                    previewFoto.src = event.target.result;
+                            previewFoto.src = event.target.result;
+
+                        }
+
+                    }
+
+                    reader.readAsDataURL(file);
 
                 }
 
-            }
-
-            reader.readAsDataURL(file);
+            });
 
         }
 
-    });
+        @if($errors->any())
 
-}
+            const passwordModalError = document.getElementById('passwordModal');
 
-@if($errors->any())
+            if(passwordModalError){
 
-    const passwordModalError = document.getElementById('passwordModal');
+                passwordModalError.classList.remove('hidden');
+                passwordModalError.classList.add('flex');
 
-    if(passwordModalError){
+            }
 
-        passwordModalError.classList.remove('hidden');
-        passwordModalError.classList.add('flex');
-
-    }
-
-@endif
+        @endif
 
     @if(session('success_password'))
         const successPasswordModal = document.getElementById('successPasswordModal');

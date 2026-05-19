@@ -16,29 +16,20 @@
 
         <div class="absolute inset-0 bg-black opacity-20"></div>
 
-        {{-- Tombol Kembali --}}
-        <div class="absolute top-5 left-6 z-10 ">
-            <a href="{{ route('beranda') }}"
-            class="flex items-center gap-2 text-white text-sm font-medium hover:opacity-80 transition">
-                <img src="{{ asset('images/icons/arrow-left.svg') }}" alt="Kembali" class="w-4 h-4">
-                Kembali
-            </a>
-        </div>
-
         {{-- Logo --}}
-        <div class="absolute top-14 left-6 z-10">
+        <div class="absolute top-6 left-6 z-10">
             <img src="{{ asset('images/logo/logo-white.png') }}" alt="Carent" class="h-8 w-auto">
         </div>
 
         {{-- Teks - Desktop (kiri bawah) --}}
         <div class="hidden lg:flex absolute bottom-40 left-10 right-10 flex-col gap-4 z-10">
             <div>
-                <h1 class="text-white text-5xl font-semibold leading-tight">Selamat Datang Admin!</h1>
+                <h1 class="text-white text-5xl font-semibold leading-tight">Halo Admin!</h1>
                 <h2 class="text-white text-2xl font-semibold">Selamat Datang di CARENT</h2>
             </div>
             <p class="text-white text-lg leading-relaxed">
-                Siap untuk perjalananmu hari ini?<br>
-                Masuk dan temukan mobil terbaik untuk kebutuhanmu.
+                Siap mengelola rental hari ini?<br>
+                Pantau data mobil, booking, dan aktivitas penyewa dengan mudah.
             </p>
         </div>
 
@@ -56,7 +47,7 @@
             {{-- Judul --}}
             <div class="flex flex-col gap-1.5 mb-2">
                 <h2 class="text-3xl font-bold text-gray-900">Login</h2>
-                <p class="text-gray-500 text-sm">Masuk untuk melanjutkan ke akun kamu</p>
+                <p class="text-gray-500 text-sm">Masuk untuk mulai mengelola CARENT hari ini.</p>
             </div>
 
             {{-- Form --}}
@@ -101,16 +92,12 @@
                     @enderror
                 </div>
 
-                {{-- Remember & Lupa Password --}}
+                {{-- Remember --}}
                 <div class="flex items-center justify-between">
                     <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600">
                         Ingat Saya
                     </label>
-                    <a href=""
-                       class="text-sm text-blue-700 font-medium hover:underline">
-                        Lupa Password?
-                    </a>
                 </div>
 
                 {{-- Tombol Login --}}
