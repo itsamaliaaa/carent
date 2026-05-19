@@ -12,7 +12,7 @@
 <aside id="sidebar"
        class="w-64 h-screen overflow-y-auto
               bg-white border-r flex flex-col justify-between text-sm
-              fixed md:static
+              fixed md:sticky top-0
               transform -translate-x-full md:translate-x-0
               transition duration-300 z-40">
 
