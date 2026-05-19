@@ -21,14 +21,18 @@ class ReviewController extends Controller
             $query->whereDate('tanggal_posting', '<=', $request->end_date);
         }
 
-        if ($request->filled('search')) {
+        if ($request->filled('cari')) {
             $query->whereHas('user', function ($q) use ($request) {
-                $q->where('email', 'like', '%' . $request->search . '%')
-                    ->orWhere('name', 'like', '%' . $request->search . '%');
+                $q->where(function ($subQuery) use ($request) {
+                    $subQuery->where('users.nama_lengkap', 'like', '%' . $request->cari . '%')
+                        ->orWhere('users.email', 'like', '%' . $request->cari . '%');
+                });
             });
         }
 
-        $reviews = $query->orderBy('tanggal_posting', 'desc')->get();
+        $reviews = $query->get();
+
+        $reviews = $query->orderBy('tanggal_posting', 'asc')->get();
 
         return view('admin.review.index', compact('reviews'));
     }

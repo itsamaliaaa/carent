@@ -4,26 +4,6 @@
 
 <div class="flex flex-col gap-4 py-2 px-2" x-data="{ popUpTambah: false }">
 
-    @if(session('success'))
-        <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-            {{ session('success') }}
-        </div>
-
-        <script>
-            setTimeout(() => {
-                const alert = document.getElementById('success-alert');
-                if (alert) {
-                    alert.style.transition = 'opacity 0.5s ease';
-                    alert.style.opacity = '0';
-
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 500);
-                }
-            }, 2000); 
-        </script>
-    @endif
-
     {{-- Card --}}
     <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50">
         <div class="flex justify-between items-center mb-5">
@@ -35,15 +15,17 @@
         </div>
         <hr class="border-t border-gray-200 mb-6">
         {{-- Search --}}
-        <div class="flex gap-4">
-            <div class="relative flex-1">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search Icon">
+        <form method="GET" action="{{ route('admin.driver.index') }}">
+            <div class="flex gap-4">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search Icon">
+                    </div>
+                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari Driver" class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-400">
                 </div>
-                <input type="text" placeholder="Cari Driver" class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-400">
+                <button class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">Cari</button>
             </div>
-            <button class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">Cari</button>
-        </div>
+        </form>
     </div>
 
     {{-- Form Tambah Driver --}}
