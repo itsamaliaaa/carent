@@ -47,7 +47,7 @@
             {{-- Judul --}}
             <div class="flex flex-col gap-1.5 mb-2">
                 <h2 class="text-3xl font-bold text-gray-900">Login</h2>
-                <p class="text-gray-500 text-sm">Kamu memiliki akses tertinggi di sistem ini. Gunakan dengan bijak dan bertanggung jawab.</p>
+                <p class="text-gray-500 text-sm">Masuk untuk mulai mengelola CARENT hari ini.</p>
             </div>
 
             {{-- Form --}}
@@ -92,16 +92,12 @@
                     @enderror
                 </div>
 
-                {{-- Remember & Lupa Password --}}
+                {{-- Remember --}}
                 <div class="flex items-center justify-between">
                     <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600">
                         Ingat Saya
                     </label>
-                    <a href=""
-                       class="text-sm text-blue-700 font-medium hover:underline">
-                        Lupa Password?
-                    </a>
                 </div>
 
                 {{-- Tombol Login --}}
