@@ -27,172 +27,15 @@
     {{-- Footer --}}
     @include('components.footer')
 
-   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
 
-        // MOBILE MENU
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        // MOBILE PROFILE DROPDOWN
-        const mobileProfileBtn = document.getElementById('mobileProfileBtn');
-        const mobileProfileMenu = document.getElementById('mobileProfileMenu');
-
-        if(menuBtn && mobileMenu){
-
-            menuBtn.addEventListener('click', () => {
-
-                mobileMenu.classList.toggle('hidden');
-
-            });
-
-        }
-
-        // TOGGLE PROFILE MOBILE
-        if(mobileProfileBtn && mobileProfileMenu){
-
-            mobileProfileBtn.addEventListener('click', () => {
-
-                mobileProfileMenu.classList.toggle('hidden');
-
-            });
-
-        }
-
-        // PROFILE DROPDOWN
-        const profileBtn = document.getElementById('profileBtn');
-        const profileDropdown = document.getElementById('profileDropdown');
-        const profileOverlay = document.getElementById('profileOverlay');
-
-        if(profileBtn){
-
-            profileBtn.addEventListener('click', () => {
-
-                profileDropdown.classList.toggle('hidden');
-                profileOverlay.classList.toggle('hidden');
-
-            });
-
-        }
-
-        if(profileOverlay){
-
-            profileOverlay.addEventListener('click', () => {
-
-                profileDropdown.classList.add('hidden');
-                profileOverlay.classList.add('hidden');
-
-            });
-
-        }
-
-        // EDIT PROFILE MODAL
-        const editProfileBtn = document.getElementById('editProfileBtn');
-        const editModal = document.getElementById('editModal');
-        const closeEditModal = document.getElementById('closeEditModal');
-
-        if(editProfileBtn){
-
-            editProfileBtn.addEventListener('click', () => {
-
-                profileDropdown.classList.add('hidden');
-                profileOverlay.classList.add('hidden');
-
-                editModal.classList.remove('hidden');
-                editModal.classList.add('flex');
-
-            });
-
-        }
-
-        if(closeEditModal){
-
-            closeEditModal.addEventListener('click', () => {
-
-                editModal.classList.add('hidden');
-                editModal.classList.remove('flex');
-
-            });
-
-        }
-
-        // CONFIRM MODAL
-        const openConfirmModal = document.getElementById('openConfirmModal');
-        const confirmModal = document.getElementById('confirmModal');
-        const closeConfirmModal = document.getElementById('closeConfirmModal');
-
-        if(openConfirmModal){
-
-            openConfirmModal.addEventListener('click', () => {
-
-                confirmModal.classList.remove('hidden');
-                confirmModal.classList.add('flex');
-
-            });
-
-        }
-
-        if(closeConfirmModal){
-
-            closeConfirmModal.addEventListener('click', () => {
-
-                confirmModal.classList.add('hidden');
-                confirmModal.classList.remove('flex');
-
-            });
-
-        }
-
-        // SUBMIT PROFILE
-        const confirmEditBtn = document.getElementById('confirmEditBtn');
-        const editProfileForm = document.getElementById('editProfileForm');
-        const loadingModal = document.getElementById('loadingModal');
-
-        if(confirmEditBtn){
-
-            confirmEditBtn.addEventListener('click', () => {
-
-                confirmModal.classList.add('hidden');
-                confirmModal.classList.remove('flex');
-
-                loadingModal.classList.remove('hidden');
-                loadingModal.classList.add('flex');
-
-                const progressCircle = document.getElementById('progressCircle');
-                const progressText = document.getElementById('progressText');
-
-                let progress = 0;
-
-                const interval = setInterval(() => {
-
-                    progress += 10;
-
-                    const offset = 314 - (314 * progress / 100);
-
-                    progressCircle.style.strokeDashoffset = offset;
-
-                    progressText.innerText = progress + '%';
-
-                    if(progress >= 100){
-
-                        clearInterval(interval);
-
-                        editProfileForm.submit();
-
-                    }
-
-                }, 300);
-
-            });
-
-        }
-
-        // SUCCESS MODAL
+        // SUCCESS MODAL (EDIT PROFILE)
         @if(session('success'))
 
             const successModal = document.getElementById('successModal');
 
-            if(successModal){
+            if (successModal) {
 
                 successModal.classList.remove('hidden');
                 successModal.classList.add('flex');
@@ -208,113 +51,90 @@
 
         @endif
 
-        // PASSWORD MODAL
-        const changePasswordBtn = document.getElementById('changePasswordBtn');
-        const editProfileBtnMobile = document.getElementById('editProfileBtnMobile');
-        const changePasswordBtnMobile = document.getElementById('changePasswordBtnMobile');
-        const passwordModal = document.getElementById('passwordModal');
-        const closePasswordModal = document.getElementById('closePasswordModal');
 
-        if(editProfileBtnMobile){
-            editProfileBtnMobile.addEventListener('click', () => {
+        // SUCCESS MODAL (CHANGE PASSWORD)
+        @if(session('success_password'))
 
-                mobileMenu.classList.add('hidden');
+            const successPasswordModal = document.getElementById('successPasswordModal');
 
-                editModal.classList.remove('hidden');
-                editModal.classList.add('flex');
+            if (successPasswordModal) {
 
-            });
+                successPasswordModal.classList.remove('hidden');
+                successPasswordModal.classList.add('flex');
 
-        }
+                setTimeout(() => {
 
-        if(changePasswordBtnMobile){
-            changePasswordBtnMobile.addEventListener('click', () => {
+                    successPasswordModal.classList.add('hidden');
+                    successPasswordModal.classList.remove('flex');
 
-                mobileMenu.classList.add('hidden');
+                }, 3500);
 
-                passwordModal.classList.remove('hidden');
-                passwordModal.classList.add('flex');
+            }
 
-            });
+        @endif
 
-        }
 
-        if(changePasswordBtn){
-            changePasswordBtn.addEventListener('click', () => {
+        // OPEN PASSWORD MODAL IF VALIDATION ERROR
+        @if($errors->any())
 
-                profileDropdown.classList.add('hidden');
-                profileOverlay.classList.add('hidden');
+            const passwordModal = document.getElementById('passwordModal');
+
+            if (passwordModal) {
 
                 passwordModal.classList.remove('hidden');
                 passwordModal.classList.add('flex');
 
-                // RESET INPUT
-                passwordForm.reset();
+            }
 
-                // BALIKIN TYPE PASSWORD
-                document.getElementById('passwordLama').type = 'password';
-                document.getElementById('passwordBaru').type = 'password';
-                document.getElementById('konfirmasiPassword').type = 'password';
+        @endif
 
-            });
 
-        }
+        // MOBILE MENU
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
 
-        if(closePasswordModal){
+        if (menuBtn && mobileMenu) {
 
-            closePasswordModal.addEventListener('click', () => {
+            menuBtn.addEventListener('click', () => {
 
-                passwordModal.classList.add('hidden');
-                passwordModal.classList.remove('flex');
-
-                passwordForm.reset();
-            });
-        }
-
-        // OPEN CONFIRM PASSWORD
-        const openPasswordConfirmModal = document.getElementById('openPasswordConfirmModal');
-        const passwordConfirmModal = document.getElementById('passwordConfirmModal');
-
-        if(openPasswordConfirmModal){
-
-            openPasswordConfirmModal.addEventListener('click', () => {
-
-                passwordConfirmModal.classList.remove('hidden');
-                passwordConfirmModal.classList.add('flex');
+                mobileMenu.classList.toggle('hidden');
 
             });
 
         }
 
-        // CLOSE CONFIRM PASSWORD
-        const closePasswordConfirmModal = document.getElementById('closePasswordConfirmModal');
 
-        if(closePasswordConfirmModal){
+        // MOBILE PROFILE DROPDOWN
+        const mobileProfileBtn = document.getElementById('mobileProfileBtn');
+        const mobileProfileMenu = document.getElementById('mobileProfileMenu');
 
-            closePasswordConfirmModal.addEventListener('click', () => {
+        if (mobileProfileBtn && mobileProfileMenu) {
 
-                passwordConfirmModal.classList.add('hidden');
-                passwordConfirmModal.classList.remove('flex');
+            mobileProfileBtn.addEventListener('click', () => {
+
+                mobileProfileMenu.classList.toggle('hidden');
 
             });
+
         }
 
-        const confirmPasswordBtn = document.getElementById('confirmPasswordBtn');
-        const passwordForm = document.getElementById('passwordForm');
 
-        if(confirmPasswordBtn){
+        // EDIT PROFILE CONFIRMATION
+        const confirmEditBtn = document.getElementById('confirmEditBtn');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const loadingModal = document.getElementById('loadingModal');
 
-            confirmPasswordBtn.addEventListener('click', () => {
+        if (confirmEditBtn && editProfileForm && loadingModal) {
 
-                passwordConfirmModal.classList.add('hidden');
+            confirmEditBtn.addEventListener('click', () => {
 
                 loadingModal.classList.remove('hidden');
                 loadingModal.classList.add('flex');
 
-                let progress = 0;
-
                 const progressCircle = document.getElementById('progressCircle');
                 const progressText = document.getElementById('progressText');
+
+                let progress = 0;
 
                 const interval = setInterval(() => {
 
@@ -322,14 +142,70 @@
 
                     const offset = 314 - (314 * progress / 100);
 
-                    progressCircle.style.strokeDashoffset = offset;
+                    if (progressCircle) {
+                        progressCircle.style.strokeDashoffset = offset;
+                    }
 
-                    progressText.innerText = progress + '%';
+                    if (progressText) {
+                        progressText.innerText = progress + '%';
+                    }
 
-                    if(progress >= 100){
+                    if (progress >= 100) {
 
                         clearInterval(interval);
+                        editProfileForm.submit();
 
+                    }
+
+                }, 300);
+
+            });
+
+        }
+
+
+        // CHANGE PASSWORD CONFIRMATION
+        const confirmPasswordBtn = document.getElementById('confirmPasswordBtn');
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordConfirmModal = document.getElementById('passwordConfirmModal');
+
+        if (
+            confirmPasswordBtn &&
+            passwordForm &&
+            loadingModal &&
+            passwordConfirmModal
+        ) {
+
+            confirmPasswordBtn.addEventListener('click', () => {
+
+                passwordConfirmModal.classList.add('hidden');
+                passwordConfirmModal.classList.remove('flex');
+
+                loadingModal.classList.remove('hidden');
+                loadingModal.classList.add('flex');
+
+                const progressCircle = document.getElementById('progressCircle');
+                const progressText = document.getElementById('progressText');
+
+                let progress = 0;
+
+                const interval = setInterval(() => {
+
+                    progress += 10;
+
+                    const offset = 314 - (314 * progress / 100);
+
+                    if (progressCircle) {
+                        progressCircle.style.strokeDashoffset = offset;
+                    }
+
+                    if (progressText) {
+                        progressText.innerText = progress + '%';
+                    }
+
+                    if (progress >= 100) {
+
+                        clearInterval(interval);
                         passwordForm.submit();
 
                     }
@@ -337,110 +213,58 @@
                 }, 300);
 
             });
+
         }
 
-        // PREVIEW FOTO PROFILE
-        const fotoProfilInput = document.getElementById('fotoProfilInput');
 
-        if(fotoProfilInput){
+        // OPEN CONFIRM MODAL
+        const openConfirmModal = document.getElementById('openConfirmModal');
+        const confirmModal = document.getElementById('confirmModal');
 
-            fotoProfilInput.addEventListener('change', function(e){
+        if (openConfirmModal && confirmModal) {
 
-                const file = e.target.files[0];
+            openConfirmModal.addEventListener('click', () => {
 
-                if(file){
-
-                    const reader = new FileReader();
-
-                    reader.onload = function(event){
-
-                        let previewFoto = document.getElementById('previewFoto');
-                        if(!previewFoto){
-
-                            const previewDefault = document.getElementById('previewDefault');
-
-                            previewDefault.outerHTML = `
-                                <img
-                                    id="previewFoto"
-                                    src="${event.target.result}"
-                                    class="w-28 h-28 rounded-full object-cover"
-                                >
-                            `;
-
-                        } else {
-
-                            previewFoto.src = event.target.result;
-
-                        }
-
-                    }
-
-                    reader.readAsDataURL(file);
-
-                }
+                confirmModal.classList.remove('hidden');
+                confirmModal.classList.add('flex');
 
             });
 
         }
 
-        @if($errors->any())
 
-            const passwordModalError = document.getElementById('passwordModal');
+        // CLOSE CONFIRM MODAL
+        const closeConfirmModal = document.getElementById('closeConfirmModal');
 
-            if(passwordModalError){
+        if (closeConfirmModal && confirmModal) {
 
-                passwordModalError.classList.remove('hidden');
-                passwordModalError.classList.add('flex');
+            closeConfirmModal.addEventListener('click', () => {
 
-            }
+                confirmModal.classList.add('hidden');
+                confirmModal.classList.remove('flex');
 
-        @endif
-
-    @if(session('success_password'))
-        const successPasswordModal = document.getElementById('successPasswordModal');
-
-        if(successPasswordModal){
-
-            successPasswordModal.classList.remove('hidden');
-            successPasswordModal.classList.add('flex');
-
-            setTimeout(() => {
-
-                successPasswordModal.classList.add('hidden');
-                successPasswordModal.classList.remove('flex');
-
-            }, 3500);
+            });
 
         }
-    @endif
-
     });
 
+        // TOGGLE PASSWORD
+        function togglePassword(id, button){
+            const input = document.getElementById(id);
+            const icon = button.querySelector('.eyeIcon');
 
-    // TOGGLE PASSWORD
-    function togglePassword(id, button){
+            if(input.type === 'password'){
+                input.type = 'text';
+                icon.src = "{{ asset('images/icons/eye-off.svg') }}";
 
-        const input = document.getElementById(id);
-
-        const icon = button.querySelector('.eyeIcon');
-
-        if(input.type === 'password'){
-
-            input.type = 'text';
-
-            icon.src = "{{ asset('images/icons/eye-off.svg') }}";
-
-        } else {
-
-            input.type = 'password';
-
-            icon.src = "{{ asset('images/icons/eye.svg') }}";
+            } else {
+                input.type = 'password';
+                icon.src = "{{ asset('images/icons/eye.svg') }}";
+            }
 
         }
+    </script>
 
-    }
-
-</script>
 
 </body>
 </html>
