@@ -24,7 +24,7 @@ class MobilSeeder extends Seeder
             'biaya_admin'         => 25000,
             'biaya_over_km'       => 3000,
             'batas_km_per_hari'   => 200,
-            'deskripsi'           => 'Mobil keluarga nyaman dan irit bahan bakar.',
+            'deskripsi'           => 'Toyota Avanza 2023 merupakan pilihan ideal untuk perjalanan keluarga maupun kebutuhan harian. Dikenal sebagai mobil yang nyaman dan efisien, Avanza hadir dengan desain modern serta kabin yang luas sehingga memberikan pengalaman berkendara yang menyenangkan.',
             'status'              => 'tersedia',
         ]);
 
@@ -33,6 +33,24 @@ class MobilSeeder extends Seeder
             'url_foto'   => 'uploads/mobil/toyota-avanza-2023.png',
             'is_primary' => true,
             'urutan'     => 1,
+        ]);
+
+        FotoMobil::create([
+            'mobil_id' => 1,
+            'url_foto' => 'uploads/mobil/toyota-avanza-2023(1).png',
+            'is_primary' => false
+        ]);
+
+        FotoMobil::create([
+            'mobil_id' => 1,
+            'url_foto' => 'uploads/mobil/toyota-avanza-2023(2).png',
+            'is_primary' => false
+        ]);
+
+        FotoMobil::create([
+            'mobil_id' => 1,
+            'url_foto' => 'uploads/mobil/toyota-avanza-2023(3).png',
+            'is_primary' => false
         ]);
 
         // Daihatsu Xenia 2023

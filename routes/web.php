@@ -84,7 +84,9 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::put('/rental/{id}/status', [SuperAdmin\RentalController::class, 'toggleStatus'])->name('rental.status');
     Route::get('/review', [SuperAdmin\ReviewController::class, 'index'])->name('review.index');
     Route::put('/review/{id}/toggle', [SuperAdmin\ReviewController::class, 'toggle'])->name('review.toggle');
-    Route::resource('/kebijakan', SuperAdmin\KebijakanController::class);
+    // Route::resource('/kebijakan', SuperAdmin\KebijakanController::class);
+    Route::get('/kebijakan', [SuperAdmin\KebijakanController::class, 'index']) ->name('kebijakan.index');
+    Route::post('/kebijakan', [SuperAdmin\KebijakanController::class, 'save']) ->name('kebijakan.save');
     Route::get('/laporan', [SuperAdmin\LaporanController::class, 'index'])->name('laporan');
     Route::get('/profil', [SuperAdmin\ProfilController::class, 'index'])->name('profil');
     Route::put('/profil', [SuperAdmin\ProfilController::class, 'update'])->name('profil.update');

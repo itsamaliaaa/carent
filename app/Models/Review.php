@@ -2,32 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    use HasFactory;
-
-    // Nama tabel di database Anda
     protected $table = 'review';
 
-    // Primary key tabel Anda
     protected $primaryKey = 'review_id';
 
-    // Kolom yang dapat diisi secara massal (Mass Assignment)
+    public $timestamps = false;
+
     protected $fillable = [
         'booking_id',
         'user_id',
         'rating',
         'komentar',
         'status_tampilkan',
-        'tanggal_posting'
+        'tanggal_posting',
+    ];
+
+    protected $casts = [
+        'status_tampilkan' => 'boolean',
+        'tanggal_posting' => 'datetime',
     ];
 
     /**
-     * 1. Relasi ke model User
-     * Menggunakan 'user_id' sebagai Foreign Key dan Local Key
+     * Relasi ke User (penulis review)
      */
     public function user()
     {
@@ -35,12 +35,26 @@ class Review extends Model
     }
 
     /**
-     * 2. Relasi ke model ReviewReply (Balasan Ulasan)
-     * Menghubungkan satu ulasan ke satu balasan admin
+     * Relasi ke Booking
      */
-    public function reply()
+    public function booking()
     {
-        // Pastikan di sini memanggil ReplyReview::class
-        return $this->hasOne(ReplyReview::class, 'review_id', 'review_id');
+        return $this->belongsTo(Booking::class, 'booking_id', 'booking_id');
+    }
+
+    /**
+     * Scope review yang ditampilkan
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('status_tampilkan', true);
+    }
+
+    /**
+     * Scope review yang disembunyikan
+     */
+    public function scopeHidden($query)
+    {
+        return $query->where('status_tampilkan', false);
     }
 }
