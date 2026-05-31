@@ -12,16 +12,23 @@ class BookingController extends Controller
     {
         return view('admin.booking.index');
     }
+
     public function show($id)
     {
-        $booking = Booking::with('car')->findOrFail($id);
+        $booking = Booking::with([
+            'mobil',
+            'user',
+            'driver',
+            'pembayaran',   // <-- ini yang mengandung bukti transfer
+        ])->findOrFail($id);
+
         return view('admin.bookings.show', compact('booking'));
     }
 
     public function updateStatus(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
-        $booking->update(['status' => $request->status]);
+        $booking->update(['status_booking' => $request->status]);
 
         return redirect()->back()->with('success', 'Status updated!');
     }

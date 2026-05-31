@@ -35,6 +35,14 @@ class Review extends Model
     }
 
     /**
+     * Relasi ke ReplyReview
+     */
+    public function reply()
+    {
+        return $this->hasOne(ReplyReview::class, 'review_id', 'review_id');
+    }
+
+    /**
      * Relasi ke Booking
      */
     public function booking()
