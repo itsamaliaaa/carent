@@ -263,6 +263,34 @@
             }
 
         }
+
+        // LOGOUT MODAL
+
+        const openLogoutModal = document.getElementById('openLogoutModal');
+        const closeLogoutModal = document.getElementById('closeLogoutModal');
+        const logoutModal = document.getElementById('logoutModal');
+
+        if (openLogoutModal && logoutModal) {
+
+            openLogoutModal.addEventListener('click', () => {
+
+                logoutModal.classList.remove('hidden');
+                logoutModal.classList.add('flex');
+
+            });
+
+        }
+
+        if (closeLogoutModal && logoutModal) {
+
+            closeLogoutModal.addEventListener('click', () => {
+
+                logoutModal.classList.add('hidden');
+                logoutModal.classList.remove('flex');
+
+            });
+
+        }
     </script>
 
 

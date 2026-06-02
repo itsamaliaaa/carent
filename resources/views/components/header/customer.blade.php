@@ -156,22 +156,18 @@
 
                         </button>
 
-                        <form action="{{ route('logout') }}" method="POST">
+                        <button
+                            type="button"
+                            id="openLogoutModal"
+                            class="group w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 transition text-left">
 
-                            @csrf
+                            <img src="{{ asset('images/icons/logout-04.svg') }}" class="w-5 h-5">
 
-                            <button type="submit"
-                                class="group w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 transition text-left">
+                            <span class="text-red-500 group-hover:text-red-700 group-hover:font-medium transition">
+                                Keluar
+                            </span>
 
-                                <img src="{{ asset('images/icons/logout-04.svg') }}" class="w-5 h-5">
-
-                                <span class="text-red-500 group-hover:text-red-700 group-hover:font-medium transition">
-                                    Keluar
-                                </span>
-
-                            </button>
-
-                        </form>
+                        </button>
 
                     </div>
 
@@ -840,6 +836,52 @@
             <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">
                 Password berhasil diperbarui
             </h2>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL KONFIRMASI LOGOUT -->
+    <div
+        id="logoutModal"
+        class="fixed inset-0 z-[70] hidden items-center justify-center">
+
+        <div class="absolute inset-0 bg-black/50"></div>
+
+        <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
+
+            <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
+                Apakah kamu yakin ingin keluar dari akun ini?
+            </p>
+
+            <div class="flex gap-4 mt-8">
+
+                <!-- Ya -->
+                <form action="{{ route('logout') }}" method="POST" class="flex-1">
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="w-full bg-[#62B33B] hover:bg-green-600
+                        text-white py-3 rounded-xl font-semibold">
+
+                        Ya
+
+                    </button>
+                </form>
+
+                <!-- Tidak -->
+                <button
+                    type="button"
+                    id="closeLogoutModal"
+                    class="flex-1 bg-[#B92A44] hover:bg-red-600
+                    text-white py-3 rounded-xl font-semibold">
+
+                    Tidak
+
+                </button>
+
+            </div>
 
         </div>
 
