@@ -12,7 +12,7 @@ class BookingController extends Controller
     {
         return view('admin.booking.index');
     }
-
+  
     public function show($id)
     {
         $booking = Booking::with('car')->findOrFail($id);
@@ -22,9 +22,7 @@ class BookingController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $booking = Booking::findOrFail($id);
-        $booking->update([
-            'status' => $request->status
-        ]);
+        $booking->update(['status' => $request->status]);
 
         return redirect()->back()->with('success', 'Status updated!');
     }
