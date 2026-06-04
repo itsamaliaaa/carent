@@ -21,6 +21,16 @@ class DashboardController extends Controller
         $rentalBaru      = Rental::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
         $userBaru        = User::where('role', 'customer')->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
 
+        // Validasi tanggal
+        $request->validate([
+            'dari'   => 'nullable|date',
+            'sampai' => 'nullable|date|after_or_equal:dari',
+        ], [
+            'dari.date'                => 'Tanggal mulai tidak valid.',
+            'sampai.date'              => 'Tanggal akhir tidak valid.',
+            'sampai.after_or_equal'    => 'Tanggal akhir tidak boleh lebih awal dari tanggal mulai.',
+        ]);
+
         // FILTER LAPORAN
         $query = Rental::withCount(['bookings' => function ($q) use ($request) {
                 $q->where('status_booking', 'selesai');

@@ -67,22 +67,26 @@
 
                 {{-- Tanggal Mulai --}}
                 <div class="flex flex-col gap-1">
-                    <label class="text-xs text-gray-500">Tanggal</label>
-                    <div class="relative">
-                        <input type="date" name="dari"
-                               value="{{ request('dari') }}"
-                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67]">
-                    </div>
+                    <label class="text-xs text-gray-500">Tanggal Mulai</label>
+                    <input type="date" name="dari"
+                        value="{{ request('dari') }}"
+                        class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67]
+                                {{ $errors->has('dari') ? 'border-red-400 bg-red-50' : 'border-gray-200' }}">
+                    @error('dari')
+                        <span class="text-red-500 text-[11px]">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Tanggal Akhir --}}
                 <div class="flex flex-col gap-1">
-                    <label class="text-xs text-gray-500">Tanggal</label>
-                    <div class="relative">
-                        <input type="date" name="sampai"
-                               value="{{ request('sampai') }}"
-                               class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67]">
-                    </div>
+                    <label class="text-xs text-gray-500">Tanggal Akhir</label>
+                    <input type="date" name="sampai"
+                        value="{{ request('sampai') }}"
+                        class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67]
+                                {{ $errors->has('sampai') ? 'border-red-400 bg-red-50' : 'border-gray-200' }}">
+                    @error('sampai')
+                        <span class="text-red-500 text-[11px]">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Filter Perusahaan --}}
@@ -117,143 +121,100 @@
         </form>
     </div>
 
-    {{-- Tabel + Summary --}}
-    <div class="bg-white rounded-2xl shadow-sm border p-6">
+    {{-- Wrapper utama --}}
+    <div class="flex flex-col lg:flex-row gap-4">
 
-        <div class="flex flex-col lg:flex-row gap-6">
+        {{-- Tabel Rental --}}
+        <div class="flex-1 bg-white rounded-2xl shadow-sm border p-6 overflow-x-auto">
 
-            {{-- Tabel Rental --}}
-            <div class="flex-1 overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-gray-500 border-b">
+                        <th class="pb-3 font-semibold">Perusahaan</th>
+                        <th class="pb-3 font-semibold">Kota</th>
+                        <th class="pb-3 font-semibold">Transaksi</th>
+                        <th class="pb-3 font-semibold">Pendapatan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($daftarRental as $rental)
+                    <tr class="border-b last:border-0 hover:bg-gray-50 transition">
+                        <td class="py-3.5 font-medium text-gray-800">{{ $rental->nama_rental }}</td>
+                        <td class="py-3.5 text-gray-600">{{ $rental->kota }}</td>
+                        <td class="py-3.5 text-gray-600">{{ $rental->bookings_count }}</td>
+                        <td class="py-3.5 text-gray-800 font-semibold">
+                            Rp {{ number_format($rental->total_pendapatan, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="py-10 text-center text-gray-400">Belum ada data</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
-                <table class="w-full text-sm">
-
-                    <thead>
-                        <tr class="text-left text-gray-500 border-b">
-                            <th class="pb-3 font-semibold">Perusahaan</th>
-                            <th class="pb-3 font-semibold">Kota</th>
-                            <th class="pb-3 font-semibold">Transaksi</th>
-                            <th class="pb-3 font-semibold">Pendapatan</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @forelse ($daftarRental as $rental)
-
-                        <tr class="border-b last:border-0 hover:bg-gray-50 transition">
-
-                            <td class="py-4 font-medium text-gray-800">
-                                {{ $rental->nama_rental }}
-                            </td>
-
-                            <td class="py-4 text-gray-600">
-                                {{ $rental->kota }}
-                            </td>
-
-                            <td class="py-4 text-gray-600">
-                                {{ $rental->bookings_count }}
-                            </td>
-
-                            <td class="py-4 text-gray-800 font-semibold">
-                                Rp {{ number_format($rental->total_pendapatan, 0, ',', '.') }}
-                            </td>
-
-                        </tr>
-
-                        @empty
-
-                        <tr>
-                            <td colspan="4" class="py-10 text-center text-gray-400">
-                                Belum ada data
-                            </td>
-                        </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
-
-                {{-- Pagination --}}
-                <div class="mt-5">
-                    {{ $daftarRental->links() }}
-                </div>
-
-            </div>
-
-            {{-- Summary Kanan --}}
-            <div class="w-full lg:w-[280px] shrink-0 flex flex-col gap-4">
-
-                {{-- Total Pendapatan --}}
-                <div class="bg-gray-50 border rounded-2xl p-5">
-
-                    <p class="text-[11px] text-gray-400 uppercase tracking-wide font-semibold">
-                        Total Pendapatan
-                    </p>
-
-                    <p class="text-2xl font-bold text-gray-900 mt-1">
-                        Rp {{ number_format($summaryPendapatan, 0, ',', '.') }}
-                    </p>
-
-                </div>
-
-                {{-- Jumlah Transaksi --}}
-                <div class="bg-gray-50 border rounded-2xl p-5">
-
-                    <p class="text-[11px] text-gray-400 uppercase tracking-wide font-semibold">
-                        Jumlah Transaksi
-                    </p>
-
-                    <p class="text-2xl font-bold text-gray-900 mt-1">
-                        {{ $summaryTransaksi }}
-                    </p>
-
-                </div>
-
-                {{-- Rata-rata --}}
-                <div class="bg-gray-50 border rounded-2xl p-5">
-
-                    <p class="text-[11px] text-gray-400 uppercase tracking-wide font-semibold">
-                        Rata-rata Per Transaksi
-                    </p>
-
-                    <p class="text-2xl font-bold text-gray-900 mt-1">
-
-                        Rp {{ $summaryTransaksi > 0 
-                            ? number_format($summaryPendapatan / $summaryTransaksi, 0, ',', '.') 
-                            : 0 }}
-
-                    </p>
-
-                </div>
-
-                {{-- Periode --}}
-                <div class="bg-gray-50 border rounded-2xl p-5">
-
-                    <p class="text-[11px] text-gray-400 uppercase tracking-wide font-semibold">
-                        Periode
-                    </p>
-
-                    <p class="text-sm font-semibold text-gray-800 mt-1 leading-relaxed">
-
-                        {{ request('dari') 
-                            ? \Carbon\Carbon::parse(request('dari'))->format('d M Y') 
-                            : '-' }}
-
-                        <span class="text-gray-400">s/d</span>
-
-                        {{ request('sampai') 
-                            ? \Carbon\Carbon::parse(request('sampai'))->format('d M Y') 
-                            : '-' }}
-
-                    </p>
-
-                </div>
-
+            {{-- Pagination --}}
+            <div class="mt-5">
+                {{ $daftarRental->links() }}
             </div>
 
         </div>
 
+    {{-- Summary Kanan (4 card) --}}
+    <div class="w-full lg:w-[240px] shrink-0 flex flex-col gap-3">
+
+        {{-- Total Pendapatan --}}
+        <div class="bg-blue-50 rounded-2xl px-5 py-4">
+            <p class="text-[10px] text-gray-800 uppercase tracking-widest font-semibold mb-1">
+                Total Pendapatan
+            </p>
+            <p class="text-xl font-bold text-black-800">
+                Rp {{ number_format($summaryPendapatan, 0, ',', '.') }}
+            </p>
+        </div>
+
+        {{-- Jumlah Transaksi --}}
+        <div class="bg-blue-50 rounded-2xl px-5 py-4">
+            <p class="text-[10px] text-gray-800 uppercase tracking-widest font-semibold mb-1">
+                Jumlah Transaksi
+            </p>
+            <p class="text-xl font-bold text-black-800">
+                {{ $summaryTransaksi }}
+            </p>
+        </div>
+
+        {{-- Rata-rata Per Transaksi --}}
+        <div class="bg-blue-50 rounded-2xl px-5 py-4">
+            <p class="text-[10px] text-gray-800 uppercase tracking-widest font-semibold mb-1">
+                Rata - Rata Per Transaksi
+            </p>
+            <p class="text-xl font-bold text-black-800">
+                Rp {{ $summaryTransaksi > 0
+                    ? number_format($summaryPendapatan / $summaryTransaksi, 0, ',', '.')
+                    : 0 }}
+            </p>
+        </div>
+
+        {{-- Periode --}}
+        <div class="bg-blue-50 rounded-2xl px-5 py-4">
+            <p class="text-[10px] text-gray-800 uppercase tracking-widest font-semibold mb-1">
+                Periode
+            </p>
+            <p class="text-sm font-bold text-black-800">
+                {{ request('dari')
+                    ? \Carbon\Carbon::parse(request('dari'))->format('Y-m-d')
+                    : '-' }}
+                s/d
+                {{ request('sampai')
+                    ? \Carbon\Carbon::parse(request('sampai'))->format('Y-m-d')
+                    : '-' }}
+            </p>
+        </div>
+
     </div>
+
+</div>
+
 </div>
 @endsection
