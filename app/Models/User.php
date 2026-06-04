@@ -69,4 +69,10 @@ class User extends Authenticatable implements CanResetPassword
     {
         return $this->email;
     }
+
+    // relasi kebijakan
+    public function kebijakan()
+    {
+        return $this->hasMany(Kebijakan::class, 'dibuat_oleh', 'user_id');
+    }
 }

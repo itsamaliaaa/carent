@@ -214,4 +214,39 @@ class CatalogController extends Controller
             'isSearch'
         ));
     }
+
+    public function detail($id)
+    {
+        $mobil = Mobil::with([
+            'fotoPrimary',
+            'fotos',
+            'rental'
+        ])->findOrFail($id);
+
+        // REVIEW DARI DATABASE
+        $reviews = \DB::table('review')
+            ->join('users', 'review.user_id', '=', 'users.user_id')
+            ->join('booking', 'review.booking_id', '=', 'booking.booking_id')
+            ->select(
+                'review.*',
+                'users.email'
+            )
+            ->where('booking.mobil_id', $mobil->mobil_id)
+            ->where('review.status_tampilkan', true)
+            ->latest('review.tanggal_posting')
+            ->get();
+            
+        // MOBIL TERKAIT
+        $mobilTerkait = Mobil::with('fotoPrimary')
+            ->where('kategori', $mobil->kategori)
+            ->where('mobil_id', '!=', $mobil->mobil_id)
+            ->take(3)
+            ->get();
+
+        return view('customer.detail-mobil', compact(
+            'mobil',
+            'reviews',
+            'mobilTerkait'
+        ));
+    }
 }

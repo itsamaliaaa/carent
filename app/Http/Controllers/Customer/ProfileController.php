@@ -45,7 +45,7 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $request->validate([
+        $request->validateWithBag('password', [
             'password_lama' => 'required',
             'password_baru' => 'required|min:8|confirmed',
         ], [
@@ -55,16 +55,14 @@ class ProfileController extends Controller
 
         $user = auth()->user();
 
-        // CHECK PASSWORD LAMA
         if (!Hash::check($request->password_lama, $user->password)) {
 
-            return redirect()->back()->withErrors([
-                'password_lama' => 'Password lama salah'
-            ]);
-
+            return redirect()->back()
+                ->withErrors([
+                    'password_lama' => 'Password lama salah'
+                ], 'password');
         }
 
-        // UPDATE PASSWORD
         $user->update([
             'password' => Hash::make($request->password_baru)
         ]);

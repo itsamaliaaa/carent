@@ -12,6 +12,7 @@ class BookingController extends Controller
     {
         return view('admin.booking.index');
     }
+  
     public function show($id)
     {
         $booking = Booking::with('car')->findOrFail($id);

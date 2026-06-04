@@ -118,8 +118,9 @@
                 </div>
 
                 {{-- Password --}}
-                <div class="flex flex-col gap-1.5">
+                <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Password</label>
+
                     <div class="relative">
                         <input
                             type="password"
@@ -127,32 +128,51 @@
                             id="passwordInput"
                             placeholder="Masukkan Password"
                             class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                                   @error('password') border-red-400 bg-red-50 @enderror">
-                        <button type="button" onclick="togglePassword('passwordInput', 'eyeIcon1')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <img id="eyeIcon1" src="{{ asset('images/icons/eye.svg') }}" class="w-5 h-5">
+                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                @error('password') border-red-400 bg-red-50 @enderror">
+
+                        <button
+                            type="button"
+                            class="toggle-password absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            data-target="passwordInput">
+
+                            <img
+                                class="eye-icon w-5 h-5"
+                                src="{{ asset('images/icons/eye.svg') }}"
+                                data-eye="{{ asset('images/icons/eye.svg') }}"
+                                data-eye-off="{{ asset('images/icons/eye-off.svg') }}"
+                                alt="Toggle Password">
                         </button>
                     </div>
+
                     @error('password')
                         <span class="text-red-500 text-xs">{{ $message }}</span>
                     @enderror
                 </div>
 
                 {{-- Konfirmasi Password --}}
-                <div class="flex flex-col gap-1.5">
+                <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Konfirmasi Password</label>
+
                     <div class="relative">
                         <input
                             type="password"
                             name="password_confirmation"
-                            id="passwordConfirmInput"
-                            placeholder="Masukkan Password"
-                            class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <button type="button" onclick="togglePassword('passwordConfirmInput', 'eyeIcon2')"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <img id="eyeIcon2" src="{{ asset('images/icons/eye.svg') }}" class="w-5 h-5">
+                            id="passwordConfirmationInput"
+                            placeholder="Konfirmasi Password"
+                            class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm">
+
+                        <button
+                            type="button"
+                            class="toggle-password absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            data-target="passwordConfirmationInput">
+
+                            <img
+                                class="eye-icon w-5 h-5"
+                                src="{{ asset('images/icons/eye.svg') }}"
+                                data-eye="{{ asset('images/icons/eye.svg') }}"
+                                data-eye-off="{{ asset('images/icons/eye-off.svg') }}"
+                                alt="Toggle Password">
                         </button>
                     </div>
                 </div>
@@ -174,21 +194,6 @@
         </div>
     </div>
 </div>
-
-<script>
-    function togglePassword(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon  = document.getElementById(iconId);
-
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.src   = '{{ asset("images/icons/eye-off.svg") }}';
-        } else {
-            input.type = 'password';
-            icon.src   = '{{ asset("images/icons/eye.svg") }}';
-        }
-    }
-</script>
 
 </body>
 </html>

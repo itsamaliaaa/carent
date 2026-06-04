@@ -48,6 +48,7 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 
 // CUSTOMER ROUTES
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('/booking/{mobil_id}/driver-random',[Customer\BookingController::class, 'getRandomDriver'])->name('booking.driver-random');
     Route::get('/booking/{mobil_id}', [Customer\BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
     Route::get('/riwayat', [Customer\BookingController::class, 'riwayat'])->name('booking.riwayat');
@@ -84,7 +85,9 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::put('/rental/{id}/status', [SuperAdmin\RentalController::class, 'toggleStatus'])->name('rental.status');
     Route::get('/review', [SuperAdmin\ReviewController::class, 'index'])->name('review.index');
     Route::put('/review/{id}/toggle', [SuperAdmin\ReviewController::class, 'toggle'])->name('review.toggle');
-    Route::resource('/kebijakan', SuperAdmin\KebijakanController::class);
+    // Route::resource('/kebijakan', SuperAdmin\KebijakanController::class);
+    Route::get('/kebijakan', [SuperAdmin\KebijakanController::class, 'index']) ->name('kebijakan.index');
+    Route::post('/kebijakan', [SuperAdmin\KebijakanController::class, 'save']) ->name('kebijakan.save');
     Route::get('/laporan', [SuperAdmin\LaporanController::class, 'index'])->name('laporan');
     Route::get('/profil', [SuperAdmin\ProfilController::class, 'index'])->name('profil');
     Route::put('/profil', [SuperAdmin\ProfilController::class, 'update'])->name('profil.update');

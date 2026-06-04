@@ -41,7 +41,7 @@
 
         <!-- NAMA -->
         <span class="text-sm text-gray-700 hidden sm:block">
-            {{ 'Admin' }}
+            {{ (auth()->user()->nama_lengkap) }}
         </span>
 
         @auth
@@ -183,7 +183,7 @@
 
             <!-- Avatar -->
             <div class="flex flex-col items-center">
-            //perbaiki edit foto profil
+                
             <div class="relative"> 
 
                 <!-- FOTO -->

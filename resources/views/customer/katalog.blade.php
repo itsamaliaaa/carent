@@ -365,7 +365,10 @@
             @foreach($mobilTersedia as $mobil)
 
             {{-- CARD --}}
-            <div class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent">
+            <a
+                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
+            >
 
                 <div class="relative">
 
@@ -441,7 +444,7 @@
 
                 </div>
 
-            </div>
+            </a>
 
             @endforeach
 
@@ -486,7 +489,10 @@
 
             @foreach($mobilKeluarga as $mobil)
 
-            <div class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent">
+            <a
+                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
+            >
 
                 {{-- IMAGE --}}
                 <div class="relative">
@@ -567,7 +573,7 @@
 
                 </div>
 
-            </div>
+            </a>
 
             @endforeach
 
@@ -595,8 +601,10 @@
 
             @foreach($mobilHarian as $mobil)
 
-            <div class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent">
-
+            <a
+                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
+            >
                 <div class="relative">
 
                     <img
@@ -670,8 +678,7 @@
                     </div>
 
                 </div>
-
-            </div>
+            </a>
 
             @endforeach
 
@@ -699,7 +706,10 @@
 
             @foreach($mobilRombongan as $mobil)
 
-            <div class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent">
+            <a
+                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
+            >
 
                 <div class="relative">
 
@@ -775,7 +785,7 @@
 
                 </div>
 
-            </div>
+            </a>
 
             @endforeach
 

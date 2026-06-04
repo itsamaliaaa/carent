@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('nama_driver');
             $table->string('foto')->nullable();
             $table->unsignedTinyInteger('umur');
+            $table->string('no_telp', 20);
             $table->decimal('tarif_harian', 12, 2);
             $table->enum('status', ['tersedia', 'tidak_tersedia'])->default('tersedia');
             $table->timestamps();
