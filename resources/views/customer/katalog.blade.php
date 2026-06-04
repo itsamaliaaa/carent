@@ -21,7 +21,7 @@
                 />
 
                 <circle
-                    id="progressCircle"
+                    id="progressCircleKatalog"
                     cx="60"
                     cy="60"
                     r="50"
@@ -38,7 +38,7 @@
 
             <div class="absolute inset-0 flex items-center justify-center">
 
-                <span id="progressText" class="text-2xl font-bold text-[#0B1F67]">
+                <span id="progressTextKatalog" class="text-2xl font-bold text-[#0B1F67]">
                     0%
                 </span>
 
@@ -61,7 +61,7 @@
 
         {{-- FORM --}}
         <form
-            id="searchForm"
+            id="searchFormKatalog"
             action="{{ route('katalog') }}"
             method="GET"
             class="bg-[#ECECF3] rounded-[10px] p-4"
@@ -839,7 +839,7 @@
     }
 
     // LOADING
-    const searchForm = document.getElementById('searchForm');
+    const searchForm = document.getElementById('searchFormKatalog');
     const filterForm = document.getElementById('filterForm');
     const loadingOverlay = document.getElementById('loadingOverlay');
 
@@ -850,8 +850,8 @@
 
         let progress = 0;
 
-        const circle = document.getElementById('progressCircle');
-        const text = document.getElementById('progressText');
+        const circle = document.getElementById('progressCircleKatalog');
+        const text = document.getElementById('progressTextKatalog');
 
         const interval = setInterval(() => {
 
