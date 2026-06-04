@@ -1,69 +1,74 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="p-6 flex flex-col gap-6">
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 
-    {{-- Session --}}
-    @if(session('success'))
-    <div class="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-xl text-sm">
-        {{ session('success') }}
-    </div>
-    @endif
+    .custom-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
 
-    {{-- Header + Filter --}}
-    <div class="bg-white rounded-2xl shadow-sm border p-6 flex flex-col gap-5">
+<div class="flex flex-col gap-4 py-2 px-2">
 
-        <div class="flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-[#0B1F67]">Moderasi Review</h1>
-            <button form="formFilter" type="submit"
-                    class="bg-[#0B1F67] hover:bg-[#0e2781] text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition">
-                Terapkan Filter
-            </button>
+    {{-- Card Filter & Search --}}
+    <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50 mb-3">
+        <div class="flex justify-between items-center mb-5">
+            <h1 class="text-[#1D2B6B] text-2xl font-bold">Moderasi Review</h1>
         </div>
+        <hr class="border-t border-gray-200 mb-6">
 
-        <hr class="border-gray-100">
-
-        <form id="formFilter" action="{{ route('superadmin.review.index') }}" method="GET">
-            <div class="flex flex-wrap items-end gap-4">
-
+        <form method="GET" action="{{ route('superadmin.review.index') }}">
+            {{-- Date Filter --}}
+            <div class="flex items-start gap-4 mb-5">
                 {{-- Tanggal Mulai --}}
-                <div class="flex flex-col gap-1.5">
-                    <label class="text-xs text-gray-500">Tanggal</label>
-                    <input type="date" name="dari"
-                           value="{{ request('dari') }}"
-                           class="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67] w-44">
+                <div class="flex flex-col gap-1 flex-1">
+                    <label class="text-xs text-gray-400 font-medium">Tanggal</label>
+                    <input type="date" name="dari" value="{{ request('dari') }}"
+                        class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] uppercase">
+                    <span class="text-xs min-h-[16px]"></span> 
                 </div>
 
-                <span class="text-sm text-gray-400 mb-2.5">s/d</span>
+                <span class="text-sm text-gray-500 mt-7">s/d</span>
 
-                {{-- Tanggal Akhir --}}
-                <div class="flex flex-col gap-1.5">
-                    <label class="text-xs text-gray-500">Tanggal</label>
-                    <input type="date" name="sampai"
-                           value="{{ request('sampai') }}"
-                           class="border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67] w-44">
+                {{-- Tanggal Selesai --}}
+                <div class="flex flex-col gap-1 flex-1">
+                    <label class="text-xs text-gray-400 font-medium">Tanggal</label>
+                    <input type="date" name="sampai" value="{{ request('sampai') }}"
+                        class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] uppercase">
+                    <span class="text-xs min-h-[16px]">
+                        @error('sampai')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </span>
                 </div>
 
+                {{-- Tombol --}}
+                <div class="flex flex-col flex-1">
+                    <div class="h-[6px]"></div>
+                    <label class="text-xs text-gray-400 font-medium opacity-0">Filter</label> 
+                    <button type="submit" class="bg-[#1D2B6B] text-white px-5 py-2 rounded-lg font-semibold text-xs hover:bg-[#152052] transition">
+                        Terapkan Filter
+                    </button>
+                    <span class="min-h-[16px]"></span> 
+                </div>
             </div>
 
             {{-- Search --}}
-            <div class="flex gap-3 mt-4">
+            <div class="flex gap-4">
                 <div class="relative flex-1">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search Icon">
                     </div>
-                    <input type="text" name="cari"
-                           value="{{ request('cari') }}"
-                           placeholder="Cari User"
-                           class="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-[#0B1F67]">
+                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari User"
+                        class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-800">
                 </div>
-                <button type="submit"
-                        class="bg-[#0B1F67] hover:bg-[#0e2781] text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition">
-                    Cari
-                </button>
+                <button class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">Cari</button>
             </div>
         </form>
-
     </div>
 
     {{-- Daftar Review --}}

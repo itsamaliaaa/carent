@@ -91,8 +91,12 @@
         @endif
 
 
-        // OPEN PASSWORD MODAL IF VALIDATION ERROR
-        @if($errors->any())
+        // OPEN PASSWORD MODAL IF PASSWORD VALIDATION ERROR
+        @if(
+            $errors->has('password_lama') ||
+            $errors->has('password_baru') ||
+            $errors->has('password_baru_confirmation')
+        )
 
             const passwordModal = document.getElementById('passwordModal');
 
