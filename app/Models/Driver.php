@@ -19,5 +19,6 @@ class Driver extends Model
         'umur',
         'tarif_harian',
         'status',
+        'no_telp',
     ];
 }
