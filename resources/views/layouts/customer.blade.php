@@ -75,7 +75,7 @@
 
 
         // OPEN PASSWORD MODAL IF VALIDATION ERROR
-        @if($errors->any())
+        @if($errors->password->any())
 
             const passwordModal = document.getElementById('passwordModal');
 
