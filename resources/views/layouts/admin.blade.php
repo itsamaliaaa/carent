@@ -37,7 +37,15 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('openSidebar');
+        const sidebar = document.getElementById('sidebar');
+
+            if (btn && sidebar) {
+                btn.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                });
+        }
 
         // SUCCESS MODAL (EDIT PROFILE)
         @if(session('success'))
@@ -273,22 +281,22 @@
 
         }
 
-                // LOGOUT MODAL
+        // LOGOUT MODAL
 
-                const openLogoutModal = document.getElementById('openLogoutModal');
+        const logoutButtons = document.querySelectorAll('.openLogoutModal');
         const closeLogoutModal = document.getElementById('closeLogoutModal');
         const logoutModal = document.getElementById('logoutModal');
 
-        if (openLogoutModal && logoutModal) {
+        logoutButtons.forEach(button => {
 
-            openLogoutModal.addEventListener('click', () => {
+        button.addEventListener('click', () => {
 
                 logoutModal.classList.remove('hidden');
                 logoutModal.classList.add('flex');
 
             });
 
-        }
+        });
 
         if (closeLogoutModal && logoutModal) {
 

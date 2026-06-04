@@ -139,8 +139,7 @@
 
                         <button
                             type="button"
-                            id="openLogoutModal"
-                            class="group w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 transition text-left">
+                            class="openLogoutModal group w-full flex items-center gap-3 px-5 py-4 hover:bg-red-50 transition text-left">
 
                             <img src="{{ asset('images/icons/logout-04.svg') }}" class="w-5 h-5">
 
@@ -655,7 +654,7 @@
 
     </div>
 
-        <!-- MODAL KONFIRMASI LOGOUT -->
+    <!-- MODAL KONFIRMASI LOGOUT -->
     <div
         id="logoutModal"
         class="fixed inset-0 z-[70] hidden items-center justify-center">
