@@ -219,13 +219,31 @@
 
                     {{-- Modal Edit --}}
                     <div x-show="openEdit"
-                         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-                         x-cloak style="display: none;">
-                        <div class="bg-white rounded-[20px] w-full max-w-2xl p-10 shadow-lg overflow-y-auto max-h-[90vh]"
-                             @click.away="openEdit = false">
-                            <h2 class="text-[#1D2B6B] text-3xl font-bold mb-8">Edit Rental</h2>
+                        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                        x-cloak
+                        style="display: none;">
 
-                            <form action="{{ route('superadmin.rental.update', $rental->rental_id) }}" method="POST" enctype="multipart/form-data">
+                        <div class="relative bg-white rounded-[20px] w-full max-w-2xl p-10 shadow-lg overflow-y-auto max-h-[90vh]"
+                            @click.away="openEdit = false">
+
+                            {{-- Tombol Close --}}
+                            <button
+                                type="button"
+                                @click="openEdit = false"
+                                class="absolute top-5 right-5 text-2xl text-gray-500">
+
+                                ×
+
+                            </button>
+
+                            <h2 class="text-[#1D2B6B] text-3xl font-bold mb-8">
+                                Edit Rental
+                            </h2>
+
+                            <form action="{{ route('superadmin.rental.update', $rental->rental_id) }}"
+                                method="POST"
+                                enctype="multipart/form-data">
+
                                 @csrf
                                 @method('PUT')
 
@@ -234,47 +252,51 @@
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Nama Rental</label>
                                         <input type="text" name="nama_rental" value="{{ $rental->nama_rental }}" required
-                                               class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Email</label>
                                         <input type="email" name="email" value="{{ $rental->email }}" required
-                                               class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">No Telepon</label>
                                         <input type="text" name="no_telp" value="{{ $rental->no_telp }}" required
-                                               class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Kota</label>
                                         <input type="text" name="kota" value="{{ $rental->kota }}" required
-                                               class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Alamat</label>
                                         <textarea name="alamat" required rows="3"
-                                                  class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->alamat }}</textarea>
+                                                class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->alamat }}</textarea>
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Deskripsi</label>
                                         <textarea name="deskripsi" rows="3"
-                                                  class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->deskripsi }}</textarea>
+                                                class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->deskripsi }}</textarea>
                                     </div>
 
                                     <div class="flex flex-col gap-1 col-span-2">
                                         <label class="text-sm text-gray-600">Logo Perusahaan</label>
+
                                         @if($rental->logo_perusahaan)
                                             <img src="{{ asset('storage/' . $rental->logo_perusahaan) }}"
-                                                 class="w-20 h-12 object-contain mb-2 rounded">
+                                                class="w-20 h-12 object-contain mb-2 rounded">
                                         @endif
-                                        <input type="file" name="logo_perusahaan" accept="image/*"
-                                               class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none">
+
+                                        <input type="file"
+                                            name="logo_perusahaan"
+                                            accept="image/*"
+                                            class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none">
                                     </div>
 
                                 </div>
@@ -283,12 +305,15 @@
                                         class="bg-[#0b1f67] w-full text-white py-2.5 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781] mt-6">
                                     Simpan
                                 </button>
+
                             </form>
-                        </div>
+
                     </div>
 
-                </div>
-            </div>
+        </div>
+
+    </div>
+</div>
             @empty
             <div class="text-center text-gray-400 py-8">Belum ada data rental.</div>
             @endforelse

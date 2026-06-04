@@ -10,13 +10,26 @@ use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Cari data rental milik admin yang sedang login
         $rental = Rental::where('admin_id', auth()->id())->first();
 
-        // Ambil driver milik rental 
-        $drivers = Driver::where('rental_id', $rental ? $rental->rental_id : 0)->paginate(3)->onEachSide(1);
+        // 1. Mulai query dasar dengan kondisi rental
+        $query = Driver::where('rental_id', $rental ? $rental->rental_id : 0);
+
+        // 2. Jika ada kata kunci cari, tambahkan filter ke dalam $query
+        if ($request->filled('cari')) {
+            $keyword = $request->cari;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama_driver', 'like', '%' . $keyword . '%')
+                    ->orWhere('umur', 'like', '%' . $keyword . '%')
+                    ->orWhere('tarif_harian', 'like', '%' . $keyword . '%')
+                    ->orWhere('status', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        // 3. Eksekusi query dengan paginate (cukup lakukan satu kali ini saja)
+        $drivers = $query->paginate(3)->withQueryString();
 
         return view('admin.driver.index', compact('drivers'));
     }
@@ -30,7 +43,7 @@ class DriverController extends Controller
             'foto' => 'required|image|max:2048',
             'tarif_harian' => 'required|numeric',
         ]);
-        
+
         // Cari data rental milik admin yang sedang login
         $rental = Rental::where('admin_id', auth()->id())->first();
 
