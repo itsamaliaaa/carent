@@ -69,145 +69,168 @@
 
     {{-- Tabel Driver --}}
     <div class="bg-white rounded-[20px] p-7 shadow-sm border border-gray-50">
-        <!-- Header Tabel -->
-        <div class="grid grid-cols-[1fr_0.7fr_0.6fr_0.9fr_1fr_1.2fr_0.7fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
-            <div>Nama Driver</div>
-            <div>Foto</div>
-            <div>Umur</div>
-            <div>No. Telepon</div>
-            <div>Tarif</div>
-            <div>Status</div>
-            <div>Aksi</div>
-        </div>
-        <!-- Data Tabel -->
-        <div class="flex flex-col gap-3">
-            @foreach ($drivers as $driver)
-            <div class="grid grid-cols-[1fr_0.7fr_0.6fr_0.9fr_1fr_1.2fr_0.7fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
-                <div class="text-[14px] font-semibold">{{ $driver->nama_driver }}</div>
-                <div class="flex justify-start">
-                    <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
+        <div class="overflow-x-auto">
+            <div class="min-w-[1050px]">
+
+                <div class="grid grid-cols-[1.3fr_1fr_0.9fr_1.5fr_1.1fr_1.5fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
+                    <div>Nama Driver</div>
+                    <div>Foto</div>
+                    <div>Umur</div>
+                    <div>No. Telepon</div>
+                    <div>Tarif</div>
+                    <div>Status</div>
+                    <div>Aksi</div>
                 </div>
-                <div class="text-[14px] font-semibold">{{ $driver->umur }} tahun</div>
-                <div class="text-[13px] font-semibold">{{ $driver->no_telepon ?? '-' }}</div>
-                <div class="text-[14px] font-semibold">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
-                <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
-                    {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
-                </span>
 
-                {{-- Aksi --}}
-                <div class="flex justify-start gap-2" x-data="{ openEdit: false }">
+                <div class="flex flex-col gap-3">
+                    @foreach ($drivers as $driver)
+                    <div class="grid grid-cols-[1.3fr_1fr_0.9fr_1.5fr_1.1fr_1.5fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
+                        <div class="text-[14px] font-semibold truncate">{{ $driver->nama_driver }}</div>
+                        <div class="flex justify-start">
+                            <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
+                        </div>
+                        <div class="text-[14px] font-semibold">{{ $driver->umur }} tahun</div>
+                        <div class="text-[13px] font-semibold break-all">{{ $driver->no_telepon ?? '-' }}</div>
+                        <div class="text-[14px] font-semibold">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
 
-                    {{-- Tombol Edit --}}
-                    <button type="button" @click="openEdit = true" class="w-9 h-9 bg-[#8BC34A] flex justify-center items-center rounded-lg">
-                        <img src="{{ asset('images/icons/pencil-edit-01.svg') }}" class="w-5 h-5 brightness-0 invert">
-                    </button>
+                        <div>
+                            <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
+                                {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
+                            </span>
+                        </div>
 
-                    {{-- Form Edit --}}
-                    <div x-show="openEdit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-cloak style="display: none;">
-                        <div class="bg-white rounded-[20px] w-full max-w-lg p-10 shadow-lg">
-                            <div class="flex justify-between items-center mb-8">
-                                <h2 class="text-[#1D2B6B] text-3xl font-bold">Edit Driver</h2>
-                                <button type="button" @click="openEdit = false" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
+                        {{-- Aksi --}}
+                        <div class="flex justify-start gap-2" x-data="{ openEdit: false }">
+
+                            {{-- Tombol Edit --}}
+                            <button type="button" @click="openEdit = true" class="w-9 h-9 bg-[#8BC34A] flex justify-center items-center rounded-lg shrink-0">
+                                <img src="{{ asset('images/icons/pencil-edit-01.svg') }}" class="w-5 h-5 brightness-0 invert">
+                            </button>
+
+                            {{-- Form Edit (Modal) --}}
+                            <div x-show="openEdit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" x-cloak style="display: none;">
+                                <div class="bg-white rounded-[20px] w-full max-w-lg p-10 shadow-lg">
+                                    <div class="flex justify-between items-center mb-8">
+                                        <h2 class="text-[#1D2B6B] text-3xl font-bold">Edit Driver</h2>
+                                        <button type="button" @click="openEdit = false" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
+                                    </div>
+
+                                    <form id="formEditDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.update', $driver) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <div class="mb-4 text-left">
+                                            <label class="text-sm text-gray-600 block mb-1">Nama</label>
+                                            <input type="text" name="nama_driver" value="{{ $driver->nama_driver }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                        </div>
+                                        <div class="mb-4 text-left">
+                                            <label class="text-sm text-gray-600 block mb-1">Umur</label>
+                                            <input type="number" name="umur" value="{{ $driver->umur }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                        </div>
+                                        <div class="mb-4 text-left">
+                                            <label class="text-sm text-gray-600 block mb-1">No. Telepon</label>
+                                            <input type="tel" name="no_telepon" value="{{ $driver->no_telepon }}" required placeholder="Contoh: +62 xx-xxxx-xxxx" class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                        </div>
+                                        <div class="mb-4" x-data="{ fileName: '{{ $driver->foto ? basename($driver->foto) : 'Tidak ada file yang dipilih' }}' }">
+                                            <label class="text-gray-600 text-sm mb-2 block">Foto</label>
+                                            <div class="relative flex items-center border border-gray-200 rounded-lg overflow-hidden h-[40px] group transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-100">
+                                                <div class="bg-[#F3F4F6] text-gray-600 px-4 h-full flex items-center border-r border-gray-200 text-[14px] transition-colors duration-200 group-hover:bg-[#E5E7EB] group-hover:text-gray-800">
+                                                    Pilih File
+                                                </div>
+                                                <div class="px-4 text-gray-400 text-[14px] truncate flex-1 bg-white" x-text="fileName"></div>
+                                                <input type="file" name="foto"
+                                                    @change="fileName = $event.target.files[0].name"
+                                                    class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                                            </div>
+                                        </div>
+                                        <div class="mb-4 text-left">
+                                            <label class="text-sm text-gray-600 block mb-1">Tarif</label>
+                                            <input type="number" name="tarif_harian" value="{{ $driver->tarif_harian }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                        </div>
+
+                                        {{-- Dropdown status driver --}}
+                                        <div class="mb-6 text-left" x-data="{ open: false, selected: '{{ $driver->status }}' }">
+                                            <input type="hidden" name="status" :value="selected">
+                                            <div class="text-sm text-gray-600 mb-2">Status</div>
+                                            <div class="relative">
+                                                <button type="button" @click="open = !open"
+                                                    class="w-full px-3.5 bg-white border border-gray-200 rounded-lg inline-flex justify-between items-center h-10 relative z-20">
+                                                    <span x-text="selected == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia'"
+                                                        class="flex-1 text-left text-gray-800 text-sm font-normal leading-6"></span>
+                                                    <img src="{{ asset('images/icons/Vector.svg') }}"
+                                                        class="h-3 w-3 transition-transform duration-200"
+                                                        :class="open ? 'rotate-180' : ''" alt="arrow">
+                                                </button>
+                                                <div x-show="open" @click.away="open = false"
+                                                    class="absolute left-0 z-10 w-full overflow-hidden pt-4"
+                                                    style="top: 50%; background-color: white; border-left: 1px solid #d1d5db; border-right: 1px solid #d1d5db; border-bottom: 1px solid #d1d5db; border-radius: 0 0 8px 8px;"
+                                                    x-cloak>
+
+                                                    <div x-show="selected != 'tersedia'"
+                                                        @click="selected = 'tersedia'; open = false"
+                                                        style="background-color: white; color: #374151;"
+                                                        class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
+                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
+                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                                        Tersedia
+                                                    </div>
+
+                                                    <div x-show="selected != 'tidak_tersedia'"
+                                                        @click="selected = 'tidak_tersedia'; open = false"
+                                                        style="background-color: white; color: #374151;"
+                                                        class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
+                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
+                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                                        Tidak Tersedia
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="button"
+                                            data-confirm="editConfirmDriver"
+                                            data-target-submit="formEditDriver{{ $driver->driver_id }}"
+                                            data-feedback="successEditDriver"
+                                            class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Edit</button>
+                                    </form>
+                                </div>
                             </div>
 
-                            <form id="formEditDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.update', $driver) }}" method="POST" enctype="multipart/form-data">
+                            {{-- Tombol Hapus --}}
+                            <form id="formHapusDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.destroy', $driver) }}" method="POST">
                                 @csrf
-                                @method('PUT')
-
-                                <div class="mb-4 text-left">
-                                    <label class="text-sm text-gray-600 block mb-1">Nama</label>
-                                    <input type="text" name="nama_driver" value="{{ $driver->nama_driver }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
-                                </div>
-                                <div class="mb-4 text-left">
-                                    <label class="text-sm text-gray-600 block mb-1">Umur</label>
-                                    <input type="number" name="umur" value="{{ $driver->umur }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
-                                </div>
-                                <div class="mb-4 text-left">
-                                    <label class="text-sm text-gray-600 block mb-1">No. Telepon</label>
-                                    <input type="tel" name="no_telepon" value="{{ $driver->no_telepon }}" required placeholder="Contoh: +62 xx-xxxx-xxxx" class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
-                                </div>
-                                <div class="mb-4" x-data="{ fileName: '{{ $driver->foto ? basename($driver->foto) : 'Tidak ada file yang dipilih' }}' }">
-                                    <label class="text-gray-600 text-sm mb-2 block">Foto</label>
-                                    <div class="relative flex items-center border border-gray-200 rounded-lg overflow-hidden h-[40px] group transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-100">
-                                        <div class="bg-[#F3F4F6] text-gray-600 px-4 h-full flex items-center border-r border-gray-200 text-[14px] transition-colors duration-200 group-hover:bg-[#E5E7EB] group-hover:text-gray-800">
-                                            Pilih File
-                                        </div>
-                                        <div class="px-4 text-gray-400 text-[14px] truncate flex-1 bg-white" x-text="fileName"></div>
-                                        <input type="file" name="foto"
-                                            @change="fileName = $event.target.files[0].name"
-                                            class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
-                                    </div>
-                                </div>
-                                <div class="mb-4 text-left">
-                                    <label class="text-sm text-gray-600 block mb-1">Tarif</label>
-                                    <input type="number" name="tarif_harian" value="{{ $driver->tarif_harian }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
-                                </div>
-
-                                {{-- Dropdown status driver --}}
-                                <div class="mb-6 text-left" x-data="{ open: false, selected: '{{ $driver->status }}' }">
-                                    <input type="hidden" name="status" :value="selected">
-                                    <div class="text-sm text-gray-600 mb-2">Status</div>
-                                    <div class="relative">
-                                        <button type="button" @click="open = !open"
-                                            class="w-full px-3.5 bg-white border border-gray-200 rounded-lg inline-flex justify-between items-center h-10 relative z-20">
-                                            <span x-text="selected == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia'"
-                                                class="flex-1 text-left text-gray-800 text-sm font-normal leading-6"></span>
-                                            <img src="{{ asset('images/icons/Vector.svg') }}"
-                                                class="h-3 w-3 transition-transform duration-200"
-                                                :class="open ? 'rotate-180' : ''" alt="arrow">
-                                        </button>
-                                        <div x-show="open" @click.away="open = false"
-                                            class="absolute left-0 z-10 w-full rounded-b-lg overflow-hidden pt-4"
-                                            style="top: 50%; background-color: white; border-left: 1px solid #d1d5db; border-right: 1px solid #d1d5db; border-bottom: 1px solid #d1d5db;"
-                                            x-cloak>
-                                            <div x-show="selected != 'tersedia'"
-                                                @click="selected = 'tersedia'; open = false"
-                                                style="background-color: white;"
-                                                class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                                onmouseover="this.style.backgroundColor='#E8EAF6'; this.style.color='#1D2B6B';"
-                                                onmouseout="this.style.backgroundColor='white';">
-                                                Tersedia
-                                            </div>
-                                            <div x-show="selected != 'tidak_tersedia'"
-                                                @click="selected = 'tidak_tersedia'; open = false"
-                                                style="background-color: white;"
-                                                class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                                onmouseover="this.style.backgroundColor='#E8EAF6'; this.style.color='#1D2B6B';"
-                                                onmouseout="this.style.backgroundColor='white';">
-                                                Tidak Tersedia
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                @method('DELETE')
                                 <button type="button"
-                                    data-confirm="editConfirmDriver"
-                                    data-target-submit="formEditDriver{{ $driver->driver_id }}"
-                                    data-feedback="successEditDriver"
-                                    class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Edit</button>
+                                    data-confirm="hapusConfirmDriver"
+                                    data-target-submit="formHapusDriver{{ $driver->driver_id }}"
+                                    data-feedback="successHapusDriver"
+                                    class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg shrink-0">
+                                    <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
+                                </button>
                             </form>
                         </div>
                     </div>
-
-                    {{-- Form Hapus --}}
-                    <form id="formHapusDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.destroy', $driver) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            data-confirm="hapusConfirmDriver"
-                            data-target-submit="formHapusDriver{{ $driver->driver_id }}"
-                            data-feedback="successHapusDriver"
-                            class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg">
-                            <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
-                        </button>
-                    </form>
+                    @endforeach
                 </div>
+
             </div>
-            @endforeach
         </div>
-        <!-- Pagination -->
+
         <div class="mt-6 flex justify-end">
             {{ $drivers->links() }}
+        </div>
+    </div>
+</div>
+
+{{-- LOADING --}}
+<div id="loadingModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] hidden items-center justify-center">
+    <div class="relative w-32 h-32">
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10" />
+            <circle id="progressCircle" cx="60" cy="60" r="50" fill="none" stroke="#0B1F67" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition: stroke-dashoffset 0.3s ease" />
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <span id="progressText" class="text-2xl font-bold text-[#0B1F67]">0%</span>
         </div>
     </div>
 </div>

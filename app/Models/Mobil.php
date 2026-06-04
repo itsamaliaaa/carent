@@ -13,7 +13,7 @@ class Mobil extends Model
         'rental_id', 'nama_mobil', 'tahun', 'transmisi', 'kategori',
         'kapasitas_penumpang', 'jenis_bahan_bakar', 'harga_per_hari',
         'biaya_admin', 'biaya_over_km', 'batas_km_per_hari',
-        'deskripsi', 'status',
+        'deskripsi', 'status', 'asuransi', 'tarif_driver', 'prasyarat_kendaraan'
     ];
 
     public function rental()
