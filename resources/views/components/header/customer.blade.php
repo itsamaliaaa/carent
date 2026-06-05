@@ -438,8 +438,12 @@
                     <input
                         type="text"
                         name="nama_lengkap"
-                        value="{{ auth()->user()->nama_lengkap }}"
+                        value="{{ old('nama_lengkap', auth()->user()->nama_lengkap) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+
+                        @error('nama_lengkap', 'profile')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div>
@@ -450,8 +454,12 @@
                     <input
                         type="email"
                         name="email"
-                        value="{{ auth()->user()->email }}"
+                        value="{{ old('email', auth()->user()->email) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+
+                        @error('email', 'profile')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div>
@@ -462,8 +470,11 @@
                     <input
                         type="text"
                         name="no_telepon"
-                        value="{{ auth()->user()->no_telp }}"
+                        value="{{ old('no_telepon', auth()->user()->no_telp) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+                         @error('no_telepon', 'profile')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <!-- BUTTON -->
@@ -668,7 +679,7 @@
 
                         </button>
                     </div>
-                    @error('password_lama')
+                    @error('password_lama', 'password')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
@@ -702,7 +713,7 @@
                                 src="{{ asset('images/icons/eye.svg') }}"
                                 class="w-5 h-5 eyeIcon">
                         </button>
-                        @error('password_baru')
+                        @error('password_baru', 'password')
                             <p class="text-red-500 text-sm mt-1">
                                 {{ $message }}
                             </p>
@@ -740,7 +751,7 @@
 
                         </button>
                     </div>
-                    @error('password_baru_confirmation')
+                    @error('password_baru_confirmation', 'password')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
@@ -886,6 +897,24 @@
         </div>
 
     </div>
+
+    @if ($errors->profile->any())
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('editModal').classList.remove('hidden');
+        document.getElementById('editModal').classList.add('flex');
+    });
+    </script>
+    @endif
+
+    @if ($errors->password->any())
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('passwordModal').classList.remove('hidden');
+        document.getElementById('passwordModal').classList.add('flex');
+    });
+    </script>
+    @endif
 
     @endauth
 

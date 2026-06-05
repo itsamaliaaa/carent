@@ -6,7 +6,7 @@
 
     {{-- BACK --}}
     <a href="{{ route('mobil.detail', $mobil->mobil_id) }}"
-    class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D]">
+    class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
         <i class="fa-solid fa-chevron-left text-xs"></i>
         Kembali
     </a>
@@ -108,20 +108,17 @@
 
                         <div>
                             <label class="block text-sm font-medium text-[#545454] mb-2">
-                                Umur*
+                                Tanggal Lahir*
                             </label>
 
                             <input
-                                id="umurPengendara"
-                                type="number"
-                                name="umur"
-                                value="{{ old('umur') }}"
-                                min="17"
-                                max="80"
-                                class="w-full h-12 border border-[#D9D9D9] rounded-[8px] px-4 text-sm"
-                                placeholder="Masukkan umur">
+                                id="tglLahirPengendara"
+                                type="date"
+                                name="tgl_lahir"
+                                value="{{ old('tgl_lahir') }}"
+                                class="w-full h-12 border border-[#D9D9D9] rounded-[8px] px-4 text-sm">
 
-                            @error('umur')
+                            @error('tgl_lahir')
                                 <p class="text-red-500 text-sm mt-1">
                                     {{ $message }}
                                 </p>
@@ -233,31 +230,32 @@
 
                     <div class="w-full h-[1px] bg-[#D9D9D9] mt-4 mb-6"></div>
 
-                    <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex flex-col md:flex-row items-start gap-20">
 
-                    <div>
-                        <p class="text-sm font-medium text-[#111111] mb-3">
-                            Scan untuk membayar via QRIS
-                        </p>
-                        <div class="w-[180px] h-[180px] border border-[#E5E7EB] rounded-[12px] overflow-hidden">
+                        <div class="shrink-0">
+                                <p class="text-sm text-[#545454] mb-3">
+                                    Scan untuk membayar via QRIS
+                                </p>
 
-                            @if($rekening && $rekening->url_qris)
-                                <img
-                                    src="{{ asset('storage/' . $rekening->url_qris) }}"
-                                    class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-sm text-gray-400">
-                                    QRIS belum tersedia
+                                <div class="w-[140px] h-[140px]">
+
+                                    @if($rekening && $rekening->url_qris)
+                                        <img
+                                            src="{{ asset('storage/' . $rekening->url_qris) }}"
+                                            class="w-full h-full object-contain">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-sm text-gray-400">
+                                            QRIS belum tersedia
+                                        </div>
+                                    @endif
+
                                 </div>
-                            @endif
-
                         </div>
-                    </div>
-
-                        <div class="space-y-5">
-
-                            <div>
-                                <p class="text-xs text-[#777777]">
+                        
+                        <div class="space-y-5 md:text-left">
+                            
+                            <div class="mb-5">
+                                <p class="text-[13px] text-[#777777] uppercase mb-1">
                                     BANK TUJUAN
                                 </p>
 
@@ -266,8 +264,8 @@
                                 </p>
                             </div>
 
-                            <div>
-                                <p class="text-xs text-[#777777]">
+                            <div class="mb-5">
+                                <p class="text-[13px] text-[#777777] uppercase mb-1">
                                     NOMOR REKENING
                                 </p>
 
@@ -277,7 +275,7 @@
                             </div>
 
                             <div>
-                                <p class="text-xs text-[#777777]">
+                                <p class="text-[13px] text-[#777777] uppercase mb-1">
                                     ATAS NAMA
                                 </p>
 
@@ -622,7 +620,7 @@
         const namaPengendara = document.getElementById('namaPengendara');
         const teleponPengendara = document.getElementById('teleponPengendara');
         const simPengendara = document.getElementById('simPengendara');
-        const umurPengendara = document.getElementById('umurPengendara');
+        const tglLahirPengendara = document.getElementById('tglLahirPengendara');
 
         const jumlahHari = {{ $jumlahHari }};
         const driverPerHari = 250000;
@@ -657,7 +655,7 @@
                 namaPengendara,
                 teleponPengendara,
                 simPengendara,
-                umurPengendara
+                tglLahirPengendara
             ].forEach(input => {
                 input.readOnly = isDriver;
 

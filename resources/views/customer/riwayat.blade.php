@@ -1,3 +1,5 @@
+<!-- memindahkan hasil kerja tariq ke riwayat. -->
+
 @extends('layouts.customer')
 
 @section('content')

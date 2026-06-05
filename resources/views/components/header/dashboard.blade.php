@@ -227,7 +227,9 @@
             <!-- FORM -->
             <form
                 id="editProfileForm"
-                action="{{ route('superadmin.profil.update') }}"
+                action="{{ auth()->user()->role == 'super_admin'
+                    ? route('superadmin.profil.update')
+                    : route('admin.profil.update') }}"
                 method="POST"
                 enctype="multipart/form-data"
                 class="mt-8 space-y-5">
@@ -248,11 +250,12 @@
                         Nama Lengkap
                     </label>
 
-                    <input
-                        type="text"
-                        name="nama_lengkap"
-                        value="{{ auth()->user()->nama_lengkap }}"
+                    <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap', auth()->user()->nama_lengkap) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+
+                        @error('nama_lengkap', 'profile')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div>
@@ -260,11 +263,12 @@
                         Email
                     </label>
 
-                    <input
-                        type="email"
-                        name="email"
-                        value="{{ auth()->user()->email }}"
+                    <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+
+                        @error('email', 'profile')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <div>
@@ -272,11 +276,12 @@
                         No. Telepon
                     </label>
 
-                    <input
-                        type="text"
-                        name="no_telepon"
-                        value="{{ auth()->user()->no_telp }}"
+                    <input type="text" name="no_telepon" value="{{ old('no_telepon', auth()->user()->no_telp) }}"
                         class="w-full border rounded-xl px-4 py-3 mt-1">
+
+                        @error('no_telepon', 'profile')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                 </div>
 
                 <!-- BUTTON -->
@@ -443,7 +448,9 @@
 
             <form
                 id="passwordForm"
-                action="{{ route('superadmin.profil.password') }}"
+                action="{{ auth()->user()->role == 'super_admin'
+                ? route('superadmin.profil.password')
+                : route('admin.profil.password') }}"
                 method="POST"
                 class="mt-10 space-y-5"
             >
@@ -481,7 +488,7 @@
 
                         </button>
                     </div>
-                    @error('password_lama')
+                    @error('password_lama', 'password')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
@@ -515,7 +522,7 @@
                                 src="{{ asset('images/icons/eye.svg') }}"
                                 class="w-5 h-5 eyeIcon">
                         </button>
-                        @error('password_baru')
+                        @error('password_baru', 'password')
                             <p class="text-red-500 text-sm mt-1">
                                 {{ $message }}
                             </p>
@@ -553,7 +560,7 @@
 
                         </button>
                     </div>
-                    @error('password_baru_confirmation')
+                    @error('password_baru_confirmation', 'password')
                         <p class="text-red-500 text-sm mt-1">
                             {{ $message }}
                         </p>
@@ -700,6 +707,24 @@
 
     </div>
 
+    @if ($errors->profile->any())
+    
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('editModal').classList.add('flex');
+        });
+        </script>
+        @endif
 
+        @if ($errors->password->any())
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('passwordModal').classList.remove('hidden');
+            document.getElementById('passwordModal').classList.add('flex');
+        });
+        </script>
+        @endif
+        
     @endauth
 </nav>
