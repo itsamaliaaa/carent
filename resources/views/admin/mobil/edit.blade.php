@@ -177,10 +177,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
-                        <input id="foto-input" type="file" name="foto[]" accept="image/*" multiple
-                            class="block w-full text-[14px] text-gray-400 border border-gray-300 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2.5 file:px-4 file:mr-4 cursor-pointer focus:outline-none file:hover:bg-[#E5E7EB] file:transition-colors"
-                            onchange="handleFotoPreview(event)" />
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
+
+                            <input id="foto-input" type="file" name="foto[]" accept="image/*"multiple
+                                class="block w-full text-[14px] text-gray-400 border border-gray-300 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2.5 file:px-4 file:mr-4 cursor-pointer focus:outline-none file:hover:bg-[#E5E7EB] file:transition-colors"
+                                onchange="handleFotoPreview(event)" />
+                        </div>
                     </div>
 
                     {{-- Driver (input angka tarif) --}}
@@ -225,7 +228,16 @@
 
                 </div>
 
-                <div id="foto-preview-container" class="hidden items-center gap-2 overflow-x-auto mt-3 p-2 w-full rounded-lg" style="white-space: nowrap;"></div>
+                <div class="mt-5">
+                    <div class="flex items-center gap-2 overflow-x-auto mt-3 p-2 w-full rounded-lg" style="white-space: nowrap;">
+                        @foreach($mobil->fotos as $foto)
+                        <div class="flex-shrink-0">
+                            <img src="{{ asset('storage/' . $foto->url_foto) }}"
+                                class="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm">
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
 
                 <div class="mt-5">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Prasayarat Kendaraan</label>

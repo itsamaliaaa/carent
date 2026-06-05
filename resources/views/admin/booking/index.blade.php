@@ -49,7 +49,55 @@
     </div>
 </div>
 
-<!-- confirm ubah status -->
+{{-- Tabel Booking --}}
+<div class="bg-white rounded-[20px] p-7 shadow-sm border border-gray-50">
+    <div class="overflow-x-auto">
+        <div class="min-w-[1050px]">
+
+            {{-- Header Tabel --}}
+            <div class="grid grid-cols-[1.5fr_1.5fr_1.2fr_1.2fr_1fr_0.8fr] bg-[#F8F9FB] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px] text-gray-600">
+                <div>Nama Penyewa</div>
+                <div>Tipe Unit</div>
+                <div>Tanggal Pengambilan</div>
+                <div>Tanggal Pengembalian</div>
+                <div>Status</div>
+                <div class="text-center">Aksi</div>
+            </div>
+
+            {{-- Body Tabel --}}
+            <div class="flex flex-col gap-3">
+                @foreach ($bookings as $booking)
+                <div class="grid grid-cols-[1.5fr_1.5fr_1.2fr_1.2fr_1fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
+                    <div class="text-[14px] font-semibold text-gray-800">{{ $booking->nama_penyewa }}</div>
+                    <div class="text-[14px] font-medium text-gray-600">{{ $booking->tipe_unit }}</div>
+                    <div class="text-[13px] text-gray-500">{{ $booking->tanggal_pengambilan }}</div>
+                    <div class="text-[13px] text-gray-500">{{ $booking->tanggal_pengembalian }}</div>
+                    
+                    {{-- Status Badge --}}
+                    <div>
+                        <span class="{{ $booking->status == 'sedang_berlangsung' ? 'bg-[#EDE7F6] text-[#5E35B1]' : 'bg-[#FFFDE7] text-[#FBC02D]' }} w-fit inline-block whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold">
+                            {{ $booking->status == 'sedang_berlangsung' ? 'Sedang Berlangsung' : 'Menunggu Konfirmasi' }}
+                        </span>
+                    </div>
+
+                    {{-- Tombol Aksi --}}
+                    <div class="flex justify-center">
+                        <button class="bg-[#1D2B6B] text-white text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-[#152052] transition">
+                            Lihat Detail
+                        </button>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+        </div>
+    </div>
+
+    {{-- Pagination --}}
+    <div class="mt-6 flex justify-end">
+        {{ $bookings->links() }}
+    </div>
+</div>
 <div
     id="confirmUbahStatus"
     class="fixed inset-0 z-[70] hidden items-center justify-center">
