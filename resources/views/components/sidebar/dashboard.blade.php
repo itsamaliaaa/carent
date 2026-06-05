@@ -10,11 +10,7 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
 @endphp
 
 <aside id="sidebar"
-<<<<<<< HEAD
-    class="w-64 h-screen overflow-y-auto
-=======
        class="w-64 h-[calc(100vh-4rem)] md:h-screen overflow-y-auto
->>>>>>> ff49cf2eaa6d82c3e52b91b27ff09e635bfa0bbb
               bg-white border-r flex flex-col justify-between text-sm
               fixed md:sticky top-16 md:top-0
               transform -translate-x-full md:translate-x-0
@@ -146,18 +142,6 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
         </a>
         <hr>
         @endif
-
-<<<<<<< HEAD
-
-
-        <form action="/logout" method="POST">
-            @csrf
-            <button class="group flex items-center gap-3 px-4 py-3 rounded-lg w-full text-left text-red-700 hover:bg-red-50">
-                <img src="{{ asset('images/icons/logout-04.svg') }}" class="w-5 h-5">
-                Logout
-            </button>
-        </form>
-=======
         <button
             type="button"
             class="openLogoutModal group flex items-center gap-3 px-4 py-3 rounded-lg w-full text-left text-red-700 hover:bg-red-50">
@@ -212,7 +196,6 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
             </div>
 
         </div>
->>>>>>> ff49cf2eaa6d82c3e52b91b27ff09e635bfa0bbb
 
     </div>
 
