@@ -170,7 +170,7 @@
 
                         <img
                             src="{{ $mobil->rental->logo
-                                ? asset('storage/' . $mobil->rental->logo)
+                                ? asset('storage/' . $mobil->rental->logo_perusahaan)
                                 : asset('images/rental.png') }}"
                             class="w-20 h-20 rounded-full object-cover border border-[#E5E7EB]"
                         >
@@ -500,6 +500,7 @@
 
                 <form
                     class="mt-6 space-y-5"
+                    id="bookingForm"
                     action="{{ auth()->check() ? route('customer.booking.create', $mobil->mobil_id) : route('login') }}"
                     method="GET"
                 >
@@ -516,9 +517,8 @@
                             <input
                                 type="text"
                                 id="lokasi"
-                                name="lokasi"
+                                name="lokasi"                             
                                 placeholder="Pilih lokasi"
-
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -543,7 +543,7 @@
                             <input
                                 type="date"
                                 id="tglAmbil"
-                                name="tglAmbil"                            
+                                name="tglAmbil"                     
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -578,7 +578,7 @@
                             <input
                                 type="date"
                                 id="tglKembali"
-                                name="tglKembali"                                
+                                name="tglKembali"                                                        
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
                         </div>
@@ -592,7 +592,7 @@
                             <input
                                 type="time"
                                 id="waktuKembali"
-                                name="waktuKembali"                                
+                                name="waktuKembali"                                       
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -686,7 +686,7 @@
         const hargaPerHari = {{ $mobil->harga_per_hari }};
         const deposit = 200000;
 
-        const form = document.querySelector("form");
+        const form = document.getElementById("bookingForm");
         const lokasi = document.getElementById("lokasi");
         const tglAmbil = document.getElementById("tglAmbil");
         const waktuAmbil = document.getElementById("waktuAmbil");
@@ -761,11 +761,7 @@
         function validateForm(e) {
             let valid = true;
 
-            removeError(lokasi);
-            removeError(tglAmbil);
-            removeError(waktuAmbil);
-            removeError(tglKembali);
-            removeError(waktuKembali);
+            [lokasi, tglAmbil, waktuAmbil, tglKembali, waktuKembali].forEach(removeError);
 
             if (!lokasi.value.trim()) {
                 showError(lokasi, "Lokasi wajib diisi");
@@ -777,18 +773,13 @@
                 valid = false;
             }
 
-            if (!tglKembali.value) {
-                showError(tglKembali, "Tanggal pengembalian wajib diisi");
-                valid = false;
-            }
-
-            if (tglAmbil.value && tglKembali.value && tglKembali.value <= tglAmbil.value) {
-                showError(tglKembali, "Tanggal tidak bisa dipilih");
-                valid = false;
-            }
-
             if (!waktuAmbil.value) {
                 showError(waktuAmbil, "Waktu pengambilan wajib diisi");
+                valid = false;
+            }
+
+            if (!tglKembali.value) {
+                showError(tglKembali, "Tanggal pengembalian wajib diisi");
                 valid = false;
             }
 
@@ -797,9 +788,22 @@
                 valid = false;
             }
 
+            if (tglAmbil.value && tglKembali.value) {
+                const start = new Date(tglAmbil.value);
+                const end = new Date(tglKembali.value);
+
+                if (end <= start) {
+                    showError(tglKembali, "Tanggal pengembalian harus setelah tanggal pengambilan");
+                    valid = false;
+                }
+            }
+
             if (!valid) {
                 e.preventDefault();
+                return false;
             }
+
+            return true;
         }
 
         tglAmbil.addEventListener("change", function () {

@@ -10,9 +10,13 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
 @endphp
 
 <aside id="sidebar"
+<<<<<<< HEAD
     class="w-64 h-screen overflow-y-auto
+=======
+       class="w-64 h-[calc(100vh-4rem)] md:h-screen overflow-y-auto
+>>>>>>> ff49cf2eaa6d82c3e52b91b27ff09e635bfa0bbb
               bg-white border-r flex flex-col justify-between text-sm
-              fixed md:sticky top-0
+              fixed md:sticky top-16 md:top-0
               transform -translate-x-full md:translate-x-0
               transition duration-300 z-40">
 
@@ -143,6 +147,7 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
         <hr>
         @endif
 
+<<<<<<< HEAD
 
 
         <form action="/logout" method="POST">
@@ -152,7 +157,62 @@ $iconHover = 'group-hover:brightness-0 group-hover:saturate-100 group-hover:inve
                 Logout
             </button>
         </form>
+=======
+        <button
+            type="button"
+            class="openLogoutModal group flex items-center gap-3 px-4 py-3 rounded-lg w-full text-left text-red-700 hover:bg-red-50">
+            <img src="{{ asset('images/icons/logout-04.svg') }}" class="w-5 h-5">
+            Logout
+        </button>
 
     </div>
 
 </aside>
+
+    <!-- MODAL KONFIRMASI LOGOUT -->
+    <div
+        id="logoutModal"
+        class="fixed inset-0 z-[70] hidden items-center justify-center">
+
+        <div class="absolute inset-0 bg-black/50"></div>
+
+        <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
+
+            <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
+                Apakah kamu yakin ingin keluar dari akun ini?
+            </p>
+
+            <div class="flex gap-4 mt-8">
+
+                <!-- Ya -->
+                <form action="{{ route('logout') }}" method="POST" class="flex-1">
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="w-full bg-[#62B33B] hover:bg-green-600
+                        text-white py-3 rounded-xl font-semibold">
+
+                        Ya
+
+                    </button>
+                </form>
+
+                <!-- Tidak -->
+                <button
+                    type="button"
+                    id="closeLogoutModal"
+                    class="flex-1 bg-[#B92A44] hover:bg-red-600
+                    text-white py-3 rounded-xl font-semibold">
+
+                    Tidak
+
+                </button>
+
+            </div>
+
+        </div>
+>>>>>>> ff49cf2eaa6d82c3e52b91b27ff09e635bfa0bbb
+
+    </div>
+

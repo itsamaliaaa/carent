@@ -75,7 +75,7 @@
 
 
         // OPEN PASSWORD MODAL IF VALIDATION ERROR
-        @if($errors->any())
+        @if($errors->password->any())
 
             const passwordModal = document.getElementById('passwordModal');
 
@@ -261,6 +261,34 @@
                 input.type = 'password';
                 icon.src = "{{ asset('images/icons/eye.svg') }}";
             }
+
+        }
+
+        // LOGOUT MODAL
+
+        const openLogoutModal = document.getElementById('openLogoutModal');
+        const closeLogoutModal = document.getElementById('closeLogoutModal');
+        const logoutModal = document.getElementById('logoutModal');
+
+        if (openLogoutModal && logoutModal) {
+
+            openLogoutModal.addEventListener('click', () => {
+
+                logoutModal.classList.remove('hidden');
+                logoutModal.classList.add('flex');
+
+            });
+
+        }
+
+        if (closeLogoutModal && logoutModal) {
+
+            closeLogoutModal.addEventListener('click', () => {
+
+                logoutModal.classList.add('hidden');
+                logoutModal.classList.remove('flex');
+
+            });
 
         }
     </script>

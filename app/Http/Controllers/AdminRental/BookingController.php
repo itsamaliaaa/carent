@@ -29,10 +29,14 @@ class BookingController extends Controller
         // Kirim data ke view
         return view('admin.booking.index', compact('bookings'));
     }
+<<<<<<< HEAD
 
     /**
      * Menampilkan detail booking.
      */
+=======
+  
+>>>>>>> ff49cf2eaa6d82c3e52b91b27ff09e635bfa0bbb
     public function show($id)
     {
         $booking = Booking::with([

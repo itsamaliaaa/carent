@@ -37,7 +37,15 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('openSidebar');
+        const sidebar = document.getElementById('sidebar');
+
+            if (btn && sidebar) {
+                btn.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                });
+        }
 
         // SUCCESS MODAL (EDIT PROFILE)
         @if(session('success'))
@@ -83,8 +91,12 @@
         @endif
 
 
-        // OPEN PASSWORD MODAL IF VALIDATION ERROR
-        @if($errors->any())
+        // OPEN PASSWORD MODAL IF PASSWORD VALIDATION ERROR
+        @if(
+            $errors->has('password_lama') ||
+            $errors->has('password_baru') ||
+            $errors->has('password_baru_confirmation')
+        )
 
             const passwordModal = document.getElementById('passwordModal');
 
@@ -270,6 +282,34 @@
                 input.type = 'password';
                 icon.src = "{{ asset('images/icons/eye.svg') }}";
             }
+
+        }
+
+        // LOGOUT MODAL
+
+        const logoutButtons = document.querySelectorAll('.openLogoutModal');
+        const closeLogoutModal = document.getElementById('closeLogoutModal');
+        const logoutModal = document.getElementById('logoutModal');
+
+        logoutButtons.forEach(button => {
+
+        button.addEventListener('click', () => {
+
+                logoutModal.classList.remove('hidden');
+                logoutModal.classList.add('flex');
+
+            });
+
+        });
+
+        if (closeLogoutModal && logoutModal) {
+
+            closeLogoutModal.addEventListener('click', () => {
+
+                logoutModal.classList.add('hidden');
+                logoutModal.classList.remove('flex');
+
+            });
 
         }
     </script>
