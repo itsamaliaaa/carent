@@ -42,12 +42,10 @@ class ReviewController extends Controller
 
     public function show($id)
     {
-        // 1. Get the mobil
-        $mobil = Mobil::findOrFail($id);
+        $mobil = Mobil::with('fotos')->findOrFail($id);
 
-        // 2. Use Eloquent to get reviews with the user who wrote them
-        // Ensure your Review model has a 'user' relationship defined
-        $reviews = \App\Models\Review::with('user')
+        // Get all reviews for this car
+        $reviews = \App\Models\Review::with('user', 'reply')
             ->whereHas('booking', function($query) use ($id) {
                 $query->where('mobil_id', $id);
             })
@@ -55,6 +53,31 @@ class ReviewController extends Controller
             ->latest('tanggal_posting')
             ->get();
 
-        return view('customer.rating-ulasan', compact('mobil', 'reviews'));
+        // 1. Calculate Average Rating
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $totalReviews = $reviews->count();
+
+        // 2. Calculate Ratings Distribution (5, 4, 3, 2, 1 stars)
+        $ratingCounts = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+        $ratingPercentages = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+
+        foreach ($reviews as $review) {
+            if (isset($ratingCounts[$review->rating])) {
+                $ratingCounts[$review->rating]++;
+            }
+        }
+
+        foreach ($ratingCounts as $star => $count) {
+            $ratingPercentages[$star] = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+        }
+
+        return view('customer.rating-ulasan', compact(
+            'mobil',
+            'reviews',
+            'averageRating',
+            'totalReviews',
+            'ratingCounts',
+            'ratingPercentages'
+        ));
     }
 }

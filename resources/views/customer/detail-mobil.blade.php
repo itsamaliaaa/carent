@@ -469,7 +469,7 @@
 
                 </div>
 
-                <a href="{{ route('reviews.show', ['mobil_id' => $mobil->mobil_id]) }}"
+                <a href="{{ route('reviews.show', ['id' => $mobil->mobil_id]) }}"
                     class="mt-8 h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3 w-fit">
                     Lihat Semua Ulasan
                     <i class="fa-solid fa-arrow-right"></i>

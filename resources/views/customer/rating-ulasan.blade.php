@@ -1,6 +1,6 @@
 @extends('layouts.customer')
 @section('content')
-        <div class="bg-white rounded-xl shadow-md border border-[var(--border-light)] p-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24">
 
             <a href="javascript:history.back()" class="inline-flex items-center text-sm gap-2 text-[var(--primary)] font-semibold mb-8 hover:opacity-80">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19L8 12L15 5"/></svg>
@@ -17,7 +17,7 @@
                         <div class="p-2 border border-dashed border-gray-300 rounded-lg bg-white">
                             {{-- Check if car has a primary image, otherwise show placeholder --}}
                             @php
-                                $primaryImg = $mobil->fotoMobil->first();
+                                $primaryImg = $mobil?->fotoMobil?->first();
                             @endphp
                             @if($primaryImg)
                                 <img src="{{ asset('storage/' . $primaryImg->url_foto) }}" alt="{{ $mobil->nama_mobil }}" class="w-28 h-auto rounded-md object-cover">
