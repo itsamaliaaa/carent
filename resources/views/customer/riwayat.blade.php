@@ -273,6 +273,7 @@
 
             {{-- Form --}}
             <form
+                id="formBatalBooking-{{ $booking->booking_id }}"
                 action="{{-- route('booking.batal', $booking->booking_id) --}}"
                 method="POST">
                 @csrf
@@ -290,21 +291,134 @@
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1a2f5a] transition">
                 </div>
 
-                {{-- Tombol Submit --}}
+                {{-- Tombol Submit (open confirm modal) --}}
                 <button
-                    type="submit"
+                    type="button"
+                    onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.remove('hidden')"
                     class="w-full bg-[#1a2f5a] hover:bg-[#162549] text-white font-semibold py-3 mb-6 rounded-xl transition text-sm">
                     Batalkan Booking
                 </button>
             </form>
 
-            {{-- Link Kebijakan --}}
-            <div class="text-left mt-4">
-                <a href="#" class="text-[#1a2f5a] text-sm font-semibold hover:underline">
-                    Lihat kebijakan pembatalan
-                </a>
+            {{-- CONFIRMATION MODAL (shown after clicking Batalkan Booking) --}}
+            <div
+                id="modalConfirmBatal-{{ $booking->booking_id }}"
+                class="hidden fixed inset-0 z-60 flex items-center justify-center bg-black/40 px-4">
+
+                <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
+
+                    {{-- Close --}}
+                    <button
+                        type="button"
+                        onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
+                        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition text-xl font-light">
+                        ✕
+                    </button>
+
+                    <h3 class="text-xl font-semibold text-[#141B34] text-center mb-3">
+                        Yakin ingin membatalkan booking ini?
+                    </h3>
+
+                    <p class="text-gray-500 text-sm text-center mb-6 leading-relaxed">
+                        Pembatalan akan diproses sesuai kebijakan rental. Biaya mungkin dipotong tergantung waktu pembatalan.
+                    </p>
+
+                    <div class="flex gap-3">
+                        <button
+                            type="button"
+                            onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
+                            class="flex-1 bg-white border border-gray-200 text-[#141B34] font-semibold py-2 rounded-lg">
+                            Batal
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="document.getElementById('formBatalBooking-{{ $booking->booking_id }}').submit();"
+                            class="flex-1 bg-[#B22B43] hover:bg-[#97253A] text-white font-semibold py-2 rounded-lg">
+                            Konfirmasi Batalkan
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
 
+            {{-- Link Kebijakan --}}
+            <div class="text-left mt-4">
+                <button
+                    type="button"
+                    onclick="document.getElementById('modalKebijakan').classList.remove('hidden')"
+                    class="text-[#1a2f5a] text-sm font-semibold hover:underline"
+                >
+                    Lihat kebijakan pembatalan
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- MODAL KEBIJAKAN PEMBATALAN --}}
+    <div
+        id="modalKebijakan"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 "
+    >
+        <div class="bg-white rounded-xl shadow-xl max-w-3xl p-8 relative w-622 h-718">
+
+            {{-- Tombol Close --}}
+            <button
+                type="button"
+                onclick="document.getElementById('modalKebijakan').classList.add('hidden')"
+                class="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition text-xl font-light"
+            >
+                ✕
+            </button>
+
+            {{-- Judul --}}
+            <h2 class="text-3xl font-bold text-[#141B34] text-center mb-8">
+                Kebijakan Pembatalan
+            </h2>
+
+            <div class="space-y-10 text-gray-800">
+
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-semibold text-[#141B34]">
+                        Syarat Pembatalan
+                    </h3>
+                    <ul class="space-y-2 list-disc list-inside text-base leading-7">
+                        <li>Pembatalan hanya dapat dilakukan jika status booking belum selesai.</li>
+                        <li>Pengguna wajib mengisi alasan pembatalan pada form yang tersedia.</li>
+                        <li>Pembatalan tidak dapat dilakukan setelah waktu sewa dimulai.</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-semibold text-[#141B34] mt-6">
+                        Kebijakan Pengembalian Dana
+                    </h3>
+                    <p class="text-base leading-7">
+                        Pengembalian dana akan diproses berdasarkan waktu pembatalan sebagai berikut:
+                    </p>
+                    <ul class="space-y-4 list-disc list-inside text-base leading-7">
+                        <li>
+                            <span class="font-semibold">Lebih dari 48 jam sebelum waktu sewa:</span>
+                            Pengguna berhak mendapatkan pengembalian dana sebesar 100% dari total pembayaran.
+                        </li>
+                        <li>
+                            <span class="font-semibold">24–48 jam sebelum waktu sewa:</span>
+                            Pengguna berhak mendapatkan pengembalian dana sebesar 75% dari total pembayaran.
+                        </li>
+                        <li>
+                            <span class="font-semibold">Kurang dari 24 jam sebelum waktu sewa:</span>
+                            Pengguna berhak mendapatkan pengembalian dana sebesar 50% dari total pembayaran.
+                        </li>
+                        <li>
+                            <span class="font-semibold">Pada hari H atau setelah waktu sewa dimulai:</span>
+                            Pengguna tidak mendapatkan pengembalian dana (0%).
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
         </div>
     </div>
 
