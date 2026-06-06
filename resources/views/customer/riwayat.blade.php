@@ -4,30 +4,22 @@
 
 @section('content')
 
-@if(!$bookings)
+@if(empty($bookings) || (is_object($bookings) && method_exists($bookings, 'isEmpty') && $bookings->isEmpty()))
 
-<section class="min-h-[60vh] flex items-center justify-center">
+<section class="min-h-[calc(100vh-16rem)] flex items-center justify-center py-24">
 
-    <div class="text-center">
+    <div class="text-center px-5">
 
-        <h2 class="text-2xl font-bold text-[#111827]">
+        <h2 class="text-3xl sm:text-4xl font-semibold text-[#0B1F67]">
             Belum ada riwayat booking
         </h2>
 
-        <p class="text-gray-500 text-base text-m mt-1">
-            Kamu belum melakukan pemesanan mobil.
-        </p>
-
-        <p class="text-gray-500 text-base text-m mt-1">
-            Yuk mulai cari mobil untuk perjalananmu!
+        <p class="text-gray-500 text-base sm:text-lg mt-4 max-w-xl mx-auto leading-relaxed">
+            Kamu belum melakukan pemesanan mobil. Yuk mulai cari mobil untuk perjalananmu!
         </p>
 
         <a href="{{ route('katalog') }}"
-            class="inline-flex items-center justify-center
-                   mt-10 px-8 py-3
-                   bg-[#0B1F67] hover:bg-[#081647]
-                   text-white font-semibold
-                   rounded-lg transition">
+            class="inline-flex items-center justify-center mt-10 bg-[#0B1F67] hover:bg-[#081647] text-white font-semibold rounded-xl px-8 py-3 transition">
 
             Cari Mobil
 
