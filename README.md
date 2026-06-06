@@ -4,17 +4,16 @@
     Mata Kuliah Pemrograman Web - RPL4B
 </p>
 
-## About Laravel
+## Tentang Kami
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Kelompok Aman memiliki proyek pengembangan website untuk sebuah sistem rental mobil. Kami menawarkan sistem dan tampilan yang menyerupai marketplace belanja pada umumnya agar penggunaan dapat menjadi mudah dan cepat tanggap serta intuitif.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Kelompok Aman terdiri dari anggota sebagai berikut:
+
+- Aziza Putri Amelia
+- Siti Amalia Putri
+- Sina Pijar Sahmura
+- Tariq Ahmad
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
