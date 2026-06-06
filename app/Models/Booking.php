@@ -3,6 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Rental;
+use App\Models\Mobil;
+use App\Models\Driver;
+use App\Models\Pembayaran;
+use App\Models\Review;
+use App\Models\RiwayatStatusBooking;
 
 class Booking extends Model
 {
