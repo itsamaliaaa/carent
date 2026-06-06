@@ -50,7 +50,7 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/booking/{mobil_id}/driver-random', [Customer\BookingController::class, 'getRandomDriver'])->name('booking.driver-random');
     Route::get('/booking/{mobil_id}', [Customer\BookingController::class, 'create'])->name('booking.create');
-    
+
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
     Route::get('/riwayat', [Customer\BookingController::class, 'check'])->name('booking.riwayat');
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
@@ -62,6 +62,9 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::put('/profil/password', [Customer\ProfileController::class, 'updatePassword'])->name('profil.password');
     Route::get('/notifikasi', [Customer\NotifikasiController::class, 'index'])->name('notifikasi');
     Route::post('/notifikasi/read-all', [Customer\NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
+    Route::get('/rating-ulasan', function () {
+        return view('customer.rating-ulasan');
+    });
 });
 
 // ADMIN RENTAL ROUTES
