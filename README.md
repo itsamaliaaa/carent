@@ -15,15 +15,10 @@ Kelompok Aman terdiri dari anggota sebagai berikut:
 - Sina Pijar Sahmura
 - Tariq Ahmad
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Carent
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you do not feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Temukan tempat penyewaan mobil terbaik di Kota Bandung dan sekitarnya!
+Carent menawarkan penyewaan berbagai macam mobil baik dengan lepas kunci maupun dengan driver untuk bepergian kemanapun Anda mau. Harga kami beragam dari yang terjangkau hingga mobil mewah untuk dibawa pamer ke arisan!
 
 ## Laravel Sponsors
 
