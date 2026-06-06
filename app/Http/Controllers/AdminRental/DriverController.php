@@ -13,11 +13,8 @@ class DriverController extends Controller
     public function index(Request $request)
     {
         $rental = Rental::where('admin_id', auth()->id())->first();
-
-        // 1. Mulai query dasar dengan kondisi rental
         $query = Driver::where('rental_id', $rental ? $rental->rental_id : 0);
 
-        // 2. Jika ada kata kunci cari, tambahkan filter ke dalam $query
         if ($request->filled('cari')) {
             $keyword = $request->cari;
             $query->where(function ($q) use ($keyword) {
@@ -28,7 +25,6 @@ class DriverController extends Controller
             });
         }
 
-        // 3. Eksekusi query dengan paginate (cukup lakukan satu kali ini saja)
         $drivers = $query->paginate(3)->withQueryString();
 
         return view('admin.driver.index', compact('drivers'));
@@ -41,7 +37,8 @@ class DriverController extends Controller
             'nama_driver' => 'required',
             'umur' => 'required|numeric',
             'foto' => 'required|image|max:2048',
-            'tarif_harian' => 'required|numeric',
+            'no_telepon' => 'required|regex:/^[+]?[0-9\s\-]+$/',
+            'tarif_harian' => 'required|numeric'
         ]);
 
         // Cari data rental milik admin yang sedang login
@@ -60,6 +57,7 @@ class DriverController extends Controller
             'nama_driver' => $request->nama_driver,
             'umur'         => $request->umur,
             'foto'         => $lokasiFoto,
+            'no_telepon'  => $request->no_telepon,
             'tarif_harian' => $request->tarif_harian,
             'status'      => 'tersedia',
             'rental_id'   => $rental->rental_id,
@@ -84,6 +82,7 @@ class DriverController extends Controller
             'nama_driver' => 'required',
             'umur' => 'required|numeric',
             'foto' => 'nullable|image|max:2048',
+            'no_telepon' => 'required|regex:/^[+]?[0-9\s\-]+$/',
             'tarif_harian' => 'required|numeric',
             'status' => 'required'
         ]);
@@ -91,6 +90,7 @@ class DriverController extends Controller
         // Update data driver
         $driver->nama_driver = $request->nama_driver;
         $driver->umur = $request->umur;
+        $driver->no_telepon = $request->no_telepon;
         $driver->tarif_harian = $request->tarif_harian;
         $driver->status = $request->status;
 

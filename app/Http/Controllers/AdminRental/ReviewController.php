@@ -30,8 +30,6 @@ class ReviewController extends Controller
             });
         }
 
-        $reviews = $query->get();
-
         $reviews = $query->orderBy('tanggal_posting', 'asc')->get();
 
         return view('admin.review.index', compact('reviews'));
@@ -39,12 +37,12 @@ class ReviewController extends Controller
 
     public function reply(Request $request, $id)
     {
-        // 1. Validasi input terlebih dahulu
+        // Validasi input
         $request->validate([
             'komentar' => 'required|string|max:500',
         ]);
 
-        // 2. Simpan data balasan ke database dengan kolom yang sesuai di phpMyAdmin
+        // Simpan data balasan ke database dengan kolom yang sesuai di phpMyAdmin
         ReplyReview::create([
             'review_id'     => $id,
             'user_id'       => Auth::id(),                // Mengambil ID Admin yang sedang login
