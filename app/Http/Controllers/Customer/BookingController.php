@@ -9,6 +9,8 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\Driver;
 use App\Models\Pembayaran;
+use App\Models\RiwayatStatusBooking;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -235,5 +237,45 @@ class BookingController extends Controller
             'mobil' => $mobil,
             'driver' => $driver
         ]);
+    }
+    public function batalkanBooking(Request $request, $booking_id)
+    {
+        // 1. Validasi input alasan pembatalan
+        $request->validate([
+            'alasan_pembatalan' => 'required|string|max:255'
+        ]);
+
+        $booking = Booking::findOrFail($booking_id);
+
+        // 2. Keamanan: Pastikan yang membatalkan adalah pemilik booking 
+        // dan status masih menunggu konfirmasi
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status_booking !== 'menunggu_konfirmasi') {
+            return back()->withErrors(['msg' => 'Booking ini sudah tidak dapat dibatalkan.']);
+        }
+
+        $statusLama = $booking->status_booking;
+
+        // 3. Update status Booking
+        $booking->update([
+            'status_booking' => 'dibatalkan',
+            'alasan_pembatalan' => $request->alasan_pembatalan,
+            'tanggal_pembatalan' => now(),
+            'dibatalkan_oleh' => 'Customer', 
+        ]);
+
+        // 4. Catat ke tabel RiwayatStatusBooking
+        RiwayatStatusBooking::create([
+            'booking_id' => $booking->booking_id,
+            'status_lama' => $statusLama,
+            'status_baru' => 'dibatalkan',
+            'diubah_oleh' => Auth::user()->nama_lengkap ?? 'Customer', 
+            'catatan' => 'Dibatalkan oleh pelanggan. Alasan: ' . $request->alasan_pembatalan
+        ]);
+
+        return back()->with('success', 'Booking berhasil dibatalkan.');
     }
 }

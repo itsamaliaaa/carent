@@ -73,4 +73,44 @@ class ReviewController extends Controller
             'ratingPercentages'
         ));
     }
+
+    public function storeReview(Request $request, $booking_id)
+    {
+        $request->validate([
+            'rating'   => 'required|integer|min:1|max:5',
+            'komentar' => 'required|string',
+            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $booking = Booking::findOrFail($booking_id);
+
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status_booking !== 'selesai') {
+            return back()->withErrors(['review' => 'Ulasan hanya bisa diberikan untuk perjalanan yang sudah selesai.']);
+        }
+
+        if (Review::where('booking_id', $booking_id)->exists()) {
+            return back()->withErrors(['review' => 'Kamu sudah memberikan ulasan untuk perjalanan ini.']);
+        }
+
+        $pathFoto = null;
+        if ($request->hasFile('foto')) {
+            $pathFoto = $request->file('foto')->store('reviews', 'public');
+        }
+
+        Review::create([
+            'booking_id'       => $booking->booking_id,
+            'user_id'          => Auth::id(),
+            'rating'           => $request->rating,
+            'komentar'         => $request->komentar,
+            'foto_review'      => $pathFoto,
+            'status_tampilkan' => true,
+            'tanggal_posting'  => now(),
+        ]);
+
+        return back()->with('review_success', true);
+    }
 }

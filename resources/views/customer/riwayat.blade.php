@@ -274,7 +274,7 @@
             {{-- Form --}}
             <form
                 id="formBatalBooking-{{ $booking->booking_id }}"
-                action="{{-- route('booking.batal', $booking->booking_id) --}}"
+                action="{{ route('booking.batal', $booking->booking_id) }}"
                 method="POST">
                 @csrf
 
@@ -308,13 +308,13 @@
                 <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
 
                     <h3 class="text-xl font-semibold text-[#141B34] text-center mb-3">
-                        Apaka kamu yakin ingin membatalkan booking ini?
+                        Apakah kamu yakin ingin membatalkan booking ini?
                     </h3>
 
                     <div class="flex gap-3 mt-8">
                         <button
                             type="button"
-                            onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
+                            onclick="document.getElementById('formBatalBooking-{{ $booking->booking_id }}').submit()"
                             class="flex-1 bg-[#52B33B] hover:bg-[#429a2e] border border-gray-200 text-[#141B34] font-semibold py-2 rounded-lg">
                             Ya
                         </button>
@@ -459,7 +459,7 @@
                 <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm">
 
                     <form
-                        action="route('review.store', $booking->booking_id)"
+                        action="{{ route('review.store', $booking->booking_id) }}"
 
                         method="POST"
                         enctype="multipart/form-data">
