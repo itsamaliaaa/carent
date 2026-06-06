@@ -1,30 +1,5 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARENT - Rating & Ulasan {{ $mobil->nama_mobil }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --primary: #0A194A;
-            --primary-accent: #1E3A8A;
-            --bg-page: #F8F9FC;
-            --text-heading: #1F2937;
-            --text-body: #6B7280;
-            --star-gold: #FBBF24;
-            --border-light: #E5E7EB;
-        }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-page); color: var(--text-heading); }
-        .carent-btn-primary { @apply bg-[var(--primary)] text-white px-8 py-2.5 rounded-lg text-sm font-semibold hover:bg-[var(--primary-accent)] transition-colors; }
-        .carent-btn-secondary { @apply bg-white text-[var(--primary)] px-8 py-2.5 rounded-lg text-sm font-semibold border border-[var(--primary)] hover:bg-gray-100 transition-colors; }
-    </style>
-</head>
-<body class="antialiased">
-
-    {{-- Header (Keep your existing header here) --}}
-
-    <main class="container mx-auto max-w-screen-2xl px-6 py-10">
+@extends('layouts.customer')
+@section('content')
         <div class="bg-white rounded-xl shadow-md border border-[var(--border-light)] p-8">
 
             <a href="javascript:history.back()" class="inline-flex items-center text-sm gap-2 text-[var(--primary)] font-semibold mb-8 hover:opacity-80">
@@ -140,8 +115,3 @@
             </div>
             @endif
         </div>
-    </main>
-
-    {{-- Footer (Keep your existing footer here) --}}
-</body>
-</html>
