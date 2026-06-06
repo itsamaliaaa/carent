@@ -59,9 +59,9 @@
                 </div>
             </div>
 
-            <div class="space-y-12">
+            <div class="space-y-12 border-gray-600">
                 @forelse($reviews as $review)
-                <div class="flex gap-10 border-b border-[var(--border-light)] pb-12 last:border-0 last:pb-0">
+                <div class="flex gap-10 border-gray-600 border-b border-[var(--border-light)] pb-12 last:border-0 last:pb-0">
 
                     <div class="relative w-16 h-16 rounded-full flex items-center justify-center font-bold text-white text-lg bg-gray-300 overflow-hidden">
                         @if($review->user->foto_profile)
