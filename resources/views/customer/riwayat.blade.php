@@ -307,35 +307,23 @@
 
                 <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
 
-                    {{-- Close --}}
-                    <button
-                        type="button"
-                        onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
-                        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition text-xl font-light">
-                        ✕
-                    </button>
-
                     <h3 class="text-xl font-semibold text-[#141B34] text-center mb-3">
-                        Yakin ingin membatalkan booking ini?
+                        Apaka kamu yakin ingin membatalkan booking ini?
                     </h3>
 
-                    <p class="text-gray-500 text-sm text-center mb-6 leading-relaxed">
-                        Pembatalan akan diproses sesuai kebijakan rental. Biaya mungkin dipotong tergantung waktu pembatalan.
-                    </p>
-
-                    <div class="flex gap-3">
+                    <div class="flex gap-3 mt-8">
                         <button
                             type="button"
                             onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
-                            class="flex-1 bg-white border border-gray-200 text-[#141B34] font-semibold py-2 rounded-lg">
-                            Batal
+                            class="flex-1 bg-[#52B33B] hover:bg-[#429a2e] border border-gray-200 text-[#141B34] font-semibold py-2 rounded-lg">
+                            Ya
                         </button>
 
                         <button
                             type="button"
-                            onclick="document.getElementById('formBatalBooking-{{ $booking->booking_id }}').submit();"
+                            onclick="document.getElementById('modalConfirmBatal-{{ $booking->booking_id }}').classList.add('hidden')"
                             class="flex-1 bg-[#B22B43] hover:bg-[#97253A] text-white font-semibold py-2 rounded-lg">
-                            Konfirmasi Batalkan
+                            Tidak
                         </button>
                     </div>
 
