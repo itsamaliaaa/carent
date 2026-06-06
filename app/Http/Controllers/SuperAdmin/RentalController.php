@@ -11,10 +11,20 @@ use Illuminate\Support\Facades\Storage;
 
 class RentalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $rentals = Rental::with('admin')->latest()->get();
-        return view('superadmin.rental.index', compact('rentals'));
+        $search = $request->query('search');
+    
+        $rentals = Rental::with('admin')
+            ->when($search, function ($query, $search) {
+                $query->where('nama_rental', 'like', "%{$search}%")
+                      ->orWhere('kota', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->get();
+    
+        return view('superadmin.rental.index', compact('rentals', 'search'));
     }
 
     public function store(Request $request)
@@ -63,20 +73,24 @@ class RentalController extends Controller
     public function update(Request $request, $id)
     {
         $rental = Rental::findOrFail($id);
-
-        $rental->update($request->only('nama_rental', 'email', 'no_telp', 'alamat', 'kota', 'deskripsi'));
-
+    
+        $rental->update($request->only(
+            'nama_rental', 'email', 'no_telp', 'alamat', 'kota', 'deskripsi', 'status' // tambah status
+        ));
+    
         if ($request->hasFile('logo_perusahaan')) {
             if ($rental->logo_perusahaan) {
                 Storage::disk('public')->delete($rental->logo_perusahaan);
             }
-            $rental->logo_perusahaan = $request->file('logo_perusahaan')->store('logo_rental', 'public');
+            $rental->logo_perusahaan = $request->file('logo_perusahaan')
+                                            ->store('logo_rental', 'public');
             $rental->save();
         }
-
+    
         return redirect()->route('superadmin.rental.index')
             ->with('success', 'Rental berhasil diupdate.');
     }
+    
 
     public function destroy($id)
     {

@@ -249,4 +249,37 @@ class CatalogController extends Controller
             'mobilTerkait'
         ));
     }
+
+    public function profileRental(Request $request, $id)
+    {
+        $rental = Rental::with('mobils')->findOrFail($id);
+
+        $query = Mobil::with('fotoPrimary')
+            ->where('rental_id', $id)
+            ->where('status', 'tersedia');
+
+        if ($request->filled('cari')) {
+            $query->where('nama_mobil', 'like', '%' . $request->cari . '%');
+        }
+
+        $mobils = $query->paginate(9);
+
+        $rating = round($rental->rating_rata_rata ?? 0, 1);
+
+        $totalTrip = $rental->bookings()
+            ->where('status_booking', 'selesai')
+            ->count();
+
+        $totalMobil = $rental->mobils()
+            ->where('status', 'tersedia')
+            ->count();
+
+        return view('customer.profil-rental', compact(
+            'rental',
+            'mobils',
+            'rating',
+            'totalTrip',
+            'totalMobil'
+        ));
+    }
 }

@@ -21,6 +21,7 @@ class Review extends Model
         'user_id',
         'rating',
         'komentar',
+        'foto_review',
         'status_tampilkan',
         'tanggal_posting',
     ];

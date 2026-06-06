@@ -13,56 +13,15 @@ use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
-    // tariq
-    public function check(Request $request)
+    public function check()
     {
-        $booking = null;
-
-        // Only search if user has submitted the form
-        if ($request->has('email') && $request->has('booking_code')) {
-            $booking = Booking::where('email', $request->email)
-                            ->where('booking_code', $request->booking_code)
-                            ->first();
-        }
-
-        return view('bookings.check', compact('booking'));
+        $bookings = Booking::with(['mobil', 'driver'])
+        ->where('user_id', auth()->user()->user_id)
+        ->latest()
+        ->get();
+    
+        return view('customer.riwayat', compact('bookings'));
     }
-    public function cancel(Request $request, $id)
-    {
-        $request->validate([
-            'reason' => 'required|string|max:255',
-        ]);
-
-        $booking = Booking::findOrFail($id);
-        $booking->update([
-            'status' => 'cancelled',
-            'cancellation_reason' => $request->reason
-        ]);
-
-        return redirect()->back()->with('success_cancel', true);
-    }
-
-    public function storeReview(Request $request, $bookingId)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string',
-            'photo' => 'nullable|image|max:2048',
-        ]);
-
-        $path = $request->file('photo') ? $request->file('photo')->store('reviews', 'public') : null;
-
-        Review::create([
-            'booking_id' => $bookingId,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-            'photo' => $path,
-        ]);
-
-        // Mengembalikan flash session agar Alpine.js tahu ulasan berhasil dikirim
-        return redirect()->back()->with('review_success', true);
-    }
-
 
     // aziza
     public function create(Request $request, $mobil_id)
@@ -137,11 +96,10 @@ class BookingController extends Controller
                 'digits_between:10,16'
             ];
 
-            $rules['umur'] = [
+            $rules['tgl_lahir'] = [
                 'required',
-                'integer',
-                'min:17',
-                'max:80'
+                'date',
+                'before:' . now()->subYears(17)->format('Y-m-d')
             ];
         }
 
@@ -158,9 +116,9 @@ class BookingController extends Controller
             'sim.numeric' => 'Nomor SIM hanya boleh angka.',
             'sim.digits_between' => 'Nomor SIM harus 10-16 digit.',
 
-            'umur.required' => 'Umur wajib diisi.',
-            'umur.min' => 'Umur minimal 17 tahun.',
-            'umur.max' => 'Umur maksimal 80 tahun.',
+            'tgl_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'tgl_lahir.date' => 'Tanggal lahir tidak valid.',
+            'tgl_lahir.before' => 'Pengendara minimal berusia 17 tahun.',
 
             'bukti.required' => 'Bukti pembayaran wajib diupload.',
             'bukti.mimes' => 'Bukti pembayaran harus berupa file JPG, JPEG, PNG, atau PDF.',
@@ -227,8 +185,9 @@ class BookingController extends Controller
                 ? '-'
                 : $request->sim,
 
-            // sementara
-            'tgl_lahir_pengendara' => null,
+            'tgl_lahir_pengendara' => $request->has('driver')
+                ? null
+                : $request->tgl_lahir,
             
             'tanggal_sewa' => $request->tglAmbil,
             'tanggal_kembali' => $request->tglKembali,

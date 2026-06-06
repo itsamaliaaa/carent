@@ -50,11 +50,13 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/booking/{mobil_id}/driver-random', [Customer\BookingController::class, 'getRandomDriver'])->name('booking.driver-random');
     Route::get('/booking/{mobil_id}', [Customer\BookingController::class, 'create'])->name('booking.create');
+    
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
-    Route::get('/riwayat', [Customer\BookingController::class, 'riwayat'])->name('booking.riwayat');
+    Route::get('/riwayat', [Customer\BookingController::class, 'check'])->name('booking.riwayat');
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
     Route::post('/booking/{id}/batal', [Customer\BookingController::class, 'batalkan'])->name('booking.batal');
     Route::post('/booking/{id}/review', [Customer\ReviewController::class, 'store'])->name('review.store');
+
     Route::get('/profil', [Customer\ProfileController::class, 'index'])->name('profil');
     Route::put('/profil', [Customer\ProfileController::class, 'update'])->name('profil.update');
     Route::put('/profil/password', [Customer\ProfileController::class, 'updatePassword'])->name('profil.password');
@@ -77,7 +79,9 @@ Route::middleware(['auth', 'role:admin_rental'])->prefix('admin')->name('admin.'
     Route::post('/review/{id}/reply', [AdminRental\ReviewController::class, 'reply'])->name('review.reply');
     Route::get('/laporan', [AdminRental\LaporanController::class, 'index'])->name('laporan');
     Route::get('/profil', [AdminRental\ProfilController::class, 'index'])->name('profil');
+    Route::put('/profil/rental', [AdminRental\ProfilController::class, 'updateRental'])->name('profil.rental.update');
     Route::put('/profil', [AdminRental\ProfilController::class, 'update'])->name('profil.update');
+    Route::put('/profil/password', [AdminRental\ProfilController::class, 'updatePassword'])->name('profil.password');
 });
 
 // SUPER ADMIN ROUTES

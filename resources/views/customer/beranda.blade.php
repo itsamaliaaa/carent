@@ -21,7 +21,7 @@
                 />
 
                 <circle
-                    id="progressCircle"
+                    id="progressCircleBeranda"
                     cx="60"
                     cy="60"
                     r="50"
@@ -38,7 +38,7 @@
 
             <div class="absolute inset-0 flex items-center justify-center">
 
-                <span id="progressText" class="text-2xl font-bold text-[#0B1F67]">
+                <span id="progressTextBeranda" class="text-2xl font-bold text-[#0B1F67]">
                     0%
                 </span>
 
@@ -79,7 +79,7 @@
 
             {{-- FORM --}}
             <form
-                id="searchForm"
+                id="searchFormBeranda"
                 action="{{ route('beranda') }}"
                 method="GET"
                 class="w-full max-w-[1174px] bg-white/80 backdrop-blur-sm mt-8 rounded-[10px] px-4 sm:px-6 py-5"
@@ -699,5 +699,44 @@
     @endif
 
 </div>
+
+<script>
+
+    const searchForm = document.getElementById('searchFormBeranda');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    if (searchForm && loadingOverlay) {
+
+        searchForm.addEventListener('submit', function () {
+
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
+
+            let progress = 0;
+
+            const circle = document.getElementById('progressCircleBeranda');
+            const text = document.getElementById('progressTextBeranda');
+
+            const interval = setInterval(() => {
+
+                progress += 10;
+
+                text.innerText = progress + '%';
+
+                const offset = 314 - (314 * progress / 100);
+
+                circle.style.strokeDashoffset = offset;
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+
+            }, 80);
+
+        });
+
+    }
+
+</script>
 
 @endsection
