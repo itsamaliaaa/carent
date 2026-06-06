@@ -1,18 +1,19 @@
 @extends('layouts.customer')
 @section('content')
-        <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24">
+    <div class="min-h-screen flex flex-col">
+        <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24 w-full flex-grow">
 
             <a href="javascript:history.back()" class="inline-flex items-center text-sm gap-2 text-[var(--primary)] font-semibold mb-8 hover:opacity-80">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19L8 12L15 5"/></svg>
                 Kembali
             </a>
 
-            <div class="flex items-start gap-12 mb-12">
+            <div class="block items-start gap-12 mb-12 pb-12">
                 <div class="w-[300px]">
                     <h1 class="text-3xl font-bold text-[var(--text-heading)]">Rating & Ulasan</h1>
                 </div>
 
-                <div class="flex-1 bg-gray-100 rounded-xl p-8 border border-[var(--border-light)]">
+                <div class="flex-1 bg-gray-100 rounded-xl p-8 border border-[var(--border-light)] mt-8">
                     <div class="flex items-center gap-10 mb-8 pb-8 border-b border-[var(--border-light)]">
                         <div class="p-2 border border-dashed border-gray-300 rounded-lg bg-white">
                             {{-- Check if car has a primary image, otherwise show placeholder --}}

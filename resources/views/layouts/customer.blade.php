@@ -14,13 +14,13 @@
 
 </head>
 
-<body class="font-inter">
+<body class="font-inter flex flex-col min-h-screen">
 
     {{-- Navbar --}}
     @include('components.header.customer')
 
     {{-- Konten halaman --}}
-    <main class="min-h-screen">
+    <main class="flex-grow">
         @yield('content')
     </main>
 
