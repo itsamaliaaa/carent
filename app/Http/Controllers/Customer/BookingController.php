@@ -96,11 +96,10 @@ class BookingController extends Controller
                 'digits_between:10,16'
             ];
 
-            $rules['umur'] = [
+            $rules['tgl_lahir'] = [
                 'required',
-                'integer',
-                'min:17',
-                'max:80'
+                'date',
+                'before:' . now()->subYears(17)->format('Y-m-d')
             ];
         }
 
@@ -117,9 +116,9 @@ class BookingController extends Controller
             'sim.numeric' => 'Nomor SIM hanya boleh angka.',
             'sim.digits_between' => 'Nomor SIM harus 10-16 digit.',
 
-            'umur.required' => 'Umur wajib diisi.',
-            'umur.min' => 'Umur minimal 17 tahun.',
-            'umur.max' => 'Umur maksimal 80 tahun.',
+            'tgl_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'tgl_lahir.date' => 'Tanggal lahir tidak valid.',
+            'tgl_lahir.before' => 'Pengendara minimal berusia 17 tahun.',
 
             'bukti.required' => 'Bukti pembayaran wajib diupload.',
             'bukti.mimes' => 'Bukti pembayaran harus berupa file JPG, JPEG, PNG, atau PDF.',
@@ -186,8 +185,9 @@ class BookingController extends Controller
                 ? '-'
                 : $request->sim,
 
-            // sementara
-            'tgl_lahir_pengendara' => null,
+            'tgl_lahir_pengendara' => $request->has('driver')
+                ? null
+                : $request->tgl_lahir,
             
             'tanggal_sewa' => $request->tglAmbil,
             'tanggal_kembali' => $request->tglKembali,

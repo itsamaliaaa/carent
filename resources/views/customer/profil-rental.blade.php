@@ -50,7 +50,7 @@
 
      {{-- BACK --}}
     <a href="{{ url()->previous() }}"
-       class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:text-[#0B1F67] transition">
+        class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
         <i class="fa-solid fa-chevron-left text-xs"></i>
         Kembali
     </a>

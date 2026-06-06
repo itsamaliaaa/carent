@@ -10,7 +10,7 @@ class Rental extends Model
     protected $table = 'rental';
 
     protected $fillable = [
-        'admin_id', 'nama_rental', 'logo_perusahaan', 'alamat',
+        'admin_id', 'nama_rental', 'logo_perusahaan', 'alamat', 'google_maps',
         'kota', 'deskripsi', 'no_telp', 'email',
         'latitude', 'longitude', 'status',
     ];

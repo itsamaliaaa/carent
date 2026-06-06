@@ -77,7 +77,9 @@ Route::middleware(['auth', 'role:admin_rental'])->prefix('admin')->name('admin.'
     Route::post('/review/{id}/reply', [AdminRental\ReviewController::class, 'reply'])->name('review.reply');
     Route::get('/laporan', [AdminRental\LaporanController::class, 'index'])->name('laporan');
     Route::get('/profil', [AdminRental\ProfilController::class, 'index'])->name('profil');
+    Route::put('/profil/rental', [AdminRental\ProfilController::class, 'updateRental'])->name('profil.rental.update');
     Route::put('/profil', [AdminRental\ProfilController::class, 'update'])->name('profil.update');
+    Route::put('/profil/password', [AdminRental\ProfilController::class, 'updatePassword'])->name('profil.password');
 });
 
 // SUPER ADMIN ROUTES

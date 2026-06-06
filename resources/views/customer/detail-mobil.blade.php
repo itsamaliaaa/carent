@@ -4,13 +4,11 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24">
 
-    {{-- BACK --}}
-    <a href="{{ route('katalog') }}"
-       class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:text-[#0B1F67] transition">
-
+     {{-- BACK --}}
+    <a href="{{ url()->previous() }}"
+        class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
         <i class="fa-solid fa-chevron-left text-xs"></i>
         Kembali
-
     </a>
 
     <div class="w-full h-[1px] bg-[#D9D9D9] mt-5"></div>
