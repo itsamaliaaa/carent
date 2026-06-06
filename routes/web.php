@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\AdminRental;
 use App\Http\Controllers\SuperAdmin;
+use App\Http\Controllers\AdminRental\ReviewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +58,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
     Route::post('/booking/{id}/batal', [Customer\BookingController::class, 'batalkan'])->name('booking.batal');
     Route::post('/booking/{id}/review', [Customer\ReviewController::class, 'store'])->name('review.store');
+    Route::post('/review/store/{id}', [ReviewController::class, 'store'])->name('review.store');
 
     Route::get('/profil', [Customer\ProfileController::class, 'index'])->name('profil');
     Route::put('/profil', [Customer\ProfileController::class, 'update'])->name('profil.update');

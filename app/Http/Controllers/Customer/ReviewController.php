@@ -7,37 +7,30 @@ use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\Booking;
 use App\Models\Mobil;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
     public function store(Request $request, $id)
     {
         $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'komentar' => 'required|string',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'user_id'    => 'required|integer',
+            'rating'     => 'required|integer|between:1,5',
+            'komentar'   => 'required|string',
+            'foto'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $booking = Booking::findOrFail($id);
-
-        $foto = null;
-
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto')
-                ->store('review', 'public');
-        }
-
-        Review::create([
-            'booking_id' => $booking->booking_id,
-            'user_id' => auth()->user()->user_id,
-            'rating' => $request->rating,
-            'komentar' => $request->komentar,
-            'foto' => $foto,
-            'status_tampilkan' => true,
-            'tanggal_posting' => now(),
+        DB::table('reviews')->insert([
+            'booking_id'       => $id, // Menangkap $id langsung dari parameter URL
+            'user_id'          => $request->user_id,
+            'rating'           => $request->rating,
+            'komentar'         => $request->komentar,
+            'status_tampilkan' => 1,
+            'tanggal_posting'  => Carbon::now()->toDateTimeString(),
         ]);
 
-        return back()->with('review_success', true);
+        return redirect()->back()->with('success', 'Terima kasih atas ulasan Anda!');
     }
 
     public function show($id)
