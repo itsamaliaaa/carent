@@ -235,7 +235,8 @@ class CatalogController extends Controller
             ->where('review.status_tampilkan', true)
             ->latest('review.tanggal_posting')
             ->get();
-            
+        $averageRating = $reviews->avg('rating');
+
         // MOBIL TERKAIT
         $mobilTerkait = Mobil::with('fotoPrimary')
             ->where('kategori', $mobil->kategori)

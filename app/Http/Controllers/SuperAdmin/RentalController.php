@@ -14,7 +14,7 @@ class RentalController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-    
+
         $rentals = Rental::with('admin')
             ->when($search, function ($query, $search) {
                 $query->where('nama_rental', 'like', "%{$search}%")
@@ -23,7 +23,7 @@ class RentalController extends Controller
             })
             ->latest()
             ->get();
-    
+
         return view('superadmin.rental.index', compact('rentals', 'search'));
     }
 
@@ -64,20 +64,21 @@ class RentalController extends Controller
             'deskripsi'       => $request->deskripsi,
             'logo_perusahaan' => $logoPath,
             'status'          => 'aktif',
+            'google_maps'     => $request->maps_link, 
         ]);
 
         return redirect()->route('superadmin.rental.index')
-            ->with('success', 'Rental berhasil ditambahkan.');
+            ->with('rental_success', 'Rental berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
     {
         $rental = Rental::findOrFail($id);
-    
-        $rental->update($request->only(
-            'nama_rental', 'email', 'no_telp', 'alamat', 'kota', 'deskripsi', 'status' // tambah status
-        ));
-    
+
+        $rental->update([
+            'status'      => $request->status,
+        ]);
+
         if ($request->hasFile('logo_perusahaan')) {
             if ($rental->logo_perusahaan) {
                 Storage::disk('public')->delete($rental->logo_perusahaan);
@@ -86,11 +87,10 @@ class RentalController extends Controller
                                             ->store('logo_rental', 'public');
             $rental->save();
         }
-    
+
         return redirect()->route('superadmin.rental.index')
-            ->with('success', 'Rental berhasil diupdate.');
+            ->with('rental_success', 'Rental berhasil diperbarui.');
     }
-    
 
     public function destroy($id)
     {
@@ -101,6 +101,6 @@ class RentalController extends Controller
         $rental->delete();
 
         return redirect()->route('superadmin.rental.index')
-            ->with('success', 'Rental berhasil dihapus.');
+            ->with('rental_success', 'Rental berhasil dihapus.');
     }
 }

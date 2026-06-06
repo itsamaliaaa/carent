@@ -11,8 +11,7 @@ class Rental extends Model
 
     protected $fillable = [
         'admin_id', 'nama_rental', 'logo_perusahaan', 'alamat', 'google_maps',
-        'kota', 'deskripsi', 'no_telp', 'email',
-        'latitude', 'longitude', 'status',
+        'kota', 'deskripsi', 'no_telp', 'email', 'status',
     ];
 
     public function admin()

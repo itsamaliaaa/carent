@@ -27,7 +27,7 @@
             <div class="flex items-end gap-4 mb-5">
                 {{-- Tanggal Mulai --}}
                 <div class="flex flex-col gap-1 flex-1">
-                    <label class="text-xs text-gray-400 font-medium">Tanggal</label>
+                    <label class="text-xs text-gray-400 font-medium">Tanggal Mulai</label>
                     <input type="date" name="start_date" value="{{ request('start_date') }}"
                         class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] uppercase">
                 </div>
@@ -36,7 +36,7 @@
 
                 {{-- Tanggal Selesai --}}
                 <div class="flex flex-col gap-1 flex-1">
-                    <label class="text-xs text-gray-400 font-medium">Tanggal</label>
+                    <label class="text-xs text-gray-400 font-medium">Tanggal Selesai</label>
                     <input type="date" name="end_date" value="{{ request('end_date') }}"
                         class="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] uppercase">
                 </div>

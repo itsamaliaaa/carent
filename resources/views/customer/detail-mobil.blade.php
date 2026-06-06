@@ -469,11 +469,11 @@
 
                 </div>
 
-                <button
-                    class="mt-8 h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3">
+                <a href="{{ route('reviews.show', ['id' => $mobil->mobil_id]) }}"
+                    class="mt-8 h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3 w-fit">
                     Lihat Semua Ulasan
                     <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                </a>
 
             </div>
 
@@ -515,7 +515,7 @@
                             <input
                                 type="text"
                                 id="lokasi"
-                                name="lokasi"                             
+                                name="lokasi"
                                 placeholder="Pilih lokasi"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
@@ -541,7 +541,7 @@
                             <input
                                 type="date"
                                 id="tglAmbil"
-                                name="tglAmbil"                     
+                                name="tglAmbil"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -556,7 +556,7 @@
                             <input
                                 type="time"
                                 id="waktuAmbil"
-                                name="waktuAmbil"                                
+                                name="waktuAmbil"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -576,7 +576,7 @@
                             <input
                                 type="date"
                                 id="tglKembali"
-                                name="tglKembali"                                                        
+                                name="tglKembali"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
                         </div>
@@ -590,7 +590,7 @@
                             <input
                                 type="time"
                                 id="waktuKembali"
-                                name="waktuKembali"                                       
+                                name="waktuKembali"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 

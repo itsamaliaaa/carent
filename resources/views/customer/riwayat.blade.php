@@ -323,7 +323,7 @@
 @endif
 
 
-<!-- {{-- @if($booking && $booking->status_booking == 'selesai') --}}
+@if($booking && $booking->status_booking == 'selesai')
 
 <div
     x-data="{
@@ -334,7 +334,7 @@
     }">
 
     {{-- MODAL REVIEW --}}
-    {{-- 
+
     <div
         x-show="showReview && !{{ session('review_success') ? 'true' : 'false' }}"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -365,8 +365,8 @@
                 <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm">
 
                     <form
-                        action="{{-- route('review.store', $booking->booking_id) --}}"
-                        
+                        action="route('review.store', $booking->booking_id)"
+
                         method="POST"
                         enctype="multipart/form-data">
 
@@ -556,13 +556,12 @@
         </div>
 
     </div>
-    --}}
 
     @endif
 
 </div>
 
-{{-- @endif --}} -->
+@endif
 
 
 @endsection
