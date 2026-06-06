@@ -107,14 +107,14 @@
             <div class="mt-5">
 
                 <label class="block text-sm text-gray-600 mb-2">
-                    Link Google Maps
+                    Link Google Maps (Embed)
                 </label>
 
                 <input
                     type="text"
                     name="google_maps"
                     value="{{ old('google_maps', $rental->google_maps ?? '') }}"
-                    placeholder="https://maps.app.goo.gl/..."
+                    placeholder="https://www.google.com/maps/embed?pb=..."
                     class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
 
                     @error('google_maps')

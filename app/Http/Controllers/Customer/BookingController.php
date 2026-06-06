@@ -29,7 +29,10 @@ class BookingController extends Controller
         $mobil = Mobil::with([
             'rental.rekenings',
             'fotos'
-        ])->findOrFail($mobil_id);
+        ])
+        ->withAvg('reviews', 'rating')
+        ->withCount('reviews')
+        ->findOrFail($mobil_id);
 
         $tglAmbil = $request->tglAmbil;
         $tglKembali = $request->tglKembali;
