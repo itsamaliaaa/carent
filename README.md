@@ -19,3 +19,7 @@ Kelompok Aman terdiri dari anggota sebagai berikut:
 
 Temukan tempat penyewaan mobil terbaik di Kota Bandung dan sekitarnya!
 Carent menawarkan penyewaan berbagai macam mobil baik dengan lepas kunci maupun dengan driver untuk bepergian kemanapun Anda mau. Harga kami beragam dari yang terjangkau hingga mobil mewah untuk dibawa pamer ke arisan!
+
+## Screenshot
+
+<p align="center"><a target="blank"><img src="./public/images/banner/screenshot.png" widht="400" alt="screenshot carent"></a></p>
