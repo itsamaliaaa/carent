@@ -3,26 +3,6 @@
 @section('content')
 <div class="flex flex-col gap-4 py-5 px-5" x-data="{ popUpTambah: false }">
 
-    @if(session('success'))
-    <div id="success-alert" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
-        {{ session('success') }}
-    </div>
-
-    <script>
-        setTimeout(() => {
-            const alert = document.getElementById('success-alert');
-            if (alert) {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-
-                setTimeout(() => {
-                    alert.remove();
-                }, 500);
-            }
-        }, 2000); 
-    </script>
-    @endif
-
     {{-- Card Header & Search --}}
     <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50">
         <div class="flex justify-between items-center mb-5">
@@ -34,18 +14,23 @@
             </button>
         </div>
         <hr class="border-t border-gray-200 mb-6">
-        <div class="flex gap-4">
+        <form method="GET" action="{{ route('superadmin.rental.index') }}" class="flex gap-4">
             <div class="relative flex-1">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search">
                 </div>
-                <input type="text" placeholder="Cari Rental"
-                       class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-400">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ $search ?? '' }}"
+                    placeholder="Cari Rental"
+                    class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-800">
             </div>
-            <button class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">
+            <button type="submit"
+                class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">
                 Cari
             </button>
-        </div>
+        </form>
     </div>
 
     {{-- Modal Tambah Rental --}}
@@ -276,28 +261,39 @@
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Alamat</label>
                                         <textarea name="alamat" required rows="3"
-                                                class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->alamat }}</textarea>
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->alamat }}</textarea>
                                     </div>
 
                                     <div class="flex flex-col gap-1">
                                         <label class="text-sm text-gray-600">Deskripsi</label>
                                         <textarea name="deskripsi" rows="3"
-                                                class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->deskripsi }}</textarea>
+                                            class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none resize-none">{{ $rental->deskripsi }}</textarea>
                                     </div>
 
                                     <div class="flex flex-col gap-1 col-span-2">
-                                        <label class="text-sm text-gray-600">Logo Perusahaan</label>
+                                    <label class="text-sm text-gray-600">Logo Perusahaan</label>
 
-                                        @if($rental->logo_perusahaan)
-                                            <img src="{{ asset('storage/' . $rental->logo_perusahaan) }}"
-                                                class="w-20 h-12 object-contain mb-2 rounded">
-                                        @endif
+                                    @if($rental->logo_perusahaan)
+                                        <img src="{{ asset('storage/' . $rental->logo_perusahaan) }}"
+                                            class="w-20 h-12 object-contain mb-2 rounded">
+                                    @endif
 
+                                    <div class="flex gap-4 items-end">
                                         <input type="file"
                                             name="logo_perusahaan"
                                             accept="image/*"
-                                            class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none">
+                                            class="flex-1 block text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none">
+
+                                        <div class="flex flex-col gap-1 min-w-[140px]">
+                                            <label class="text-sm text-gray-600">Status</label>
+                                            <select name="status"
+                                                class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                                <option value="aktif" {{ $rental->status == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                                <option value="nonaktif" {{ $rental->status == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                            </select>
+                                        </div>
                                     </div>
+                                </div>
 
                                 </div>
 
@@ -310,14 +306,14 @@
 
                     </div>
 
-        </div>
+                </div>
 
-    </div>
-</div>
+            </div>
+        </div>
             @empty
             <div class="text-center text-gray-400 py-8">Belum ada data rental.</div>
             @endforelse
-        </div>
+            </div>
     </div>
 
 </div>

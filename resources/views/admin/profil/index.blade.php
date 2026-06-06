@@ -2,114 +2,512 @@
 
 @section('content')
 
-<div class="flex flex-col gap-4 py-2 px-2 h-screen" x-data>
+<div class="bg-white rounded-[30px] p-10 h-[calc(100vh-120px)] overflow-y-auto">
 
-    <div class="bg-white p-14 rounded-[20px] shadow-sm border border-gray-50 flex flex-col flex-grow overflow-hidden max-h-[85vh]">
+    <h1 class="text-3xl font-bold text-[#0B1F67] mb-10">
+        Informasi Rental
+    </h1>
 
-        <div class="overflow-y-auto pr-2 flex-grow">
-            <form action="#" method="POST" enctype="multipart/form-data">
-                @csrf
+    @php
+        $rekening = $rental->rekenings->first();
+    @endphp
 
-                <div class="flex items-center gap-4 mb-6">
-                    <h1 class="text-[#1D2B6B] text-2xl font-bold">Informasi Rental</h1>
+    <form
+        action="{{ route('admin.profil.rental.update') }}"
+        id="rentalForm"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-8">
+
+        @csrf
+        @method('PUT')
+
+        {{-- INFORMASI RENTAL --}}
+        <div class="border border-[#D9D9D9] rounded-[18px] p-6">
+
+            <div class="grid grid-cols-2 gap-5">
+
+                {{-- NAMA RENTAL --}}
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">
+                        Nama Rental
+                    </label>
+
+                <input type="text"
+                        name="nama_rental"
+                        value="{{ old('nama_rental', $rental->nama_rental ?? '') }}"
+                        class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
+
+                        @error('nama_rental')
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ $message }}
+                            </p>
+                        @enderror
+
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Rental</label>
-                            <input type="text" value="Cahaya Rental" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-[#1D2B6B] focus:ring-1 focus:ring-[#1D2B6B] transition" />
-                        </div>
+                {{-- LOGO --}}
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">
+                        Logo Perusahaan
+                    </label>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Logo Perusahaan</label>
-                            <input type="file" class="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer focus:outline-none 
-                file:mr-4 file:py-2.5 file:px-4 
-                file:border-0 file:text-sm file:font-medium 
-                file:bg-gray-200 file:text-gray-700 
-                hover:file:bg-gray-300" />
-                        </div>
+                    <input
+                        type="file"
+                        name="logo_perusahaan"
+                        class="w-full border border-[#BDBDBD] rounded-[10px] text-sm
+                        file:py-3 file:px-4 file:border-0 file:bg-gray-100 file:text-gray-600">
 
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Alamat Rental</label>
-                            <input type="text" value="Jl. Amir Mahmud No. 21, Cigugur Tengah, Kec. Cimahi Tengah, Kota Cimahi, Jawa Barat 40522" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-[#1D2B6B] focus:ring-1 focus:ring-[#1D2B6B] transition" />
-                        </div>
+                        @error('logo_perusahaan')
+                            <p class="text-red-500 text-sm mt-1">
+                                {{ $message }}
+                            </p>
+                        @enderror
 
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Link Google Maps</label>
-                            <input type="text" value="https://maps.app.goo.gl/KxQ3Q1qbKM6Gtkt69" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-[#1D2B6B] focus:ring-1 focus:ring-[#1D2B6B] transition" />
-                        </div>
+                        @if($rental?->logo_perusahaan)
+                            <a
+                                href="{{ asset('storage/' . $rental->logo_perusahaan) }}"
+                                target="_blank"
+                                class="inline-flex items-center gap-1 mt-2
+                                text-xs text-[#0B1F67] hover:underline">
 
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                            <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:border-[#1D2B6B] focus:ring-1 focus:ring-[#1D2B6B] transition">Aflah Jaya Rental hadir sejak 2024 melayani kebutuhan transportasi Anda dengan armada lengkap dan terawat. Kami menyediakan layanan rental harian, mingguan, dan bulanan dengan sopir maupun lepas kunci. Semua kendaraan rutin diservis dan diasuransikan. Tersedia layanan 24 jam dan antar-jemput bandara.</textarea>
-                        </div>
-                    </div>
+                                File saat ini:
+                                <span class="font-medium">
+                                    {{ basename($rental->logo_perusahaan) }}
+                                </span>
+
+                            </a>
+                        @endif
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl p-6 mb-6">
-                    <div class="flex flex-wrap gap-4 mb-5">
-                        {{-- BCA --}}
-                        <div onclick="selectBank(this)" class="bank-card w-[138px] h-[83px] bg-white border border-gray-200 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[#1D2B6B] p-3">
-                            <img src="{{ asset('images/Bank/BCA.png') }}" alt="BCA" class="w-full h-full object-contain">
-                        </div>
+            </div>
 
-                        {{-- BNI --}}
-                        <div onclick="selectBank(this)" class="bank-card w-[138px] h-[83px] bg-white border border-gray-200 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[#1D2B6B] p-3">
-                            <img src="{{ asset('images/Bank/BNI.png') }}" alt="BNI" class="w-full h-full object-contain">
-                        </div>
+            {{-- ALAMAT --}}
+            <div class="mt-5">
 
-                        {{-- BRI --}}
-                        <div onclick="selectBank(this)" class="bank-card w-[138px] h-[83px] bg-white border border-gray-200 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[#1D2B6B] p-3">
-                            <img src="{{ asset('images/Bank/BRI.png') }}" alt="BRI" class="w-full h-full object-contain">
-                        </div>
+                <label class="block text-sm text-gray-600 mb-2">
+                    Alamat Rental
+                </label>
 
-                        {{-- BSI --}}
-                        <div onclick="selectBank(this)" class="bank-card w-[138px] h-[83px] bg-white border border-gray-200 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[#1D2B6B] p-3">
-                            <img src="{{ asset('images/Bank/BSI.png') }}" alt="BSI" class="w-full h-full object-contain">
-                        </div>
+                <input
+                    type="text"
+                    name="alamat"
+                    value="{{ old('alamat', $rental->alamat ?? '') }}"
+                    class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
 
-                        {{-- Mandiri --}}
-                        <div onclick="selectBank(this)" class="bank-card w-[138px] h-[83px] bg-white border border-gray-200 rounded-xl flex items-center justify-center cursor-pointer transition-all hover:border-[#1D2B6B] p-3">
-                            <img src="{{ asset('images/Bank/Mandiri.png') }}" alt="Mandiri" class="w-full h-full object-contain">
-                        </div>
-                    </div>
+                    @error('alamat')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror                
 
-                    <div class="mb-4">
-                        <label class="block text-sm text-slate-600 mb-1">Atas Nama</label>
-                        <input type="text" placeholder="Sesuai Buku Tabungan" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400">
-                    </div>
+            </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm text-slate-600 mb-1">Nomor Rekening</label>
-                            <input type="text" placeholder="Contoh: 1234567890" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400">
-                        </div>
+            {{-- GOOGLE MAPS --}}
+            <div class="mt-5">
 
-                        <div>
-                            <label class="block text-sm text-slate-600 mb-1">Gambar QRIS</label>
-                            <input type="file" class="block w-full text-sm text-slate-500 border border-slate-300 rounded-md cursor-pointer file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300">
-                        </div>
-                    </div>
-                </div>
+                <label class="block text-sm text-gray-600 mb-2">
+                    Link Google Maps
+                </label>
 
-                <button type="submit" class="w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
-                    Edit
-                </button>
-            </form>
+                <input
+                    type="text"
+                    name="google_maps"
+                    value="{{ old('google_maps', $rental->google_maps ?? '') }}"
+                    placeholder="https://maps.app.goo.gl/..."
+                    class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
+
+                    @error('google_maps')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror   
+            </div>
+
+            {{-- DESKRIPSI --}}
+            <div class="mt-5">
+
+                <label class="block text-sm text-gray-600 mb-2">
+                    Deskripsi
+                </label>
+
+                <textarea
+                    name="deskripsi"
+                    class="w-full h-24 border border-[#BDBDBD] rounded-[10px] p-4 resize-none text-sm">{{ old('deskripsi', $rental->deskripsi ?? '') }}</textarea>
+
+                    @error('deskripsi')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+            </div>
+
         </div>
+
+        {{-- INFORMASI PEMBAYARAN --}}
+        <div class="border border-[#D9D9D9] rounded-[18px] p-6">
+
+            <h2 class="text-lg font-semibold text-[#0B1F67] mb-6">
+                Informasi Pembayaran
+            </h2>
+
+            {{-- PILIHAN BANK --}}
+            <div>
+
+                <label class="block text-sm font-medium text-[#0B1F67] mb-3">
+                    Pilihan Bank
+                </label>
+
+                <div class="flex flex-wrap gap-6">
+
+                    @php
+                        $banks = ['BSI', 'BRI', 'BNI', 'BCA', 'Mandiri'];
+                    @endphp
+
+                    @foreach($banks as $namaBank)
+
+                        <label class="flex items-center gap-2 cursor-pointer">
+
+                            <input
+                                type="radio"
+                                name="nama_bank"
+                                value="{{ $namaBank }}"
+                                {{ ($rekening->nama_bank ?? '') == $namaBank ? 'checked' : '' }}>
+
+                                @error('nama_bank')
+                                    <p class="text-red-500 text-sm mt-1">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+
+                            <span class="text-sm text-gray-700">
+                                {{ $namaBank }}
+                            </span>
+
+                        </label>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+            {{-- DETAIL REKENING --}}
+            <div class="mt-6">
+
+                <label class="block text-sm font-medium text-[#0B1F67] mb-3">
+                    Detail Rekening
+                </label>
+
+                <div class="grid grid-cols-2 gap-6">
+
+                    {{-- ATAS NAMA --}}
+                    <div>
+
+                        <label class="block text-sm text-gray-600 mb-2">
+                            Atas Nama
+                        </label>
+
+                        <input
+                            type="text"
+                            name="atas_nama"
+                            value="{{ old('atas_nama', $rekening->atas_nama ?? '') }}"
+                            placeholder="Sesuai Buku Tabungan"
+                            class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
+
+                            @error('atas_nama')
+                                <p class="text-red-500 text-sm mt-1">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+
+                    </div>
+
+                    {{-- NOMOR REKENING --}}
+                    <div>
+
+                        <label class="block text-sm text-gray-600 mb-2">
+                            Nomor Rekening
+                        </label>
+
+                        <input
+                            type="text"
+                            name="nomor_rekening"
+                            value="{{ old('nomor_rekening', $rekening->nomor_rekening ?? '') }}"
+                            placeholder="Contoh: 1234567890"
+                            class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
+
+                            @error('nomor_rekening')
+                                <p class="text-red-500 text-sm mt-1">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {{-- QRIS --}}
+            <div class="mt-6">
+
+                <label class="block text-sm font-medium text-[#0B1F67] mb-3">
+                    Pembayaran QRIS
+                </label>
+
+                <input
+                    type="file"
+                    name="qris"
+                    class="w-full border border-[#BDBDBD] rounded-[10px] text-sm
+                    file:py-3 file:px-4 file:border-0 file:bg-gray-100 file:text-gray-600">
+
+                    @error('qris')
+                        <p class="text-red-500 text-sm mt-1">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+                    @if($rekening?->url_qris)
+                        <a
+                            href="{{ asset('storage/' . $rekening->url_qris) }}"
+                            target="_blank"
+                            class="inline-flex items-center gap-1 mt-2
+                            text-xs text-[#0B1F67] hover:underline">
+
+                            File saat ini:
+                            <span class="font-medium">
+                                {{ basename($rekening->url_qris) }}
+                            </span>
+
+                        </a>
+                    @endif
+
+            </div>
+
+        </div>
+
+        {{-- BUTTON --}}
+        <button
+            type="button"
+            id="openRentalConfirmModal"
+            class="w-full h-12 bg-[#0B1F67]
+            hover:bg-[#08184f]
+            text-white font-semibold
+            rounded-[10px]">
+
+            Edit
+
+        </button>
+
+    </form>
+
+</div>
+
+<!-- MODAL KONFIRMASI -->
+<div
+    id="rentalConfirmModal"
+    class="fixed inset-0 z-[70] hidden items-center justify-center">
+
+    <div class="absolute inset-0 bg-black/50"></div>
+
+    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
+
+        <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
+            Apakah kamu yakin ingin mengubah informasi rental?
+        </p>
+
+        <div class="flex gap-4 mt-8">
+
+            <button
+                type="button"
+                id="confirmRentalBtn"
+                class="flex-1 bg-[#62B33B] hover:bg-green-600
+                text-white py-3 rounded-xl font-semibold">
+
+                Ya
+
+            </button>
+
+            <button
+                type="button"
+                id="closeRentalConfirmModal"
+                class="flex-1 bg-[#B92A44] hover:bg-red-600
+                text-white py-3 rounded-xl font-semibold">
+
+                Tidak
+
+            </button>
+
+        </div>
+
     </div>
+
+</div>
+
+<!-- LOADING -->
+<div
+    id="rentalLoadingModal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80]
+    hidden items-center justify-center">
+
+    <div class="relative w-32 h-32">
+
+        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+
+            <circle
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="#E5E7EB"
+                stroke-width="10"
+            />
+
+            <circle
+                id="rentalProgressCircle"
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="#0B1F67"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-dasharray="314"
+                stroke-dashoffset="314"
+                style="transition: stroke-dashoffset 0.3s ease"
+            />
+
+        </svg>
+
+        <div class="absolute inset-0 flex items-center justify-center">
+
+            <span
+                id="rentalProgressText"
+                class="text-2xl font-bold text-[#0B1F67]">
+
+                0%
+
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+<div
+    id="rentalSuccessModal"
+    class="fixed inset-0 z-[90] hidden items-center justify-center">
+
+    <div class="absolute inset-0 bg-black/50"></div>
+
+    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
+
+        <div class="flex justify-center">
+
+            <img
+                src="{{ asset('images/icons/check-circle.svg') }}"
+                class="w-24 h-24">
+
+        </div>
+
+        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">
+            Informasi rental berhasil diperbarui
+        </h2>
+
+    </div>
+
 </div>
 
 <script>
-    function selectBank(element) {
-        document.querySelectorAll('.bank-card').forEach(card => {
-            card.classList.remove('border-2', 'border-[#1D2B6B]');
-            card.classList.add('border', 'border-gray-200');
-        });
-        element.classList.remove('border', 'border-gray-200');
-        element.classList.add('border-2', 'border-[#1D2B6B]');
-    }
+
+    const rentalForm = document.getElementById('rentalForm');
+
+    const rentalConfirmModal =
+        document.getElementById('rentalConfirmModal');
+
+    const rentalLoadingModal =
+        document.getElementById('rentalLoadingModal');
+
+    document.getElementById('openRentalConfirmModal')
+    ?.addEventListener('click', () => {
+
+        rentalConfirmModal.classList.remove('hidden');
+        rentalConfirmModal.classList.add('flex');
+
+    });
+
+    document.getElementById('closeRentalConfirmModal')
+    ?.addEventListener('click', () => {
+
+        rentalConfirmModal.classList.add('hidden');
+        rentalConfirmModal.classList.remove('flex');
+
+    });
+
+    document.getElementById('confirmRentalBtn')
+    ?.addEventListener('click', () => {
+
+        rentalConfirmModal.classList.add('hidden');
+        rentalConfirmModal.classList.remove('flex');
+
+        rentalLoadingModal.classList.remove('hidden');
+        rentalLoadingModal.classList.add('flex');
+
+        const circle =
+            document.getElementById('rentalProgressCircle');
+
+        const text =
+            document.getElementById('rentalProgressText');
+
+        let progress = 0;
+
+        const interval = setInterval(() => {
+
+            progress += 10;
+
+            text.textContent = progress + '%';
+
+            const offset = 314 - (314 * progress / 100);
+
+            circle.style.strokeDashoffset = offset;
+
+            if (progress >= 100) {
+
+                clearInterval(interval);
+
+                rentalForm.submit();
+
+            }
+
+        }, 80);
+
+    });
+
 </script>
+
+@if(session('success_rental'))
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const modal =
+            document.getElementById('rentalSuccessModal');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        setTimeout(() => {
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+        }, 2000);
+
+    });
+    </script>
+@endif
 
 @endsection
