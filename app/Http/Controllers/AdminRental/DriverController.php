@@ -46,7 +46,7 @@ class DriverController extends Controller
 
         // Kalau rental tidak ditemukan
         if (!$rental) {
-            return redirect()->back()->with('error', 'Data rental tidak ditemukan!');
+            return redirect()->back();
         }
 
         // Upload foto ke folder drivers
@@ -64,7 +64,7 @@ class DriverController extends Controller
         ]);
 
         // Kalau rental berhasil ditambahkan
-        return redirect()->back()->with('success', 'Driver berhasil ditambahkan');
+        return redirect()->back();
     }
 
     public function update(Request $request, $id)
@@ -96,7 +96,7 @@ class DriverController extends Controller
 
         $driver->save();
 
-        return redirect()->back()->with('success', 'Data driver berhasil diperbarui');
+        return redirect()->back();
     }
 
     public function destroy($id)
@@ -111,6 +111,6 @@ class DriverController extends Controller
         // Hapus data driver
         $driver->delete();
 
-        return redirect()->back()->with('success', 'Driver berhasil dihapus');
+        return redirect()->back();
     }
 }

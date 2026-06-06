@@ -62,7 +62,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kapasitas</label>
-                        <input type="text" name="kapasitas" value="{{ old('kapasitas', $mobil->kapasitas_penumpang) }}" placeholder="Contoh: 7"
+                        <input type="text" name="kapasitas_penumpang" value="{{ old('kapasitas_penumpang', $mobil->kapasitas_penumpang) }}" placeholder="Contoh: 7"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                     </div>
 
@@ -101,7 +101,8 @@
                     {{-- Total (readonly, otomatis) --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Total</label>
-                        <input type="text" id="total_display" readonly placeholder="Otomatis terisi"
+                        <input type="text" id="total_display" readonly
+                            value="Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}"
                             class="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 bg-gray-50 cursor-not-allowed focus:outline-none transition" />
                     </div>
 
@@ -138,7 +139,7 @@
                     </div>
 
                     <!-- Dropdown Bahan Bakar -->
-                    <div x-data="{ open: false, selected: '{{ old('bahan_bakar', $mobil->jenis_bahan_bakar) }}' }">
+                    <div x-data="{ open: false, selected: '{{ old('bahan_bakar', $mobil->bahan_bakar) }}' }">
                         <input type="hidden" name="bahan_bakar" :value="selected">
                         <label class="text-sm font-medium text-gray-700 mb-1 block">Bahan Bakar</label>
                         <div class="relative">
@@ -169,24 +170,25 @@
                         </div>
                     </div>
 
-                    {{-- Total dengan driver (readonly, otomatis) --}}
+                    {{-- Total dengan driver --}}
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">TOTAL (dengan driver, 1 hari)</label>
-                        <input type="text" id="total_driver_display" readonly placeholder="Otomatis terisi"
-                            class="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 bg-gray-50 cursor-not-allowed focus:outline-none transition" />
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Driver (opsional)</label>
+                        <input type="number" id="driver_input" name="driver" value="{{ old('driver', $mobil->tarif_driver) }}" placeholder="Contoh: 150000"
+                            oninput="hitungTotal()"
+                            class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                     </div>
 
+                    <!-- Input Foto -->
                     <div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
-
-                            <input id="foto-input" type="file" name="foto[]" accept="image/*"multiple
+                            <input id="foto-input" type="file" name="foto[]" accept="image/*" multiple
                                 class="block w-full text-[14px] text-gray-400 border border-gray-300 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2.5 file:px-4 file:mr-4 cursor-pointer focus:outline-none file:hover:bg-[#E5E7EB] file:transition-colors"
                                 onchange="handleFotoPreview(event)" />
                         </div>
                     </div>
 
-                    {{-- Driver (input angka tarif) --}}
+                    <!-- Driver -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Driver (opsional)</label>
                         <input type="number" id="driver_input" name="driver" value="{{ old('driver', $mobil->tarif_driver) }}" placeholder="Contoh: 150000"
@@ -229,11 +231,12 @@
                 </div>
 
                 <div class="mt-5">
-                    <div class="flex items-center gap-2 overflow-x-auto mt-3 p-2 w-full rounded-lg" style="white-space: nowrap;">
+                    <div id="foto-preview-container" class="flex flex-wrap gap-2 mt-3">
                         @foreach($mobil->fotos as $foto)
-                        <div class="flex-shrink-0">
-                            <img src="{{ asset('storage/' . $foto->url_foto) }}"
-                                class="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm">
+                        <div class="relative flex-shrink-0" id="foto-lama-{{ $foto->id }}">
+                            <img src="{{ asset('storage/' . $foto->url_foto) }}" class="w-20 h-20 object-cover rounded-lg border border-gray-200">
+                            <button type="button" onclick="hapusFotoLama('{{ $foto->id }}')" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow">✕</button>
+                            <span id="file-count-label" class="text-sm text-gray-500 whitespace-nowrap"></span>
                         </div>
                         @endforeach
                     </div>
@@ -255,16 +258,16 @@
 
 <script>
     function hitungTotal() {
-        const sewa = parseInt(document.getElementById('sewa_dasar_input')?.value) || 0;
-        const driver = parseInt(document.getElementById('driver_input')?.value) || 0;
+        const sewaInput = document.getElementById('sewa_dasar_input');
+        const driverInput = document.getElementById('driver_input');
+        const totalDisplay = document.getElementById('total_display');
 
-        document.getElementById('total_display').value = sewa > 0 ?
-            'Rp ' + sewa.toLocaleString('id-ID') :
-            '';
+        const sewa = parseInt(sewaInput?.value) || 0;
+        const driver = parseInt(driverInput?.value) || 0;
 
-        document.getElementById('total_driver_display').value = sewa > 0 ?
-            'Rp ' + (sewa + driver).toLocaleString('id-ID') :
-            '';
+        if (totalDisplay) {
+            totalDisplay.value = sewa > 0 ? 'Rp ' + (sewa + driver).toLocaleString('id-ID') : '';
+        }
     }
 
     let selectedFiles = [];
@@ -281,14 +284,15 @@
 
     function renderPreviews() {
         const container = document.getElementById('foto-preview-container');
+        if (!container) return;
+
         container.innerHTML = '';
-        if (selectedFiles.length === 0) {
-            container.classList.add('hidden');
-            container.classList.remove('flex');
-            return;
-        }
-        container.classList.remove('hidden');
-        container.classList.add('flex');
+        const label = document.getElementById('file-count-label');
+        if (label) label.innerText = selectedFiles.length > 0 ? selectedFiles.length + ' file' : '';
+
+        container.classList.toggle('hidden', selectedFiles.length === 0);
+        container.classList.toggle('flex', selectedFiles.length > 0);
+
         selectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -296,7 +300,7 @@
                 wrapper.className = 'relative flex-shrink-0';
                 wrapper.innerHTML = `
                     <img src="${e.target.result}" class="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm">
-                    <button type="button" onclick="removePhoto(${index})" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow">✕</button>
+                    <button type="button" onclick="removePhoto(${index})" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-shadow shadow">✕</button>
                     <span class="block text-center text-[10px] text-gray-400 mt-0.5 w-20 truncate">${file.name}</span>
                 `;
                 container.appendChild(wrapper);
@@ -309,6 +313,40 @@
         selectedFiles.splice(index, 1);
         renderPreviews();
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        hitungTotal();
+
+        const confirmModal = document.getElementById('editConfirmMobil');
+        const closeBtn = document.getElementById('closeEditConfirmMobilBtn');
+        const confirmBtn = document.getElementById('confirmEditMobilBtn');
+        const form = document.querySelector('form');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        // Memicu modal saat tombol edit ditekan
+        if (submitBtn) {
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                confirmModal.classList.remove('hidden');
+                confirmModal.classList.add('flex');
+            });
+        }
+
+        // Menutup modal
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                confirmModal.classList.remove('flex');
+                confirmModal.classList.add('hidden');
+            });
+        }
+
+        // Menjalankan submit form
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => {
+                form.submit();
+            });
+        }
+    });
 </script>
 
 {{-- LOADING --}}
@@ -364,28 +402,17 @@
 <div
     id="successEditMobil"
     class="fixed inset-0 z-[90] hidden items-center justify-center">
-
     <div class="absolute inset-0 bg-black/50"></div>
-
     <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-
         <div class="flex justify-center">
-
             <div class="w-24 h-24 flex items-center justify-center">
-
                 <img
                     src="{{ asset('images/icons/check-circle.svg') }}"
                     alt="Success">
-
             </div>
-
         </div>
-
         <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil diedit</h2>
-
     </div>
-
 </div>
-
 
 @endsection

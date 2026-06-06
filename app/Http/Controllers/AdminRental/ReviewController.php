@@ -42,15 +42,14 @@ class ReviewController extends Controller
             'komentar' => 'required|string|max:500',
         ]);
 
-        // Simpan data balasan ke database dengan kolom yang sesuai di phpMyAdmin
+        // Simpan data balasan ke database
         ReplyReview::create([
             'review_id'     => $id,
-            'user_id'       => Auth::id(),                // Mengambil ID Admin yang sedang login
+            'user_id'       => Auth::id(),      
             'komentar'      => $request->komentar,
-            'tanggal_balas' => now()->toDateString(),    // Format tanggal YYYY-MM-DD sesuai database
+            'tanggal_balas' => now()->toDateString(),
         ]);
 
-        // 3. Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Balasan berhasil dikirim!');
+        return redirect()->back();
     }
 }

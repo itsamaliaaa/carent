@@ -17,7 +17,7 @@
         </div>
 
         <div class="overflow-y-auto pr-2 flex-grow">
-            <form action="{{ route('admin.mobil.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="formTambahMobil" action="{{ route('admin.mobil.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-5">
@@ -61,7 +61,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kapasitas</label>
-                        <input type="text" name="kapasitas" placeholder="Contoh: 7"
+                        <input type="text" name="kapasitas_penumpang" placeholder="Contoh: 7"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                     </div>
 
@@ -232,7 +232,15 @@
                         class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                 </div>
 
-                <button type="submit" onclick="document.getElementById('konfirmasiTambahMobil').classList.remove('hidden'); document.getElementById('tambahConfirmMobil').classList.add('flex');" class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
+                {{-- Tombol Tambah - validasi dulu, baru buka modal --}}
+                <button type="button"
+                    onclick="
+                        const form = document.getElementById('formTambahMobil');
+                        if (!form.checkValidity()) { form.reportValidity(); return; }
+                        const modal = document.getElementById('konfirmasiTambahMobil');
+                        modal.style.display = 'flex';
+                    "
+                    class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
                     Tambah
                 </button>
             </form>
@@ -241,41 +249,51 @@
 </div>
 
 <script>
+    // Inisialisasi array untuk menyimpan file
+    let selectedFiles = [];
+
+    // Fungsi Hitung Total
     function hitungTotal() {
         const sewa = parseInt(document.getElementById('sewa_dasar_input')?.value) || 0;
         const driver = parseInt(document.getElementById('driver_input')?.value) || 0;
 
         document.getElementById('total_display').value = sewa > 0 ?
-            'Rp ' + sewa.toLocaleString('id-ID') :
-            '';
+            'Rp ' + sewa.toLocaleString('id-ID') : '';
 
         document.getElementById('total_driver_display').value = sewa > 0 ?
-            'Rp ' + (sewa + driver).toLocaleString('id-ID') :
-            '';
+            'Rp ' + (sewa + driver).toLocaleString('id-ID') : '';
     }
 
-    let selectedFiles = [];
-
+    // Fungsi menangani preview foto
     function handleFotoPreview(event) {
-        const newFiles = Array.from(event.target.files);
+        const input = event.target;
+        const newFiles = Array.from(input.files);
+        
         if (newFiles.length === 0) return;
+
         newFiles.forEach(newFile => {
             const isDuplicate = selectedFiles.some(f => f.name === newFile.name && f.size === newFile.size);
             if (!isDuplicate) selectedFiles.push(newFile);
         });
+
+        updateInputFiles(input);
         renderPreviews();
     }
 
+    // Fungsi merender preview ke layar
     function renderPreviews() {
         const container = document.getElementById('foto-preview-container');
         container.innerHTML = '';
+        
         if (selectedFiles.length === 0) {
             container.classList.add('hidden');
             container.classList.remove('flex');
             return;
         }
+
         container.classList.remove('hidden');
         container.classList.add('flex');
+
         selectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -283,7 +301,7 @@
                 wrapper.className = 'relative flex-shrink-0';
                 wrapper.innerHTML = `
                     <img src="${e.target.result}" class="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm">
-                    <button type="button" onclick="removePhoto(${index})" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow">✕</button>
+                    <button type="button" data-index="${index}" class="btn-remove absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow">✕</button>
                     <span class="block text-center text-[10px] text-gray-400 mt-0.5 w-20 truncate">${file.name}</span>
                 `;
                 container.appendChild(wrapper);
@@ -292,10 +310,30 @@
         });
     }
 
+    // Fungsi hapus foto
     function removePhoto(index) {
         selectedFiles.splice(index, 1);
+        const input = document.getElementById('foto-input');
+        updateInputFiles(input);
         renderPreviews();
     }
+
+    // Fungsi sinkronisasi DataTransfer agar file terhapus dari input form
+    function updateInputFiles(inputElement) {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        inputElement.files = dataTransfer.files;
+    }
+
+    // Event Delegation untuk tombol X (agar tombol X pasti berfungsi)
+    document.getElementById('foto-preview-container').addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-remove')) {
+            const index = e.target.getAttribute('data-index');
+            removePhoto(index);
+        }
+    });
 </script>
 
 {{-- LOADING --}}
@@ -311,46 +349,24 @@
     </div>
 </div>
 
-<!-- feedback tambah mobil -->
-<div
-    id="successTambahMobil"
-    class="fixed inset-0 z-[90] hidden items-center justify-center">
-
-    <div class="absolute inset-0 bg-black/50"></div>
-
-    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-
-        <div class="flex justify-center">
-
-            <div class="w-24 h-24 flex items-center justify-center">
-
-                <img
-                    src="{{ asset('images/icons/check-circle.svg') }}"
-                    alt="Success">
-
-            </div>
-
-        </div>
-
-        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
-
-    </div>
-
-</div>
-
-<!-- confirm tambah mobil -->
-<div id="konfirmasiTambahMobil" class="fixed inset-0 z-[70] hidden items-center justify-center">
+{{-- CONFIRM TAMBAH MOBIL --}}
+<div id="konfirmasiTambahMobil" class="fixed inset-0 z-[100] items-center justify-center" style="display: none;">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
         <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
             Apakah kamu yakin ingin menambahkan mobil ini?
         </p>
         <div class="flex gap-4 mt-8">
-            <button type="button" id="confirmMobilBtn"
+            <button type="button"
+                onclick="
+                    document.getElementById('konfirmasiTambahMobil').style.display = 'none';
+                    document.getElementById('formTambahMobil').submit();
+                "
                 class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">
                 Ya
             </button>
-            <button type="button" id="closeConfirmMobilBtn"
+            <button type="button"
+                onclick="document.getElementById('konfirmasiTambahMobil').style.display = 'none';"
                 class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">
                 Tidak
             </button>
