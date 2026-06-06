@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Review;
 use App\Models\Booking;
+use App\Models\Mobil;
 
 class ReviewController extends Controller
 {
@@ -37,5 +38,23 @@ class ReviewController extends Controller
         ]);
 
         return back()->with('review_success', true);
+    }
+
+    public function show($id)
+    {
+        // 1. Get the mobil
+        $mobil = Mobil::findOrFail($id);
+
+        // 2. Use Eloquent to get reviews with the user who wrote them
+        // Ensure your Review model has a 'user' relationship defined
+        $reviews = \App\Models\Review::with('user')
+            ->whereHas('booking', function($query) use ($id) {
+                $query->where('mobil_id', $id);
+            })
+            ->where('status_tampilkan', true)
+            ->latest('tanggal_posting')
+            ->get();
+
+        return view('customer.rating-ulasan', compact('mobil', 'reviews'));
     }
 }

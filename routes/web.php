@@ -24,6 +24,7 @@ use App\Http\Controllers\SuperAdmin;
 Route::get('/', [Customer\CatalogController::class, 'beranda'])->name('beranda');
 Route::get('/katalog', [Customer\CatalogController::class, 'index'])->name('katalog');
 Route::get('/mobil/{id}', [Customer\CatalogController::class, 'detail'])->name('mobil.detail');
+Route::get('/mobil/{id}/rating-ulasan', [Customer\ReviewController::class, 'show'])->name('reviews.show');
 Route::get('/rental/{id}', [Customer\CatalogController::class, 'profileRental'])->name('rental.profil');
 
 // CUSTOMER AUTH
@@ -62,7 +63,6 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::put('/profil/password', [Customer\ProfileController::class, 'updatePassword'])->name('profil.password');
     Route::get('/notifikasi', [Customer\NotifikasiController::class, 'index'])->name('notifikasi');
     Route::post('/notifikasi/read-all', [Customer\NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
-    Route::get('/mobil/{mobil_id}/rating-ulasan', [Customer\ReviewController::class, 'show'])->name('reviews.show');
 });
 
 // ADMIN RENTAL ROUTES
