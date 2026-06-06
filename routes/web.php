@@ -24,6 +24,7 @@ use App\Http\Controllers\SuperAdmin;
 Route::get('/', [Customer\CatalogController::class, 'beranda'])->name('beranda');
 Route::get('/katalog', [Customer\CatalogController::class, 'index'])->name('katalog');
 Route::get('/mobil/{id}', [Customer\CatalogController::class, 'detail'])->name('mobil.detail');
+Route::get('/mobil/{id}/rating-ulasan', [Customer\ReviewController::class, 'show'])->name('reviews.show');
 Route::get('/rental/{id}', [Customer\CatalogController::class, 'profileRental'])->name('rental.profil');
 
 // CUSTOMER AUTH
@@ -50,7 +51,7 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/booking/{mobil_id}/driver-random', [Customer\BookingController::class, 'getRandomDriver'])->name('booking.driver-random');
     Route::get('/booking/{mobil_id}', [Customer\BookingController::class, 'create'])->name('booking.create');
-    
+
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
     Route::get('/riwayat', [Customer\BookingController::class, 'check'])->name('booking.riwayat');
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
