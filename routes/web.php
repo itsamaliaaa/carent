@@ -19,10 +19,6 @@ use App\Http\Controllers\Customer\BookingController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 // PUBLIC ROUTES
 Route::get('/', [Customer\CatalogController::class, 'beranda'])->name('beranda');
 Route::get('/katalog', [Customer\CatalogController::class, 'index'])->name('katalog');
@@ -95,7 +91,6 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::put('/rental/{id}/status', [SuperAdmin\RentalController::class, 'toggleStatus'])->name('rental.status');
     Route::get('/review', [SuperAdmin\ReviewController::class, 'index'])->name('review.index');
     Route::put('/review/{id}/toggle', [SuperAdmin\ReviewController::class, 'toggle'])->name('review.toggle');
-    // Route::resource('/kebijakan', SuperAdmin\KebijakanController::class);
     Route::get('/kebijakan', [SuperAdmin\KebijakanController::class, 'index'])->name('kebijakan.index');
     Route::post('/kebijakan', [SuperAdmin\KebijakanController::class, 'save'])->name('kebijakan.save');
     Route::get('/laporan', [SuperAdmin\LaporanController::class, 'index'])->name('laporan');
@@ -103,18 +98,3 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('superadmin')->name('sup
     Route::put('/profil', [SuperAdmin\ProfilController::class, 'update'])->name('profil.update');
     Route::put('/profil/password', [SuperAdmin\ProfilController::class, 'updatePassword'])->name('profil.password');
 });
-
-// API NOTIFIKASI (Polling)
-Route::middleware('auth')->prefix('api')->group(function () {
-    Route::get('/notifikasi/unread', function () {
-        $notifs = auth()->user()->unreadNotifications->take(10);
-        return response()->json([
-            'total' => auth()->user()->unreadNotifications->count(),
-            'data'  => $notifs,
-        ]);
-    });
-});
-
-// Route::get('/tes-admin', function () {
-//     return view('admin.dashboard');
-// });
