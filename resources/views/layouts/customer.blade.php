@@ -11,6 +11,7 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo/logo-title.png') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/search-loading.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </head>
 
