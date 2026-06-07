@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class RiwayatStatusBooking extends Model
 {
     use HasFactory;
+
     protected $table = 'riwayat_status_booking';
+    protected $primaryKey = 'id_riwayat';
+    public $timestamps = false; // ← tambahkan ini
 
     protected $fillable = [
-        'booking_id', 'status_lama', 'status_baru', 'diubah_oleh', 'catatan'
+        'booking_id', 'status_lama', 'status_baru', 'diubah_oleh', 'waktu_perubahan', 'keterangan'
     ];
 
     public function booking()

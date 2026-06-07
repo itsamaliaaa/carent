@@ -35,13 +35,13 @@
                 </button>
             </div>
 
-            {{-- Search — name="cari" sesuai controller --}}
+            {{-- Search --}}
             <div class="flex gap-4">
                 <div class="relative flex-1">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search Icon">
                     </div>
-                    <input type="text" name="cari" value="{{ request('cari') }}"
+                    <input type="text" name="search" value="{{ request('search') }}"
                         placeholder="Cari nama penyewa / kode booking"
                         class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-400">
                 </div>
@@ -57,23 +57,23 @@
         <div class="min-w-[1100px]">
 
             {{-- Header Tabel --}}
-            <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.3fr_0.8fr] bg-[#F8F9FB] rounded-xl py-4 px-6 mb-4 items-center gap-x-4 font-bold text-[13px] text-gray-600">
+            <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.2fr_0.8fr] bg-[#F8F9FB] rounded-xl py-4 px-6 mb-4 items-center gap-x-4 font-bold text-[13px] text-gray-600">
                 <div>Nama Penyewa</div>
                 <div>Tipe Unit</div>
                 <div>Tanggal Pengambilan</div>
                 <div>Tanggal Pengembalian</div>
                 <div>Status</div>
-                <div class="text-center">Aksi</div>
+                <div>Aksi</div>
             </div>
 
             {{-- Body Tabel --}}
             <div class="flex flex-col gap-2">
                 @forelse ($bookings as $booking)
-                <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.3fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl py-3 px-6 gap-x-4">
+                <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.2fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl py-3 px-6 gap-x-4">
 
                     {{-- Nama Penyewa: user->name atau nama_pengendara --}}
                     <div class="text-[14px] font-semibold text-gray-800">
-                        {{ $booking->user->name ?? $booking->nama_pengendara ?? 'Tanpa Nama' }}
+                        {{ $booking->nama_pengendara ?? $booking->user->nama_lengkap ?? $booking->user->name ?? '-' }}
                     </div>
 
                     {{-- Tipe Unit: dari relasi mobil --}}
@@ -115,8 +115,8 @@
                         </span>
                     </div>
 
-                    <div class="flex justify-center">
-                        <a href="{{ route('admin.booking.show', $booking->booking_id) }}"
+                    <div class="flex">
+                        <a href="{{ route('admin.booking.show', $booking->kode_booking) }}"
                             class="bg-[#1D2B6B] text-white text-[11px] font-bold px-5 py-2 rounded-lg hover:bg-[#152052] transition">
                             Lihat Detail
                         </a>
@@ -133,39 +133,6 @@
     {{-- Pagination --}}
     <div class="mt-8 flex justify-end">
         {{ $bookings->links() }}
-    </div>
-</div>
-
-{{-- Modal Konfirmasi Ubah Status --}}
-<div id="confirmUbahStatus" class="fixed inset-0 z-[70] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
-        <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
-            Apakah kamu yakin ingin mengubah status ini?
-        </p>
-        <div class="flex gap-4 mt-8">
-            <button type="button" id="confirmUbahStatusBtn"
-                class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">
-                Ya
-            </button>
-            <button type="button" id="closeUbahStatusConfirmModal"
-                class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">
-                Tidak
-            </button>
-        </div>
-    </div>
-</div>
-
-{{-- Feedback Ubah Status Berhasil --}}
-<div id="successUbahStatus" class="fixed inset-0 z-[90] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-        <div class="flex justify-center">
-            <div class="w-24 h-24 flex items-center justify-center">
-                <img src="{{ asset('images/icons/check-circle.svg') }}" alt="Success">
-            </div>
-        </div>
-        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Status berhasil diubah</h2>
     </div>
 </div>
 
