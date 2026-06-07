@@ -18,7 +18,7 @@ class BookingController extends Controller
 {
     public function check()
     {
-        $bookings = Booking::with(['mobil', 'driver', 'review'])
+        $bookings = Booking::with(['user', 'mobil', 'driver', 'review'])
             ->where('user_id', auth()->user()->user_id)
             ->latest()
             ->get();
