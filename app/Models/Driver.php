@@ -17,7 +17,7 @@ class Driver extends Model
         'nama_driver',
         'foto',
         'umur',
-        'no_telepon',
+        'no_telp',
         'tarif_harian',
         'status'
     ];
