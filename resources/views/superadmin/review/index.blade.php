@@ -90,18 +90,18 @@
             <hr class="border-gray-100">
 
             <p class="text-sm text-gray-700 leading-relaxed">{{ $review->komentar }}</p>
+            
             {{-- Foto Review --}}
-            @if($review->foto)
-                <img src="{{ asset('storage/' . $review->foto) }}"
+            @if($review->foto_review)
+                <img src="{{ asset('storage/' . $review->foto_review) }}"
                     alt="Foto Review"
                     class="w-32 h-32 object-cover rounded-xl border border-gray-200 cursor-pointer"
                     onclick="document.getElementById('fotoModal-{{ $review->review_id }}').classList.remove('hidden')">
 
-                {{-- Modal Foto --}}
                 <div id="fotoModal-{{ $review->review_id }}"
                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
                     onclick="this.classList.add('hidden')">
-                    <img src="{{ asset('storage/' . $review->foto) }}"
+                    <img src="{{ asset('storage/' . $review->foto_review) }}"
                         class="max-w-2xl max-h-[80vh] rounded-2xl object-contain shadow-2xl">
                 </div>
             @endif
