@@ -431,174 +431,126 @@
 
     <div
         x-show="showReview && !{{ session('review_success') ? 'true' : 'false' }}"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
         x-cloak>
 
-        <div class="bg-white rounded-2xl w-full max-w-lg relative shadow-2xl overflow-hidden">
+        <div class="bg-white rounded-[36px] w-full max-w-md relative shadow-2xl overflow-hidden">
 
             {{-- Tombol Tutup --}}
             <button
                 @click="showReview = false"
-                class="absolute top-4 right-6 text-gray-400 text-2xl hover:text-gray-600">
-
+                class="absolute top-4 right-4 text-gray-400 text-2xl hover:text-gray-600">
                 ✕
-
             </button>
-
-            {{-- Header --}}
-            <div class="py-6 px-10 border-b border-blue-100">
-
-                <h2 class="text-center text-2xl font-extrabold text-[#0b1f67]">
-                    Perjalanan Selesai!
-                </h2>
-
-            </div>
 
             <div class="p-8">
 
-                <div class="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm">
+                <h2 class="text-center text-3xl font-bold text-[#0b1f67] mb-8">
+                    Perjalanan selesai!
+                </h2>
 
+                <div class="bg-white border border-gray-200 rounded-[32px] p-6 shadow-sm">
+
+                    <h3 class="text-center text-lg font-semibold text-gray-900 mb-6">
+                        Bagaimana Pengalamanmu?
+                    </h3>
+
+                    {{-- Rating --}}
+                    <div class="flex justify-center gap-2 mb-6">
+                        <template x-for="i in 5" :key="i">
+                            <button
+                                type="button"
+                                @click="rating = i"
+                                @mouseenter="hover = i"
+                                @mouseleave="hover = 0"
+                                class="transition-transform hover:scale-110">
+                                <svg
+                                    class="w-10 h-10"
+                                    :class="(hover || rating) >= i ? 'text-[#0b1f67] fill-current' : 'text-gray-300 fill-current'"
+                                    viewBox="0 0 24 24">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                </svg>
+                            </button>
+                        </template>
+                    </div>
+
+                    @error('rating')
+                        <p class="text-red-500 text-sm text-center mb-4">
+                            {{ $message }}
+                        </p>
+                    @enderror
+
+                    {{-- Form --}}
                     <form
-                        action="{{ route('review.store', $booking->booking_id) }}"
-
+                        action="{{ route('customer.review.store', $booking->booking_id) }}"
                         method="POST"
                         enctype="multipart/form-data">
-
                         @csrf
-
-                        <h3 class="text-center font-bold text-gray-800 mb-4">
-                            Bagaimana Pengalamanmu?
-                        </h3>
-
-                        {{-- Rating --}}
-                        <div class="flex justify-center gap-2 mb-2">
-
-                            <input
-                                type="hidden"
-                                name="rating"
-                                :value="rating">
-
-                            <template x-for="i in 5">
-
-                                <button
-                                    type="button"
-                                    @click="rating = i"
-                                    @mouseenter="hover = i"
-                                    @mouseleave="hover = 0"
-                                    class="transition-transform hover:scale-110">
-
-                                    <svg
-                                        class="w-10 h-10"
-                                        :class="(hover || rating) >= i
-                                            ? 'text-yellow-400 fill-current'
-                                            : 'text-gray-300 fill-current'"
-                                        viewBox="0 0 24 24">
-
-                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-
-                                    </svg>
-
-                                </button>
-
-                            </template>
-
-                        </div>
-
-                        @error('rating')
-                            <p class="text-red-500 text-sm text-center mb-4">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                        <input type="hidden" name="rating" :value="rating">
 
                         {{-- Komentar --}}
                         <div class="mb-4">
-
                             <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Komentar *
                             </label>
-
-                            <textarea
+                            <input
+                                type="text"
                                 name="komentar"
                                 required
                                 placeholder="Masukkan komentar"
-                                class="w-full border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-[#0b1f67] outline-none h-24 resize-none bg-gray-50">{{ old('komentar') }}</textarea>
-
+                                value="{{ old('komentar') }}"
+                                class="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm text-gray-700 focus:ring-2 focus:ring-[#0b1f67] outline-none bg-gray-50" />
                             @error('komentar')
                                 <p class="text-red-500 text-sm mt-1">
                                     {{ $message }}
                                 </p>
                             @enderror
-
                         </div>
 
                         {{-- Upload Foto --}}
                         <div class="mb-6">
-
                             <label class="block text-sm font-medium text-gray-600 mb-2">
                                 Tambahkan Foto
                             </label>
-
-                            <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
-
-                                <label class="bg-gray-200 px-4 py-2.5 text-sm font-semibold cursor-pointer hover:bg-gray-300 transition">
-
+                            <div class="flex items-center border border-gray-200 rounded-2xl overflow-hidden bg-gray-50">
+                                <label class="bg-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 cursor-pointer hover:bg-gray-300 transition">
                                     Pilih File
-
                                     <input
                                         type="file"
                                         name="foto"
                                         accept="image/*"
                                         class="hidden"
-                                        @change="fileName = $event.target.files[0]?.name || 'Belum ada file dipilih'">
-
+                                        @change="fileName = $event.target.files[0]?.name || 'Belum ada file dipilih'" />
                                 </label>
-
-                                <span
-                                    class="px-4 text-sm text-gray-500 text-base truncate"
-                                    x-text="fileName">
-                                </span>
-
+                                <span class="flex-1 px-4 py-3 text-sm text-gray-500 truncate" x-text="fileName"></span>
                             </div>
-
                             @error('foto')
                                 <p class="text-red-500 text-sm mt-1">
                                     {{ $message }}
                                 </p>
                             @enderror
-
                         </div>
 
                         {{-- Error Review Ganda --}}
                         @error('review')
                             <div class="mb-4">
-
                                 <p class="text-red-500 text-sm text-center">
                                     {{ $message }}
                                 </p>
-
                             </div>
                         @enderror
 
                         {{-- Tombol Submit --}}
-                        <div class="flex justify-end">
-
-                            <button
-                                type="submit"
-                                class="bg-[#0b1f67] hover:bg-[#081647] text-white px-10 py-3 rounded-lg font-bold transition shadow-md">
-
-                                Kirim Ulasan
-
-                            </button>
-
-                        </div>
+                        <button
+                            type="submit"
+                            class="w-full bg-[#0b1f67] hover:bg-[#081647] text-white px-10 py-3 rounded-xl font-bold transition shadow-md">
+                            Kirim Ulasan
+                        </button>
 
                     </form>
-
                 </div>
-
             </div>
         </div>
-
     </div>
 
     {{-- MODAL SUKSES --}}
