@@ -10,8 +10,10 @@ class RiwayatStatusBooking extends Model
     use HasFactory;
     protected $table = 'riwayat_status_booking';
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'booking_id', 'status_lama', 'status_baru', 'diubah_oleh', 'catatan'
+        'booking_id', 'status_lama', 'status_baru', 'diubah_oleh', 'waktu_perubahan'
     ];
 
     public function booking()

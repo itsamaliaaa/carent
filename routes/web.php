@@ -58,7 +58,7 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
     Route::get('/riwayat', [Customer\BookingController::class, 'check'])->name('booking.riwayat');
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
-    Route::post('/booking/{id}/batal', [Customer\BookingController::class, 'batalkan'])->name('booking.batal');
+    Route::post('/booking/{id}/batal', [Customer\BookingController::class, 'batalkanBooking'])->name('booking.batal');
     Route::post('/booking/{id}/review', [Customer\ReviewController::class, 'store'])->name('review.store');
     Route::post('/review/store/{id}', [ReviewController::class, 'store'])->name('review.store');
     Route::post('/booking/{booking_id}/batal', [BookingController::class, 'batalkanBooking'])->name('booking.batal');

@@ -240,15 +240,12 @@ class BookingController extends Controller
     }
     public function batalkanBooking(Request $request, $booking_id)
     {
-        // 1. Validasi input alasan pembatalan
         $request->validate([
             'alasan_pembatalan' => 'required|string|max:255'
         ]);
 
         $booking = Booking::findOrFail($booking_id);
 
-        // 2. Keamanan: Pastikan yang membatalkan adalah pemilik booking 
-        // dan status masih menunggu konfirmasi
         if ($booking->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
@@ -259,21 +256,19 @@ class BookingController extends Controller
 
         $statusLama = $booking->status_booking;
 
-        // 3. Update status Booking
         $booking->update([
             'status_booking' => 'dibatalkan',
             'alasan_pembatalan' => $request->alasan_pembatalan,
             'tanggal_pembatalan' => now(),
-            'dibatalkan_oleh' => 'Customer', 
+            'dibatalkan_oleh' => Auth::id(), 
         ]);
 
-        // 4. Catat ke tabel RiwayatStatusBooking
         RiwayatStatusBooking::create([
             'booking_id' => $booking->booking_id,
             'status_lama' => $statusLama,
             'status_baru' => 'dibatalkan',
-            'diubah_oleh' => Auth::user()->nama_lengkap ?? 'Customer', 
-            'catatan' => 'Dibatalkan oleh pelanggan. Alasan: ' . $request->alasan_pembatalan
+            'diubah_oleh' => Auth::user()->user_id, 
+            'waktu_perubahan' => now()
         ]);
 
         return back()->with('success', 'Booking berhasil dibatalkan.');
