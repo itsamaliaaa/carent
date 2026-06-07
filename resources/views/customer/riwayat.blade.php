@@ -92,11 +92,19 @@
         </div>
         <div>
             <p class="text-gray-500 text-base">Nama Penyewa:</p>
-            <p class="font-semibold text-base">{{ $booking->nama_pengendara }}</p>
+            <p class="font-semibold text-base">
+                {{ $booking->pakai_driver
+                    ? $booking->user->nama_lengkap
+                    : $booking->nama_pengendara }}
+            </p>
         </div>
         <div>
             <p class="text-gray-500 text-base">No Telepon:</p>
-            <p class="font-semibold text-base">{{ $booking->no_telp_pengendara }}</p>
+            <p class="font-semibold text-base">
+                {{ $booking->pakai_driver
+                    ? $booking->user->no_telp
+                    : $booking->no_telp_pengendara }}
+            </p>
         </div>
         <div>
             <p class="text-gray-500 text-base">Lokasi Penjemputan:</p>
