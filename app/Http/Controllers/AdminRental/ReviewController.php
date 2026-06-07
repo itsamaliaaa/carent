@@ -31,7 +31,7 @@ class ReviewController extends Controller
             });
         }
 
-        $reviews = $query->orderBy('tanggal_posting', 'asc')->get();
+        $reviews = $query->orderBy('tanggal_posting', 'desc')->get();
 
         return view('admin.review.index', compact('reviews'));
     }

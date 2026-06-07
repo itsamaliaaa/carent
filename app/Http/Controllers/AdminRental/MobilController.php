@@ -63,7 +63,8 @@ class MobilController extends Controller
             'biaya_over_km' => 'nullable|numeric',
             'bahan_bakar'   => 'nullable|string',
             'driver'        => 'nullable|numeric',
-            'prasayarat'    => 'nullable|string'
+            'prasyarat'   => 'nullable|array',
+            'prasyarat.*' => 'nullable|string',
         ]);
 
         $rental = Rental::where('admin_id', auth()->id())->first();
@@ -83,7 +84,9 @@ class MobilController extends Controller
                 'biaya_over_km'         => $request->biaya_over_km,
                 'asuransi'              => $request->asuransi,
                 'tarif_driver'          => $request->driver,
-                'prasyarat_kendaraan'   => $request->prasayarat
+                'prasyarat_kendaraan' => $request->filled('prasyarat')
+                    ? implode("\n", array_filter($request->prasyarat))
+                    : null,
             ]);
 
             foreach ($request->file('foto') as $index => $foto) {
@@ -122,7 +125,8 @@ class MobilController extends Controller
             'detail'              => 'nullable|string',
             'biaya_over_km'       => 'nullable|numeric',
             'bahan_bakar'         => 'nullable|string',
-            'prasayarat'          => 'nullable|string',
+            'prasyarat'   => 'nullable|array',
+            'prasyarat.*' => 'nullable|string',
             'foto'                => 'nullable|array',
             'foto.*'              => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'hapus_foto'          => 'nullable|array',
@@ -148,7 +152,9 @@ class MobilController extends Controller
                 'biaya_over_km'       => $request->biaya_over_km,
                 'asuransi'            => $request->asuransi,
                 'tarif_driver'        => $request->driver,
-                'prasyarat_kendaraan' => $request->prasayarat,
+                'prasyarat_kendaraan' => $request->filled('prasyarat')
+                    ? implode("\n", array_filter($request->prasyarat))
+                    : null
             ]);
 
             // ===== HAPUS FOTO LAMA =====
