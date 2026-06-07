@@ -34,14 +34,16 @@
 
                 {{-- Info Mobil --}}
                 <div class="flex items-center gap-6 mb-6 pb-6 border-b border-gray-200">
-                    <div class="p-2 border border-dashed border-gray-300 rounded-lg bg-white flex-shrink-0">
-                        @php $primaryImg = $mobil->fotoMobil?->first(); @endphp
+                    <div class="p-0">
+                        @php $primaryImg = $mobil->fotoPrimary; @endphp
                         @if($primaryImg)
                             <img src="{{ asset('storage/' . $primaryImg->url_foto) }}"
-                                 alt="{{ $mobil->nama_mobil }}" class="w-28 h-auto rounded-md object-cover">
+                                alt="{{ $mobil->nama_mobil }}"
+                                class="w-28 h-auto rounded-md object-cover">
                         @else
                             <img src="https://via.placeholder.com/150x100?text=No+Image"
-                                 alt="{{ $mobil->nama_mobil }}" class="w-28 h-auto rounded-md object-cover">
+                                alt="{{ $mobil->nama_mobil }}"
+                                class="w-28 h-auto rounded-md object-cover">
                         @endif
                     </div>
                     <div>
