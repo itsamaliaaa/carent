@@ -57,7 +57,7 @@
         <div class="min-w-[1100px]">
 
             {{-- Header Tabel --}}
-            <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.2fr_0.8fr] bg-[#F8F9FB] rounded-xl py-4 px-6 mb-4 items-center gap-x-4 font-bold text-[13px] text-gray-600">
+            <div class="grid grid-cols-[1fr_1fr_1.2fr_1.3fr_1.2fr_0.8fr] bg-[#E8EAF6] rounded-xl py-4 px-6 mb-4 items-center gap-x-4 font-bold text-[13px] text-gray-800">
                 <div>Nama Penyewa</div>
                 <div>Tipe Unit</div>
                 <div>Tanggal Pengambilan</div>
@@ -95,7 +95,7 @@
                             : '-' }}
                     </div>
 
-                    {{-- Status Badge — status_booking --}}
+                    {{-- Status Booking --}}
                     <div>
                         @php
                         $statusClass = match($booking->status_booking) {
