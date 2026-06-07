@@ -5,8 +5,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24">
 
      {{-- BACK --}}
-    <a href="{{ url()->previous() }}"
-        class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
+    <a href="{{ session('detail_mobil_back', route('beranda')) }}"
+    class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
         <i class="fa-solid fa-chevron-left text-xs"></i>
         Kembali
     </a>
@@ -52,9 +52,19 @@
 
                     <div class="flex items-center gap-2">
 
+                        @php
+                            $starRating = round($averageRating ?? 0);
+                        @endphp
+
                         <div class="text-[#FFC107] text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $starRating ? '★' : '☆' }}
+                            @endfor
                         </div>
+
+                        <span class="text-sm font-medium text-[#545454]">
+                            {{ number_format($averageRating ?? 0, 1) }}
+                        </span>
 
                         <span class="text-sm font-medium text-[#545454]">
                             ({{ $reviews->count() }} ulasan)
@@ -159,7 +169,7 @@
                 @endphp
 
                 <a
-                    href="{{ route('rental.profil', $mobil->rental->rental_id) }}"
+                    href="{{ route('rental.profil', ['id' => $mobil->rental->rental_id, 'back' => url()->current()]) }}"
                     class="flex items-center gap-5 mt-6 group"
                 >
 
@@ -167,7 +177,7 @@
                     <div class="relative">
 
                         <img
-                            src="{{ $mobil->rental->logo
+                            src="{{ $mobil->rental->logo_perusahaan
                                 ? asset('storage/' . $mobil->rental->logo_perusahaan)
                                 : asset('images/rental.png') }}"
                             class="w-20 h-20 rounded-full object-cover border border-[#E5E7EB]"
@@ -180,7 +190,7 @@
 
                             <i class="fa-solid fa-star text-[10px] text-[#FFC107]"></i>
 
-                            {{ $totalRating }}
+                            {{ $rentalRating }}
 
                         </div>
 
@@ -295,23 +305,11 @@
                 </h3>
 
                 <ul class="mt-5 space-y-2 text-sm leading-[28px] text-[#545454] list-disc pl-5">
-
-                    <li>
-                        Penyewa wajib melakukan pemeriksaan kondisi kendaraan bersama petugas sebelum kendaraan digunakan.
-                    </li>
-
-                    <li>
-                        Setiap kerusakan, lecet, atau cacat yang sudah ada sebelumnya wajib dicatat dan didokumentasikan sebagai bukti awal.
-                    </li>
-
-                    <li>
-                        Kendaraan diserahkan dalam kondisi layak pakai dengan bahan bakar minimal sesuai standar.
-                    </li>
-
-                    <li>
-                        Seluruh kelengkapan kendaraan harus dipastikan lengkap saat proses serah terima.
-                    </li>
-
+                    @foreach(explode("\n", $mobil->prasyarat_kendaraan ?? '') as $syarat)
+                        @if(trim($syarat))
+                            <li>{{ trim($syarat) }}</li>
+                        @endif
+                    @endforeach
                 </ul>
 
             </div>
@@ -327,25 +325,11 @@
 
                 <ul class="mt-5 space-y-2 text-sm leading-[28px] text-[#545454] list-disc pl-5">
 
-                    <li>
-                        Kendaraan hanya digunakan untuk keperluan pribadi.
-                    </li>
-
-                    <li>
-                        Kendaraan dilarang digunakan di medan off road.
-                    </li>
-
-                    <li>
-                        Kendaraan tidak boleh digunakan menarik kendaraan lain.
-                    </li>
-
-                    <li>
-                        Penyewa tidak diperkenankan melakukan modifikasi kendaraan.
-                    </li>
-
-                    <li>
-                        Penyewa bertanggung jawab atas kerusakan selama masa sewa.
-                    </li>
+                    @foreach(explode("\n", $syaratKetentuan->isi ?? '') as $item)
+                        @if(trim($item))
+                            <li>{{ trim($item) }}</li>
+                        @endif
+                    @endforeach
 
                 </ul>
 
@@ -369,7 +353,7 @@
                             <div class="flex items-center gap-2">
 
                                 <h4 class="text-[40px] font-semibold text-[#111111] leading-none">
-                                    5.0
+                                    {{ number_format($averageRating ?? 0, 1) }}
                                 </h4>
 
                                 <span class="text-[#FFC107] text-xl">
@@ -469,11 +453,11 @@
 
                 </div>
 
-                <button
-                    class="mt-8 h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3">
+                <a href="{{ route('reviews.show', ['id' => $mobil->mobil_id]) }}"
+                    class="mt-8 h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3 w-fit">
                     Lihat Semua Ulasan
                     <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                </a>
 
             </div>
 
@@ -515,9 +499,10 @@
                             <input
                                 type="text"
                                 id="lokasi"
-                                name="lokasi"                             
-                                placeholder="Pilih lokasi"
-                                class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
+                                name="lokasi"
+                                value="{{ $mobil->rental->alamat }}"
+                                readonly
+                                class="w-full h-12 rounded-[8px] border border-[#D9D9D9] bg-gray-100 px-4 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition" 
                             >
 
                             <img
@@ -541,7 +526,7 @@
                             <input
                                 type="date"
                                 id="tglAmbil"
-                                name="tglAmbil"                     
+                                name="tglAmbil"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -556,7 +541,7 @@
                             <input
                                 type="time"
                                 id="waktuAmbil"
-                                name="waktuAmbil"                                
+                                name="waktuAmbil"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -576,7 +561,7 @@
                             <input
                                 type="date"
                                 id="tglKembali"
-                                name="tglKembali"                                                        
+                                name="tglKembali"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
                         </div>
@@ -590,7 +575,7 @@
                             <input
                                 type="time"
                                 id="waktuKembali"
-                                name="waktuKembali"                                       
+                                name="waktuKembali"
                                 class="w-full h-12 rounded-[8px] border border-[#D9D9D9] px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67] focus:border-[#0B1F67] transition"
                             >
 
@@ -666,7 +651,7 @@
         <div class="mt-5 overflow-hidden rounded-[18px]">
 
             <iframe
-                src="https://maps.google.com/maps?q=Bandung&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                src="{{ $mobil->rental->google_maps }}"
                 class="w-full h-[500px]"
                 allowfullscreen=""
                 loading="lazy">
@@ -759,12 +744,7 @@
         function validateForm(e) {
             let valid = true;
 
-            [lokasi, tglAmbil, waktuAmbil, tglKembali, waktuKembali].forEach(removeError);
-
-            if (!lokasi.value.trim()) {
-                showError(lokasi, "Lokasi wajib diisi");
-                valid = false;
-            }
+            [glAmbil, waktuAmbil, tglKembali, waktuKembali].forEach(removeError);
 
             if (!tglAmbil.value) {
                 showError(tglAmbil, "Tanggal pengambilan wajib diisi");
@@ -826,7 +806,6 @@
             hitungTotal();
         });
 
-        lokasi.addEventListener("input", () => removeError(lokasi));
         waktuAmbil.addEventListener("input", () => removeError(waktuAmbil));
         waktuKembali.addEventListener("input", () => removeError(waktuKembali));
 

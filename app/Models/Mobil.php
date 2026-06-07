@@ -44,4 +44,16 @@ class Mobil extends Model
             ->get()
             ->avg(fn($b) => $b->review->rating);
     }
+
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+            Review::class,
+            Booking::class,
+            'mobil_id',     // foreign key di booking
+            'booking_id',   // foreign key di review
+            'mobil_id',     // local key mobil
+            'booking_id'    // local key booking
+        )->where('status_tampilkan', true);
+    }
 }

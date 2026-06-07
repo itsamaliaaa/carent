@@ -49,7 +49,7 @@
     </div>
 
      {{-- BACK --}}
-    <a href="{{ url()->previous() }}"
+    <a href="{{ request('back', route('beranda')) }}"
         class="inline-flex items-center gap-2 text-sm font-medium text-[#08174D] hover:underline">
         <i class="fa-solid fa-chevron-left text-xs"></i>
         Kembali
@@ -73,13 +73,25 @@
                 </h1>
 
                 <div class="flex items-center gap-2 mt-2">
+
+                    @php
+                        $starRating = round($rating);
+                    @endphp
+
                     <span class="text-[#FFC107]">
-                        ★★★★★
+                        @for ($i = 1; $i <= 5; $i++)
+                            {{ $i <= $starRating ? '★' : '☆' }}
+                        @endfor
                     </span>
 
                     <span class="font-semibold">
                         {{ $rating }}
                     </span>
+
+                    <span class="text-sm text-gray-500">
+                        ({{ $totalReview }} ulasan)
+                    </span>
+
                 </div>
             </div>
 
@@ -192,6 +204,11 @@
         action="{{ route('rental.profil', $rental->rental_id) }}"
         class="mt-12">
 
+        <input
+            type="hidden"
+            name="back"
+            value="{{ request('back') }}">
+
         <div class="flex flex-col sm:flex-row gap-4">
 
             <div class="relative flex-1">
@@ -224,7 +241,7 @@
             
             @foreach($mobils as $mobil)
             <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'rental']) }}"
                 class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent">
                 
                 <div class="relative">
@@ -246,16 +263,22 @@
                     </h3>
 
                     <div class="flex items-center gap-2 mt-2">
+                        @php
+                            $rating = round($mobil->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="text-yellow-400 text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $rating ? '★' : '☆' }}
+                            @endfor
                         </div>
 
                         <span class="text-sm font-medium text-gray-700">
-                            4.9
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
                         </span>
 
                         <span class="text-sm text-gray-400">
-                            (50 Ulasan)
+                            ({{ $mobil->reviews_count }} Ulasan)
                         </span>
                     </div>
 

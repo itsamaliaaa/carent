@@ -10,17 +10,9 @@ class KebijakanController extends Controller
 {
     public function index()
     {
-        $pembatalan = Kebijakan::where('tipe', 'pembatalan')->first();
-
-        $pengembalianDana = Kebijakan::where(
-            'tipe',
-            'pengembalian_dana'
-        )->first();
-
-        $syaratKetentuan = Kebijakan::where(
-            'tipe',
-            'syarat_ketentuan_umum'
-        )->first();
+        $pembatalan       = Kebijakan::where('tipe', 'pembatalan')->first();
+        $pengembalianDana = Kebijakan::where('tipe', 'pengembalian_dana')->first();
+        $syaratKetentuan  = Kebijakan::where('tipe', 'syarat_ketentuan_umum')->first();
 
         return view('superadmin.kebijakan.index', compact(
             'pembatalan',
@@ -31,44 +23,30 @@ class KebijakanController extends Controller
 
     public function save(Request $request)
     {
-        $request->validate([
-            'pembatalan' => 'nullable|string',
-            'pengembalian_dana' => 'nullable|string',
-            'syarat_ketentuan_umum' => 'nullable|string',
-        ]);
+        $fields = [
+            'pembatalan'            => 'Syarat Pembatalan',
+            'pengembalian_dana'     => 'Kebijakan Pengembalian Dana',
+            'syarat_ketentuan_umum' => 'Syarat dan Ketentuan Umum',
+        ];
 
-        Kebijakan::updateOrCreate(
-            ['tipe' => 'pembatalan'],
-            [
-                'judul' => 'Syarat Pembatalan',
-                'isi' => $request->pembatalan,
-                'status' => 'aktif',
-                'dibuat_oleh' => auth()->user()->user_id,
-            ]
-        );
+        foreach ($fields as $tipe => $judul) {
+            $isi = implode("\n", array_filter(
+                array_map('trim', $request->input($tipe, []))
+            ));
 
-        Kebijakan::updateOrCreate(
-            ['tipe' => 'pengembalian_dana'],
-            [
-                'judul' => 'Kebijakan Pengembalian Dana',
-                'isi' => $request->pengembalian_dana,
-                'status' => 'aktif',
-                'dibuat_oleh' => auth()->user()->user_id,
-            ]
-        );
-
-        Kebijakan::updateOrCreate(
-            ['tipe' => 'syarat_ketentuan_umum'],
-            [
-                'judul' => 'Syarat dan Ketentuan Umum',
-                'isi' => $request->syarat_ketentuan_umum,
-                'status' => 'aktif',
-                'dibuat_oleh' => auth()->user()->user_id,
-            ]
-        );
+            Kebijakan::updateOrCreate(
+                ['tipe' => $tipe],
+                [
+                    'judul'       => $judul,
+                    'isi'         => $isi,
+                    'status'      => 'aktif',
+                    'dibuat_oleh' => auth()->user()->user_id,
+                ]
+            );
+        }
 
         return redirect()
             ->route('superadmin.kebijakan.index')
-            ->with('success', 'Kebijakan berhasil disimpan.');
+            ->with('kebijakan_success', true);
     }
 }

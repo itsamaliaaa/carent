@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Mobil;
 use App\Models\Rental;
+use App\Models\Kebijakan;
 use Illuminate\Http\Request;
 
 class CatalogController extends Controller
@@ -12,6 +13,8 @@ class CatalogController extends Controller
     public function beranda(Request $request)
     {
         $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('status', 'tersedia');
 
         // FILTER LOKASI
@@ -63,18 +66,24 @@ class CatalogController extends Controller
 
         // DATA DEFAULT BERANDA
         $mobilKeluarga = Mobil::with('fotoPrimary')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('kategori', 'keluarga')
             ->where('status', 'tersedia')
             ->take(3)
             ->get();
 
         $mobilHarian = Mobil::with('fotoPrimary')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')        
             ->where('kategori', 'harian')
             ->where('status', 'tersedia')
             ->take(3)
             ->get();
 
         $mobilRombongan = Mobil::with('fotoPrimary')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')        
             ->where('kategori', 'rombongan')
             ->where('status', 'tersedia')
             ->take(3)
@@ -97,6 +106,8 @@ class CatalogController extends Controller
     public function index(Request $request)
     {
         $query = Mobil::with(['fotoPrimary', 'rental'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('status', 'tersedia');
 
         // FILTER LOKASI
@@ -142,34 +153,29 @@ class CatalogController extends Controller
 
         // FILTER TRANSMISI
         if ($request->filled('transmisi')) {
-
             $query->where('transmisi', $request->transmisi);
 
         }
 
         // FILTER KATEGORI
         if ($request->filled('kategori')) {
-
             $query->where('kategori', $request->kategori);
 
         }
 
         // FILTER KAPASITAS
         if ($request->filled('kapasitas')) {
-
             $query->where('kapasitas_penumpang', '>=', $request->kapasitas);
 
         }
 
         // SEARCH MOBIL
         if ($request->filled('cari')) {
-
             $query->where('nama_mobil', 'like', '%' . $request->cari . '%');
 
         }
 
-        // CEK APAKAH SEDANG SEARCH
-        $isSearch =
+        $isFilter =
             $request->filled('lokasi') ||
             $request->filled('tanggal_sewa') ||
             $request->filled('tanggal_kembali') ||
@@ -178,50 +184,47 @@ class CatalogController extends Controller
             $request->filled('kapasitas') ||
             $request->filled('cari');
 
-        // HASIL SEARCH
-        $mobilTersedia = [];
-
-        if ($isSearch) {
-
-            $mobilTersedia = $query->latest()->get();
-
-        }
-
-        // SECTION DEFAULT
-        $mobilKeluarga = Mobil::with('fotoPrimary')
-            ->where('kategori', 'keluarga')
-            ->where('status', 'tersedia')
-            ->take(3)
-            ->get();
-
-        $mobilHarian = Mobil::with('fotoPrimary')
-            ->where('kategori', 'harian')
-            ->where('status', 'tersedia')
-            ->take(3)
-            ->get();
-
-        $mobilRombongan = Mobil::with('fotoPrimary')
-            ->where('kategori', 'rombongan')
-            ->where('status', 'tersedia')
-            ->take(3)
-            ->get();
+        $mobils = $query
+            ->latest()
+            ->paginate(9)
+            ->withQueryString();
 
         return view('customer.katalog', compact(
-            'mobilKeluarga',
-            'mobilHarian',
-            'mobilRombongan',
-            'mobilTersedia',
-            'isSearch'
+            'mobils',
+            'isFilter'
         ));
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
         $mobil = Mobil::with([
             'fotoPrimary',
             'fotos',
             'rental'
         ])->findOrFail($id);
+
+        if ($request->from == 'beranda') {
+
+            session([
+                'detail_mobil_back' => route('beranda')
+            ]);
+
+        } elseif ($request->from == 'katalog') {
+
+            session([
+                'detail_mobil_back' => route('katalog')
+            ]);
+
+        } elseif ($request->from == 'rental') {
+
+            session([
+                'detail_mobil_back' => route(
+                    'rental.profil',
+                    $mobil->rental_id
+                )
+            ]);
+
+        }
 
         // REVIEW DARI DATABASE
         $reviews = \DB::table('review')
@@ -235,18 +238,40 @@ class CatalogController extends Controller
             ->where('review.status_tampilkan', true)
             ->latest('review.tanggal_posting')
             ->get();
-            
+
+        $averageRating = $reviews->avg('rating');
+
         // MOBIL TERKAIT
         $mobilTerkait = Mobil::with('fotoPrimary')
             ->where('kategori', $mobil->kategori)
             ->where('mobil_id', '!=', $mobil->mobil_id)
             ->take(3)
             ->get();
+        
+        // RATING RENTAL
+        $rentalRating = round($mobil->rental->rating_rata_rata ?? 0, 1);
+
+        $totalReviewRental = $mobil->rental->bookings()
+            ->whereHas('review')
+            ->count();
+
+        // SK
+        $syaratKetentuan = Kebijakan::where(
+            'tipe',
+            'syarat_ketentuan_umum'
+        )->where(
+            'status',
+            'aktif'
+        )->first();
 
         return view('customer.detail-mobil', compact(
             'mobil',
             'reviews',
-            'mobilTerkait'
+            'mobilTerkait',
+            'rentalRating',
+            'totalReviewRental',
+            'averageRating',
+            'syaratKetentuan'
         ));
     }
 
@@ -255,6 +280,8 @@ class CatalogController extends Controller
         $rental = Rental::with('mobils')->findOrFail($id);
 
         $query = Mobil::with('fotoPrimary')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('rental_id', $id)
             ->where('status', 'tersedia');
 
@@ -274,12 +301,17 @@ class CatalogController extends Controller
             ->where('status', 'tersedia')
             ->count();
 
+        $totalReview = $rental->bookings()
+            ->whereHas('review')
+            ->count();
+
         return view('customer.profil-rental', compact(
             'rental',
             'mobils',
             'rating',
             'totalTrip',
-            'totalMobil'
+            'totalMobil',
+            'totalReview'
         ));
     }
 }

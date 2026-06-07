@@ -237,7 +237,7 @@
                                     Scan untuk membayar via QRIS
                                 </p>
 
-                                <div class="w-[140px] h-[140px]">
+                                <div class="w-[140px] h-[140px]" >
 
                                     @if($rekening && $rekening->url_qris)
                                         <img
@@ -443,8 +443,8 @@
                             {{ $mobil->tahun }}
                             •
                             <span class="text-[#F5B301]">★</span>
-                            {{ number_format($mobil->reviews_avg_rating ?? 5.0, 1) }}
-                            ({{ $mobil->reviews_count ?? 75 }} Ulasan)
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
+                            ({{ $mobil->reviews_count ?? 0 }} Ulasan)
                         </p>
 
                 {{-- TANGGAL --}}

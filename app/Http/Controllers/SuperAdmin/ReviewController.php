@@ -16,29 +16,27 @@ class ReviewController extends Controller
         ], [
             'sampai.after_or_equal' => 'Tanggal akhir tidak boleh sebelum tanggal mulai.',
         ]);
-    
+
         $query = Review::with(['user', 'booking.mobil.rental'])
             ->latest('tanggal_posting');
-    
-        // Filter tanggal
+
         if ($request->dari) {
             $query->whereDate('tanggal_posting', '>=', $request->dari);
         }
-    
+
         if ($request->sampai) {
             $query->whereDate('tanggal_posting', '<=', $request->sampai);
         }
-    
-        // Pencarian user
+
         if ($request->cari) {
             $query->whereHas('user', function ($q) use ($request) {
                 $q->where('nama_lengkap', 'like', '%' . $request->cari . '%')
                   ->orWhere('email', 'like', '%' . $request->cari . '%');
             });
         }
-    
+
         $reviews = $query->paginate(10)->withQueryString();
-    
+
         return view('superadmin.review.index', compact('reviews'));
     }
 
@@ -50,6 +48,6 @@ class ReviewController extends Controller
 
         $status = $review->status_tampilkan ? 'ditampilkan' : 'disembunyikan';
 
-        return redirect()->back()->with('success', "Review berhasil {$status}.");
+        return redirect()->back()->with('review_success', "Review berhasil {$status}.");
     }
 }
