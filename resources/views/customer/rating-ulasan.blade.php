@@ -27,7 +27,7 @@
 
             <div class="pt-4 border-t border-gray-400">
             {{-- Judul --}}
-            <h1 class="text-2xl font-bold text-[var(--text-heading)] mb-8">Rating & Ulasan</h1>
+            <h1 class="text-xl font-bold text-[var(--text-heading)] mb-8">Rating & Ulasan</h1>
 
             {{-- Card Mobil + Rating --}}
             <div class="bg-gray-100 rounded-xl p-6 border border-[var(--border-light)] mb-10">
@@ -47,8 +47,8 @@
                         @endif
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold">{{ $mobil->nama_mobil }} {{ $mobil->tahun }}</h2>
-                        <p class="text-xl font-bold text-[var(--primary)] mt-1">
+                        <h2 class="text-xl font-bold">{{ $mobil->nama_mobil }} {{ $mobil->tahun }}</h2>
+                        <p class="text-lg font-bold text-[var(--primary)] mt-1">
                             Rp. {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}
                             <span class="text-gray-500 font-medium text-lg">/hari</span>
                         </p>
@@ -81,7 +81,7 @@
                         <div class="flex items-center gap-2 text-sm font-semibold">
                             <span class="w-5 text-right text-gray-700">{{ $star }}★</span>
                             <div class="flex-1 bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-[var(--primary)] h-2.5 rounded-full"
+                                <div class="bg-[#0B1F67] h-2.5 rounded-full"
                                      style="width: {{ $ratingPercentages[$star] }}%"></div>
                             </div>
                             <span class="w-8 text-gray-500">({{ $ratingCounts[$star] }})</span>
