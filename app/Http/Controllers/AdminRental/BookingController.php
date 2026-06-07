@@ -14,7 +14,7 @@ use App\Models\Mobil;
 class BookingController extends Controller
 {
     /**
-     * Daftar semua booking (index untuk admin).
+     * Daftar semua booking
      */
     public function index(Request $request)
     {
@@ -48,7 +48,7 @@ class BookingController extends Controller
     }
 
     /**
-     * Detail booking — semua field read-only kecuali status_booking.
+     * Detail booking — semua field read-only kecuali status_booking
      */
     public function show(string $kodeBooking)
     {
