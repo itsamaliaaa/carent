@@ -26,13 +26,12 @@
 
 @foreach($bookings as $booking)
 
-<div x-data="{
-        showReview: false,
+    <div x-data="{
+        showReview: {{ $errors->has('rating') || $errors->has('komentar') || $errors->has('foto') ? 'true' : 'false' }},
         rating: {{ old('rating', 0) }},
         hover: 0,
         fileName: 'Belum ada file dipilih'
      }"
-     x-init="$nextTick(() => { showReview = false })"
      class="bg-white border border-gray-200 rounded-[24px] p-10 mb-10 mx-auto max-w-6xl relative">
 
     {{-- HEADER --}}
