@@ -24,7 +24,7 @@
     <div class="min-h-screen flex flex-col">
         <div class="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8 pt-6 pb-24 w-full flex-grow">
 
-            <a href="javascript:history.back()" class="inline-flex items-center text-sm gap-2 text-[var(--primary)] font-semibold mb-8 hover:opacity-80">
+            <a href="javascript:history.back()" class="inline-flex items-center text-sm gap-2 text-[var(--primary)] font-semibold mb-8 hover:underline">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19L8 12L15 5"/></svg>
                 Kembali
             </a>
