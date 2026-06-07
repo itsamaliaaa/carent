@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RentalSeeder::class,
             MobilSeeder::class,
             KebijakanSeeder::class,
+            BookingSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }
