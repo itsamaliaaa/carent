@@ -26,59 +26,80 @@
                     {{-- Nama Mobil --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Mobil</label>
-                        <input type="text" name="nama_mobil" value="{{ old('nama_mobil', $mobil->nama_mobil) }}"
+                        <input type="text" name="nama_mobil" required value="{{ old('nama_mobil', $mobil->nama_mobil) }}"
                             placeholder="Contoh: Toyota Avanza"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('nama_mobil')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Detail --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Detail</label>
-                        <input type="text" name="detail" value="{{ old('detail', $mobil->deskripsi) }}"
+                        <input type="text" name="detail" required value="{{ old('detail', $mobil->deskripsi) }}"
                             placeholder="Contoh: Mobil keluarga"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('detail')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Biaya Over KM --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Biaya Over Kilometer</label>
-                        <input type="text" name="biaya_over_km" value="{{ old('biaya_over_km', $mobil->biaya_over_km) }}"
+                        <input type="text" name="biaya_over_km" required value="{{ old('biaya_over_km', $mobil->biaya_over_km) }}"
                             placeholder="Contoh: 5000"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('biaya_over_km')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Tahun --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
-                        <input type="text" name="tahun" value="{{ old('tahun', $mobil->tahun) }}"
+                        <input type="text" name="tahun" required value="{{ old('tahun', $mobil->tahun) }}"
                             placeholder="Contoh: 2023"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('tahun')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Sewa Dasar --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Sewa Dasar (per hari)</label>
-                        <input type="number" id="sewa_dasar_input" name="sewa_dasar"
+                        <input type="number" id="sewa_dasar_input" name="sewa_dasar" required
                             value="{{ old('sewa_dasar', $mobil->harga_per_hari) }}"
                             placeholder="Contoh: 350000"
                             oninput="hitungTotal()"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('sewa_dasar')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Batas KM --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Batas KM</label>
-                        <input type="text" name="batas_km" value="{{ old('batas_km', $mobil->batas_km_per_hari) }}"
+                        <input type="text" name="batas_km" required value="{{ old('batas_km', $mobil->batas_km_per_hari) }}"
                             placeholder="Contoh: 200"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('batas_km')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Kapasitas --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kapasitas</label>
-                        <input type="text" name="kapasitas_penumpang" value="{{ old('kapasitas_penumpang', $mobil->kapasitas_penumpang) }}"
+                        <input type="text" name="kapasitas_penumpang" required value="{{ old('kapasitas_penumpang', $mobil->kapasitas_penumpang) }}"
                             placeholder="Contoh: 7"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('kapasitas_penumpang')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     {{-- Dropdown Asuransi --}}
@@ -113,7 +134,7 @@
                         </div>
                     </div>
 
-                    {{-- Total (readonly) --}}
+                    {{-- Total --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Total</label>
                         <input type="text" id="total_display" readonly
@@ -186,7 +207,7 @@
                         </div>
                     </div>
 
-                    {{-- Total dengan Driver (readonly) --}}
+                    {{-- Total dengan Driver --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">TOTAL (dengan driver, 1 hari)</label>
                         <input type="text" id="total_driver_display" readonly
@@ -249,7 +270,6 @@
 
                 {{-- ===== FOTO SECTION ===== --}}
                 <div class="mt-5">
-
                     <div class="overflow-x-auto pb-2 mt-2">
                         <div class="flex gap-4 pt-3" style="min-width: max-content;">
 
@@ -281,13 +301,14 @@
                     <input type="text" name="prasayarat" value="{{ old('prasayarat', $mobil->prasyarat_kendaraan) }}"
                         placeholder="Contoh: SIM A aktif, usia min. 21 tahun"
                         class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                    @error('prasayarat')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Tombol Edit --}}
                 <button type="button"
-                    data-confirm="konfirmasiEditMobil"
-                    data-target-submit="formEditMobil"
-                    data-feedback="successEditMobil"
+                    onclick="cekLaluKonfirmasi('formEditMobil', 'konfirmasiEditMobil')"
                     class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
                     Edit
                 </button>
@@ -296,8 +317,30 @@
     </div>
 </div>
 
+{{-- KONFIRMASI EDIT --}}
+<div id="konfirmasiEditMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
+        <p class="text-[24px] font-semibold text-[#050E2D]">Apakah kamu yakin ingin mengedit mobil ini?</p>
+        <div class="flex gap-4 mt-8">
+            <button type="button" data-submit=""
+                class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">Ya</button>
+            <button type="button" data-close="konfirmasiEditMobil"
+                class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">Tidak</button>
+        </div>
+    </div>
+</div>
+
+{{-- SUKSES EDIT MOBIL --}}
+<div id="successEditMobil" class="fixed inset-0 z-[110] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
+        <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24 mx-auto" alt="Success">
+        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil diedit</h2>
+    </div>
+</div>
+
 <script>
-    // FUNGSI PERHITUNGAN OTOMATIS
     function hitungTotal() {
         const sewa = parseInt(document.getElementById('sewa_dasar_input')?.value) || 0;
         const driver = parseInt(document.getElementById('driver_input')?.value) || 0;
@@ -309,7 +352,6 @@
             'Rp ' + (sewa + driver).toLocaleString('id-ID') : '';
     }
 
-    // FUNGSI PREVIEW FOTO
     let selectedFiles = [];
 
     function handleFotoPreview(event) {
@@ -357,7 +399,6 @@
         } catch (e) {}
     }
 
-    // FUNGSI HAPUS FOTO LAMA (DATABASE)
     function hapusFotoLama(id) {
         document.getElementById('foto-lama-' + id)?.remove();
         const input = document.createElement('input');
@@ -366,35 +407,42 @@
         input.value = id;
         document.querySelector('form').appendChild(input);
     }
-</script>
 
-{{-- KONFIRMASI EDIT --}}
-<div id="konfirmasiEditMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
-        <p class="text-[24px] font-semibold text-[#050E2D]"> Apakah kamu yakin ingin mengedit mobil ini?</p>
-        <div class="flex gap-4 mt-8">
-            <button type="button"
-                data-submit="formEditMobil"
-                data-feedback="successEditMobil"
-                class="flex-1 bg-[#62B33B] text-white py-3 rounded-xl font-semibold">
-                Ya
-            </button>
-            <button type="button"
-                data-close="konfirmasiEditMobil"
-                class="flex-1 bg-[#B92A44] text-white py-3 rounded-xl font-semibold">
-                Tidak
-            </button>
-        </div>
-    </div>
-</div>
-{{-- SUKSES EDIT MOBIL --}}
-<div id="successEditMobil" class="fixed inset-0 z-[110] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-        <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24 mx-auto" alt="Success">
-        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil diedit</h2>
-    </div>
-</div>
+    function cekLaluKonfirmasi(formId, confirmId) {
+        const form = document.getElementById(formId);
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const modal = document.getElementById(confirmId);
+        modal.querySelector('[data-submit]').dataset.submit = formId;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    document.addEventListener('click', function(e) {
+        const yaBtn = e.target.closest('[data-submit]');
+        if (yaBtn && yaBtn.dataset.submit) {
+            const modal = yaBtn.closest('.fixed');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.getElementById(yaBtn.dataset.submit)?.submit();
+            return;
+        }
+
+        const closeBtn = e.target.closest('[data-close]');
+        if (closeBtn) {
+            const modal = document.getElementById(closeBtn.dataset.close);
+            if (modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        hitungTotal();
+    });
+</script>
 
 @endsection
