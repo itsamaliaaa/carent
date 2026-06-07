@@ -308,22 +308,34 @@
                         </h3>
 
                         {{-- Rating --}}
-                        <div class="flex justify-center gap-2 mb-6">
-                            <template x-for="i in 5" :key="i">
-                                <button
-                                    type="button"
-                                    @click="rating = i"
-                                    @mouseenter="hover = i"
-                                    @mouseleave="hover = 0"
-                                    class="transition-transform hover:scale-110">
-                                    <svg
-                                        class="w-10 h-10"
-                                        :class="(hover || rating) >= i ? 'text-[#0b1f67] fill-current' : 'text-gray-300 fill-current'"
-                                        viewBox="0 0 24 24">
-                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                                    </svg>
-                                </button>
-                            </template>
+                        <div class="flex flex-col items-center mb-6">
+                            <div class="flex justify-center gap-1 mb-2">
+                                <template x-for="i in 5" :key="i">
+                                    <button
+                                        type="button"
+                                        @click="rating = i"
+                                        @mouseenter="hover = i"
+                                        @mouseleave="hover = 0"
+                                        class="focus:outline-none transition-transform duration-150"
+                                        :class="(hover || rating) >= i ? 'scale-110' : 'scale-100'"
+                                        :aria-label="'Beri bintang ' + i">
+                                        <svg
+                                            class="w-10 h-10 transition-colors duration-150"
+                                            :style="(hover || rating) >= i
+                                                ? 'fill: #F59E0B; color: #F59E0B; filter: drop-shadow(0 0 4px rgba(245,158,11,0.5));'
+                                                : 'fill: #D1D5DB; color: #D1D5DB;'"
+                                            viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                        </svg>
+                                    </button>
+                                </template>
+                            </div>
+                            {{-- Rating label --}}
+                            <p class="text-sm font-medium h-5 transition-all duration-200"
+                                :class="(hover || rating) > 0 ? 'text-amber-500' : 'text-transparent'"
+                                x-text="['', 'Sangat Buruk', 'Buruk', 'Cukup', 'Baik', 'Sangat Baik'][hover || rating] || ''">
+                            </p>
                         </div>
 
                         @error('rating')
