@@ -30,26 +30,26 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil1->mobil_id,
-            'url_foto'   => 'uploads/mobil/toyota-avanza-2023.png',
+            'url_foto'   => 'mobil/toyota-avanza-2023.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
 
         FotoMobil::create([
             'mobil_id' => 1,
-            'url_foto' => 'uploads/mobil/toyota-avanza-2023(1).png',
+            'url_foto' => 'mobil/toyota-avanza-2023(1).png',
             'is_primary' => false
         ]);
 
         FotoMobil::create([
             'mobil_id' => 1,
-            'url_foto' => 'uploads/mobil/toyota-avanza-2023(2).png',
+            'url_foto' => 'mobil/toyota-avanza-2023(2).png',
             'is_primary' => false
         ]);
 
         FotoMobil::create([
             'mobil_id' => 1,
-            'url_foto' => 'uploads/mobil/toyota-avanza-2023(3).png',
+            'url_foto' => 'mobil/toyota-avanza-2023(3).png',
             'is_primary' => false
         ]);
 
@@ -72,7 +72,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil2->mobil_id,
-            'url_foto'   => 'uploads/mobil/daihatsu-xenia-2023.png',
+            'url_foto'   => 'mobil/daihatsu-xenia-2023.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -96,7 +96,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil3->mobil_id,
-            'url_foto'   => 'uploads/mobil/toyota-innova-reborn.png',
+            'url_foto'   => 'mobil/toyota-innova-reborn.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -121,7 +121,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil4->mobil_id,
-            'url_foto'   => 'uploads/mobil/honda-brio-2022.png',
+            'url_foto'   => 'mobil/honda-brio-2022.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -145,7 +145,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil5->mobil_id,
-            'url_foto'   => 'uploads/mobil/toyota-agya-2021.png',
+            'url_foto'   => 'mobil/toyota-agya-2021.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -169,7 +169,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil6->mobil_id,
-            'url_foto'   => 'uploads/mobil/daihatsu-ayla-2022.png',
+            'url_foto'   => 'mobil/daihatsu-ayla-2022.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -193,7 +193,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil7->mobil_id,
-            'url_foto'   => 'uploads/mobil/toyota-hiace-commuter.png',
+            'url_foto'   => 'mobil/toyota-hiace-commuter.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -217,7 +217,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil8->mobil_id,
-            'url_foto'   => 'uploads/mobil/isuzu-elf-long.png',
+            'url_foto'   => 'mobil/isuzu-elf-long.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
@@ -241,7 +241,7 @@ class MobilSeeder extends Seeder
 
         FotoMobil::create([
             'mobil_id'   => $mobil9->mobil_id,
-            'url_foto'   => 'uploads/mobil/toyota-hiace-premio.png',
+            'url_foto'   => 'mobil/toyota-hiace-premio.png',
             'is_primary' => true,
             'urutan'     => 1,
         ]);
