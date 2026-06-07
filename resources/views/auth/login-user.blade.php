@@ -10,27 +10,19 @@
 
 <div class="flex flex-col lg:flex-row min-h-screen w-full">
 
-    {{-- SISI KIRI / ATAS --}}
+    {{-- SISI KIRI --}}
     <div class="w-full lg:w-1/2 min-h-[280px] lg:min-h-screen relative overflow-hidden flex flex-col lg:sticky lg:top-0"
         style='background-image: url("{{ asset("images/banner/bakcground.png") }}"); background-size: cover; background-position: center;'>
-
         <div class="absolute inset-0 bg-black opacity-20"></div>
-
-        {{-- Tombol Kembali --}}
-        <div class="absolute top-5 left-6 z-10 ">
-            <a href="{{ route('beranda') }}"
-            class="flex items-center gap-2 text-white text-sm font-medium hover:opacity-80 transition">
+        <div class="absolute top-5 left-6 z-10">
+            <a href="{{ route('beranda') }}" class="flex items-center gap-2 text-white text-sm font-medium hover:opacity-80 transition">
                 <img src="{{ asset('images/icons/arrow-left.svg') }}" alt="Kembali" class="w-4 h-4">
                 Kembali
             </a>
         </div>
-
-        {{-- Logo --}}
         <div class="absolute top-14 left-6 z-10">
             <img src="{{ asset('images/logo/logo-white.png') }}" alt="Carent" class="h-8 w-auto">
         </div>
-
-        {{-- Teks - Desktop (kiri bawah) --}}
         <div class="hidden lg:flex absolute bottom-40 left-10 right-10 flex-col gap-4 z-10">
             <div>
                 <h1 class="text-white text-5xl font-semibold leading-tight">Halo!</h1>
@@ -41,15 +33,13 @@
                 Masuk dan temukan mobil terbaik untuk kebutuhanmu.
             </p>
         </div>
-
-        {{-- Teks - Mobile (kiri bawah banner) --}}
         <div class="flex lg:hidden absolute bottom-8 left-6 right-6 flex-col gap-1 z-10">
             <h1 class="text-white text-3xl font-semibold">Halo!</h1>
             <h2 class="text-white text-base font-semibold">Selamat Datang di CARENT</h2>
         </div>
     </div>
 
-    {{-- SISI KANAN / BAWAH --}}
+    {{-- SISI KANAN --}}
     <div class="w-full lg:w-1/2 flex items-center justify-center px-6 lg:px-16">
         <div class="w-full max-w-md flex flex-col gap-5 py-10">
 
@@ -63,77 +53,40 @@
             <form action="{{ route('login') }}" method="POST" class="flex flex-col gap-4">
                 @csrf
 
-                {{-- Email --}}
                 <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Masukkan Email"
-                        value="{{ old('email') }}"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm
-                               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                               @error('email') border-red-400 bg-red-50 @enderror">
-                    @error('email')
-                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                    @enderror
+                    <input type="email" name="email" placeholder="Masukkan Email" value="{{ old('email') }}"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('email') border-red-400 bg-red-50 @enderror">
+                    @error('email')<span class="text-red-500 text-xs">{{ $message }}</span>@enderror
                 </div>
 
-                {{-- Password --}}
                 <div class="flex flex-col gap-1">
                     <label class="text-sm font-medium text-gray-700">Password</label>
-
                     <div class="relative">
-                        <input
-                            type="password"
-                            name="password"
-                            id="passwordInput"
-                            placeholder="Masukkan Password"
-                            class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm
-                                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                                @error('password') border-red-400 bg-red-50 @enderror">
-
-                        <button
-                            type="button"
-                            class="toggle-password absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            data-target="passwordInput">
-
-                            <img
-                                class="eye-icon w-5 h-5"
-                                src="{{ asset('images/icons/eye.svg') }}"
-                                data-eye="{{ asset('images/icons/eye.svg') }}"
-                                data-eye-off="{{ asset('images/icons/eye-off.svg') }}"
-                                alt="Toggle Password">
+                        <input type="password" name="password" id="passwordInput" placeholder="Masukkan Password"
+                               class="w-full border border-gray-300 rounded-lg px-4 pr-12 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('password') border-red-400 bg-red-50 @enderror">
+                        <button type="button" class="toggle-password absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" data-target="passwordInput">
+                            <img class="eye-icon w-5 h-5" src="{{ asset('images/icons/eye.svg') }}"
+                                 data-eye="{{ asset('images/icons/eye.svg') }}"
+                                 data-eye-off="{{ asset('images/icons/eye-off.svg') }}" alt="Toggle Password">
                         </button>
                     </div>
-
-                    @error('password')
-                        <span class="text-red-500 text-xs">{{ $message }}</span>
-                    @enderror
+                    @error('password')<span class="text-red-500 text-xs">{{ $message }}</span>@enderror
                 </div>
-                
 
-                {{-- Remember & Lupa Password --}}
                 <div class="flex items-center justify-between">
                     <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                         <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600">
                         Ingat Saya
                     </label>
-                    <a href="{{ route('password.request') }}"
-                       class="text-sm text-blue-700 font-medium hover:underline">
-                        Lupa Password?
-                    </a>
+                    <a href="{{ route('password.request') }}" class="text-sm text-blue-700 font-medium hover:underline">Lupa Password?</a>
                 </div>
 
-                {{-- Tombol Login --}}
-                <button type="submit"
-                        class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold
-                               py-3 rounded-lg transition duration-200 mt-2">
+                <button type="submit" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition duration-200 mt-2">
                     Login
                 </button>
             </form>
 
-            {{-- Link Register --}}
             <p class="text-center text-sm text-gray-500">
                 Belum punya akun?
                 <a href="{{ route('register') }}" class="text-blue-900 font-bold hover:underline">Daftar</a>
@@ -142,6 +95,24 @@
         </div>
     </div>
 </div>
+
+{{-- SUCCESS MODAL — Reset Password --}}
+@if(session('success'))
+<div id="resetSuccessModal" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/50">
+    <div class="relative bg-white rounded-2xl px-8 py-7 w-full max-w-xs z-10 text-center shadow-xl">
+        <div class="flex justify-center mb-4">
+            <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-14 h-14">
+        </div>
+        <h2 class="text-base font-bold text-[#0B1F67]">{{ session('success') }}</h2>
+    </div>
+</div>
+<script>
+    setTimeout(() => {
+        const m = document.getElementById('resetSuccessModal');
+        if (m) m.style.display = 'none';
+    }, 2500);
+</script>
+@endif
 
 </body>
 </html>

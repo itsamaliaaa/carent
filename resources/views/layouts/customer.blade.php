@@ -294,6 +294,21 @@
         }
     </script>
 
-
+    @if(session('login_success'))
+    <div id="loginSuccessModal" class="fixed inset-0 z-[90] flex items-center justify-center bg-black/50">
+        <div class="relative bg-white rounded-2xl px-6 py-5 w-full max-w-[220px] z-10 text-center shadow-xl">
+            <div class="flex justify-center mb-4">
+                <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-14 h-14">
+            </div>
+            <h2 class="text-base font-bold text-[#0B1F67]">{{ session('login_success') }}</h2>
+        </div>
+    </div>
+    <script>
+        setTimeout(() => {
+            const m = document.getElementById('loginSuccessModal');
+            if (m) m.style.display = 'none';
+        }, 2500);
+    </script>
+    @endif
 </body>
 </html>

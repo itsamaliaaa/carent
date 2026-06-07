@@ -124,13 +124,16 @@ class LoginController extends Controller
     private function redirectByRole($user)
     {
         if ($user->isSuperAdmin()) {
-            return redirect()->route('superadmin.dashboard');
+            return redirect()->route('superadmin.dashboard')
+                ->with('login_success', 'Login Berhasil');
         }
-
+    
         if ($user->isAdminRental()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')
+                ->with('login_success', 'Login Berhasil');
         }
-
-        return redirect()->route('beranda');
+    
+        return redirect()->route('beranda')
+            ->with('login_success', 'Login Berhasil');
     }
 }
