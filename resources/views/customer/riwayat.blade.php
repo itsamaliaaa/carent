@@ -63,14 +63,20 @@
     {{-- MOBIL & DRIVER --}}
     <div class="flex flex-col lg:flex-row justify-between items-center gap-8 mb-10">
         <div class="flex items-center gap-5">
-            <img src="{{ asset('assets/images/car.png') }}" class="w-24 h-16 object-cover rounded-lg border" alt="mobil">
+        <img src="{{ $booking->mobil->fotos->first()?->url_foto
+            ? asset('storage/' . $booking->mobil->fotos->first()->url_foto)
+            : asset('assets/images/car.png') }}"
+            class="w-24 h-16 object-cover rounded-lg border" alt="mobil">
             <div>
                 <p class="text-gray-500 text-base">Nama Mobil:</p>
                 <h4 class="font-semibold text-base text-black">{{ $booking->mobil->nama_mobil ?? '-' }}</h4>
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <img src="{{ asset('assets/images/driver-placeholder.jpg') }}" class="w-14 h-14 rounded-full object-cover" alt="driver">
+            <img src="{{ $booking->driver && $booking->driver->foto
+                ? asset('storage/' . $booking->driver->foto)
+                : asset('assets/images/driver-placeholder.jpg') }}"
+            class="w-14 h-14 rounded-full object-cover" alt="driver">
             <div>
                 <p class="text-gray-500 text-base">Nama Driver:</p>
                 <h4 class="font-medium text-base">{{ $booking->driver->nama_driver ?? 'Tanpa Driver' }}</h4>
@@ -255,8 +261,7 @@
             @if($booking->review)
                 <a href="{{ route('reviews.show', ['id' => $booking->mobil->mobil_id]) }}"
                    class="h-12 px-8 rounded-[10px] bg-[#0B1F67] text-white font-semibold hover:bg-[#08184f] transition inline-flex items-center gap-3">
-                    Lihat Semua Ulasan
-                    <i class="fa-solid fa-arrow-right"></i>
+                    Lihat Ulasan
                 </a>
 
             {{-- Belum ada review → Beri Ulasan --}}

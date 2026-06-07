@@ -304,9 +304,15 @@
                     Prasyarat Kendaraan
                 </h3>
 
-                <p class="mt-5 text-sm leading-[28px] text-[#545454]">
-                    {{ $mobil->prasyarat_kendaraan }}
-                </p>
+                <ul class="mt-5 space-y-2 text-sm leading-[28px] text-[#545454] list-disc pl-5">
+
+                    @foreach(explode("\n", $mobil->prasyarat_kendaraan ?? '') as $item)
+                        @if(trim($item))
+                            <li>{{ trim($item) }}</li>
+                        @endif
+                    @endforeach
+
+                </ul>
 
             </div>
 
