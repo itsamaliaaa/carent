@@ -30,7 +30,7 @@ class DashboardController extends Controller
 
         $today = Carbon::today();
 
-        // 1. Pendapatan (Helper untuk mengurangi pengulangan kode)
+        // Helper
         $queryPembayaran = Pembayaran::whereHas('booking', function ($q) use ($rental) {
             $q->where('rental_id', $rental->rental_id);
         })->where('status_pembayaran', 'lunas');
@@ -39,12 +39,12 @@ class DashboardController extends Controller
         $pendapatanBulanIni = (clone $queryPembayaran)->whereMonth('tanggal_bayar', now()->month)->whereYear('tanggal_bayar', now()->year)->sum('jumlah_bayar');
         $pendapatanKeseluruhan = (clone $queryPembayaran)->sum('jumlah_bayar');
 
-        // 2. Transaksi berhasil
+        // Transaksi berhasil
         $transaksiBerhasil = Booking::where('rental_id', $rental->rental_id)
             ->where('status_booking', 'selesai')
             ->count();
 
-        // 3. Top 5 mobil paling laris (Diperbaiki dengan join ke foto_mobil)
+        // Top 5 mobil paling laris
         $topMobil = DB::table('mobil')
             ->join('booking', 'mobil.mobil_id', '=', 'booking.mobil_id')
             ->leftJoin('foto_mobil', function ($join) {
@@ -63,7 +63,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // 4. Penyewaan per mobil bulan ini
+        // Penyewaan per mobil bulan ini
         $penyewaanPerMobil = DB::table('mobil')
             ->join('booking', 'mobil.mobil_id', '=', 'booking.mobil_id')
             ->where('booking.rental_id', $rental->rental_id)
@@ -75,8 +75,8 @@ class DashboardController extends Controller
             ->orderByDesc('total_booking')
             ->get();
 
-        // 5. Filter pendapatan berdasarkan tanggal
-        $pendapatanFilter = 0; // Inisialisasi dengan 0 agar tidak error di view
+        // Filter pendapatan berdasarkan tanggal
+        $pendapatanFilter = 0; 
         $jumlahTransaksiFilter = 0;
 
         if ($request->filled('start_date') && $request->filled('end_date')) {

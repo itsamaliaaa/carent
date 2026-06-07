@@ -22,8 +22,8 @@ return new class extends Migration
             $table->decimal('biaya_over_km', 10, 2)->default(0);
             $table->unsignedInteger('batas_km_per_hari')->default(0);
             $table->text('deskripsi')->nullable();                      
-            $table->enum('asuransi', ['Termasuk', 'Tidak Termasuk'])->default('Termasuk'); // ✅ pindah dari migration terpisah
-            $table->decimal('tarif_driver', 12, 2)->nullable();                     // ✅ pindah dari migration terpisah
+            $table->enum('asuransi', ['Termasuk', 'Tidak Termasuk'])->default('Termasuk');
+            $table->decimal('tarif_driver', 12, 2)->nullable();
             $table->enum('status', ['Tersedia', 'Tidak Tersedia', 'Perbaikan', 'Nonaktif'])->default('Tersedia');
             $table->timestamps();
 
