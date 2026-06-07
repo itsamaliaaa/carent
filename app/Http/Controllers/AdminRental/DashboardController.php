@@ -21,6 +21,13 @@ class DashboardController extends Controller
             abort(403, 'Rental tidak ditemukan');
         }
 
+        // Rating & total penilaian 
+        $reviews     = \App\Models\Review::whereHas('booking', function ($q) use ($rental) {
+            $q->where('rental_id', $rental->rental_id);
+        })->where('status_tampilkan', true)->get();
+        $avgRating   = $reviews->avg('rating') ?? 0;
+        $totalReview = $reviews->count();
+
         $today = Carbon::today();
 
         // 1. Pendapatan (Helper untuk mengurangi pengulangan kode)
@@ -82,7 +89,6 @@ class DashboardController extends Controller
                 ->count();
         }
 
-        // --- TAMBAHKAN LOGIKA DI BAWAH INI ---
         $displayPeriodeStr = ($request->filled('start_date') && $request->filled('end_date'))
             ? $request->start_date . ' s/d ' . $request->end_date
             : 'Pilih periode';
@@ -90,10 +96,11 @@ class DashboardController extends Controller
         $displayRata = $jumlahTransaksiFilter > 0
             ? $pendapatanFilter / $jumlahTransaksiFilter
             : 0;
-        // -------------------------------------
 
         return view('admin.dashboard', compact(
             'rental',
+            'avgRating',      
+            'totalReview',   
             'pendapatanHariIni',
             'pendapatanBulanIni',
             'pendapatanKeseluruhan',
@@ -103,7 +110,7 @@ class DashboardController extends Controller
             'pendapatanFilter',
             'jumlahTransaksiFilter',
             'displayPeriodeStr',
-            'displayRata' // <-- JANGAN LUPA TAMBAHKAN DI SINI
+            'displayRata' 
         ));
     }
 }

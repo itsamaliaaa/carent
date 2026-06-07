@@ -16,9 +16,9 @@
         </div>
         <div class="flex items-center mr-4 gap-2">
             <span class="text-yellow-400 text-lg">★</span>
-            <span class="font-bold text-lg">{{ number_format($rental->avg_rating ?? 5.0, 1) }}</span>
+            <span class="font-bold text-lg">{{ number_format($avgRating, 1) }}</span>
             <div class="h-6 w-px bg-gray-200 mx-2"></div>
-            <span class="text-[#2D3748] font-bold text-base">{{ $rental->total_review ?? '10RB' }}</span>
+            <span class="text-[#2D3748] font-bold text-base">{{ $totalReview }}</span>
             <span class="text-gray-400 text-sm">Penilaian</span>
         </div>
     </div>
