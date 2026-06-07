@@ -4,21 +4,29 @@ namespace App\Http\Controllers\AdminRental;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\Rental;
 use App\Models\RiwayatStatusBooking;
+use App\Models\Mobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use App\Models\Mobil;
 
 class BookingController extends Controller
 {
     /**
-     * Daftar semua booking
+     * Daftar semua booking milik rental yang login
      */
     public function index(Request $request)
     {
-        $query = Booking::with(['user', 'mobil', 'driver', 'pembayaran'])
+        $rental = Rental::where('admin_id', auth()->id())->first();
+
+        if (!$rental) {
+            abort(403, 'Rental tidak ditemukan.');
+        }
+
+        $query = Booking::with(['user', 'mobil','driver', 'pembayaran'])
+            ->where('rental_id', $rental->rental_id)
             ->orderByDesc('created_at');
 
         if ($request->filled('status_booking')) {
@@ -29,14 +37,15 @@ class BookingController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('booking_id', 'like', "%{$search}%")
-                    ->orWhere('nama_pengendara', 'like', "%{$search}%")
-                    ->orWhereHas('user', fn($u) => $u->where('email', 'like', "%{$search}%"));
+                  ->orWhere('nama_pengendara', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn($u) => $u->where('email', 'like', "%{$search}%"));
             });
         }
 
         if ($request->filled('start_date')) {
             $query->whereDate('tanggal_sewa', '>=', $request->start_date);
         }
+
         if ($request->filled('end_date')) {
             $query->whereDate('tanggal_sewa', '<=', $request->end_date);
         }
@@ -48,10 +57,12 @@ class BookingController extends Controller
     }
 
     /**
-     * Detail booking — semua field read-only kecuali status_booking
+     * Detail booking — hanya milik rental yang login
      */
     public function show(string $kodeBooking)
     {
+        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+
         $booking = Booking::with([
             'user',
             'mobil',
@@ -59,19 +70,26 @@ class BookingController extends Controller
             'pembayaran',
             'riwayatStatus',
             'review',
-        ])->where('kode_booking', $kodeBooking)->firstOrFail();
+        ])
+        ->where('kode_booking', $kodeBooking)
+        ->where('rental_id', $rental->rental_id)
+        ->firstOrFail();
 
         $statusOptions = $this->statusOptions();
+
         return view('admin.booking.detail', compact('booking', 'statusOptions'));
     }
 
     /**
-     * Update HANYA status_booking dari halaman detail.
-     * Semua field lain di halaman detail bersifat read-only.
+     * Update status booking — hanya milik rental yang login
      */
     public function updateStatus(Request $request, string $kodeBooking)
     {
-        $booking = Booking::where('kode_booking', $kodeBooking)->firstOrFail();
+        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+
+        $booking = Booking::where('kode_booking', $kodeBooking)
+            ->where('rental_id', $rental->rental_id)
+            ->firstOrFail();
 
         $validated = $request->validate([
             'status_booking' => ['required', Rule::in(array_keys($this->statusOptions()))],
@@ -88,7 +106,7 @@ class BookingController extends Controller
 
             if ($validated['status_booking'] === 'dikonfirmasi' && $booking->pembayaran) {
                 $booking->pembayaran->update([
-                    'status_pembayaran' => 'lunas', // ← fix: 'verified' tidak ada di enum
+                    'status_pembayaran' => 'lunas',
                     'verified_by'       => Auth::id(),
                     'verified_at'       => now(),
                 ]);
@@ -102,37 +120,39 @@ class BookingController extends Controller
             }
 
             RiwayatStatusBooking::create([
-                'booking_id'  => $booking->booking_id,
-                'status_lama' => $statusLama,
-                'status_baru' => $validated['status_booking'],
-                'diubah_oleh' => Auth::id(),
-                'waktu_perubahan'  => now(),
-                'keterangan'  => 'Status diubah oleh admin'
+                'booking_id'      => $booking->booking_id,
+                'status_lama'     => $statusLama,
+                'status_baru'     => $validated['status_booking'],
+                'diubah_oleh'     => Auth::id(),
+                'waktu_perubahan' => now(),
+                'keterangan'      => 'Status diubah oleh admin',
             ]);
         });
 
-        return redirect()
-            ->route('admin.booking.index', $booking->kode_booking);
+        return redirect()->route('admin.booking.index');
     }
 
     /**
-     * Download bukti transfer
+     * Download bukti transfer — hanya milik rental yang login
      */
     public function downloadBuktiTransfer(string $kodeBooking)
     {
+        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+
         $booking = Booking::with('pembayaran')
             ->where('kode_booking', $kodeBooking)
+            ->where('rental_id', $rental->rental_id)
             ->firstOrFail();
 
         $pembayaran = $booking->pembayaran;
 
-        if (! $pembayaran || ! $pembayaran->bukti_pembayaran) {
+        if (!$pembayaran || !$pembayaran->bukti_pembayaran) {
             return back()->with('error', 'Bukti transfer tidak tersedia.');
         }
 
         $path = storage_path('app/public/' . $pembayaran->bukti_pembayaran);
 
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             return back()->with('error', 'File bukti transfer tidak ditemukan.');
         }
 
@@ -140,11 +160,6 @@ class BookingController extends Controller
             $path,
             'bukti-transfer-' . $booking->kode_booking . '.' . pathinfo($path, PATHINFO_EXTENSION)
         );
-    }
-
-    public function mobil()
-    {
-        return $this->belongsTo(Mobil::class, 'mobil_id', 'mobil_id');
     }
 
     private function statusOptions(): array
@@ -156,7 +171,7 @@ class BookingController extends Controller
             'deposit_kembali'     => 'Deposit Kembali',
             'selesai'             => 'Selesai',
             'dibatalkan'          => 'Dibatalkan',
-            'ditolak'             => 'Ditolak'
+            'ditolak'             => 'Ditolak',
         ];
     }
 }

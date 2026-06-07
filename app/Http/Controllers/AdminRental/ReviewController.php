@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminRental;
 use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\ReplyReview;
+use App\Models\Rental;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,22 +13,29 @@ class ReviewController extends Controller
 {
     public function index(Request $request)
     {
+        $rental = Rental::where('admin_id', auth()->id())->first();
 
-        $query = Review::with(['user', 'reply']);
+        if (!$rental) {
+            abort(403, 'Rental tidak ditemukan.');
+        }
+
+        $query = Review::with(['user', 'reply'])
+            ->whereHas('booking', function ($q) use ($rental) {
+                $q->where('rental_id', $rental->rental_id);
+            });
 
         if ($request->filled('start_date')) {
             $query->whereDate('tanggal_posting', '>=', $request->start_date);
         }
+
         if ($request->filled('end_date')) {
             $query->whereDate('tanggal_posting', '<=', $request->end_date);
         }
 
         if ($request->filled('cari')) {
             $query->whereHas('user', function ($q) use ($request) {
-                $q->where(function ($subQuery) use ($request) {
-                    $subQuery->where('users.nama_lengkap', 'like', '%' . $request->cari . '%')
-                        ->orWhere('users.email', 'like', '%' . $request->cari . '%');
-                });
+                $q->where('nama_lengkap', 'like', '%' . $request->cari . '%')
+                  ->orWhere('email', 'like', '%' . $request->cari . '%');
             });
         }
 
@@ -38,15 +46,20 @@ class ReviewController extends Controller
 
     public function reply(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
             'komentar' => 'required|string|max:500',
         ]);
 
-        // Simpan data balasan ke database
+        // Review hanya milik rental yang login
+        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+
+        $reviewMilikRental = Review::whereHas('booking', function ($q) use ($rental) {
+            $q->where('rental_id', $rental->rental_id);
+        })->findOrFail($id);
+
         ReplyReview::create([
-            'review_id'     => $id,
-            'user_id'       => Auth::id(),      
+            'review_id'     => $reviewMilikRental->review_id,
+            'user_id'       => Auth::id(),
             'komentar'      => $request->komentar,
             'tanggal_balas' => now()->toDateString(),
         ]);
