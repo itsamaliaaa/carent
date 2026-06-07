@@ -29,7 +29,16 @@
     <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
         <p class="text-xs text-gray-400 text-right">Total Pendapatan</p>
         <p class="text-3xl font-bold text-gray-900">
-            Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+            @php $val = $totalPendapatan; @endphp
+            @if($val >= 1000000000)
+                Rp {{ number_format($val / 1000000000, 1, ',', '.') }} M
+            @elseif($val >= 1000000)
+                Rp {{ number_format($val / 1000000, 1, ',', '.') }} jt
+            @elseif($val >= 1000)
+                Rp {{ number_format($val / 1000, 0, ',', '.') }} rb
+            @else
+                Rp {{ number_format($val, 0, ',', '.') }}
+            @endif
         </p>
         <p class="text-xs flex items-center gap-1 {{ $persenPendapatan >= 0 ? 'text-green-500' : 'text-red-500' }}">
             <span>{{ $persenPendapatan >= 0 ? '↑' : '↓' }}</span>
