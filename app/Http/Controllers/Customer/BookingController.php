@@ -171,14 +171,18 @@ class BookingController extends Controller
         $jumlahHari = max(1, $jumlahHari);
         $deposit = 200000;
         $totalHarga = $mobil->harga_per_hari * $jumlahHari;
+        $subtotalMobil = $mobil->harga_per_hari * $jumlahHari;
 
         // TAMBAH BIAYA DRIVER JIKA DIPILIH
         $driverTarif = Driver::where('rental_id', $mobil->rental_id)
             ->where('status', 'tersedia')
             ->value('tarif_harian') ?? 0;
 
+        $hargaDriver = 0;
+
         if ($request->has('driver')) {
-            $totalHarga += $driverTarif * $jumlahHari;
+            $hargaDriver = $driverTarif * $jumlahHari;
+            $totalHarga += $hargaDriver;
         }
 
         // TAMBAH DEPOSIT
@@ -192,6 +196,15 @@ class BookingController extends Controller
                 ])
                 ->withInput();
         }
+
+        $rincianHarga = [
+            'jumlah_hari' => $jumlahHari,
+            'harga_mobil_per_hari' => $mobil->harga_per_hari,
+            'subtotal_mobil' => $subtotalMobil,
+            'harga_driver_per_hari' => $driverTarif,
+            'harga_driver' => $hargaDriver,
+            'deposit' => $deposit,
+        ];
         
         $booking = Booking::create([
 
@@ -226,6 +239,7 @@ class BookingController extends Controller
             'waktu_kembali' => $request->waktuKembali,
             'lokasi_penjemputan' => $request->lokasi,
             'total_harga' => $totalHarga,
+            'rincian_harga' => $rincianHarga,
             'setuju_syarat' => true,
             'waktu_setuju_syarat' => now(),
             'catatan' => $request->catatan,
