@@ -144,19 +144,23 @@
                     <div class="space-y-5">
 
                         <div class="flex items-start justify-between">
-
+                            
                             <div>
                                 <h4 class="font-medium text-[#111111]">
                                     Driver
                                 </h4>
-
                                 <p class="text-sm text-[#545454]">
                                     Tidak termasuk biaya Tol
                                 </p>
+
+                                @if(!$driverTersedia)
+                                    <p class="text-sm text-red-500 mt-1">
+                                        Driver sedang tidak tersedia
+                                    </p>
+                                @endif
                             </div>
 
                             <div class="flex items-center gap-4">
-
                                 <p class="font-semibold text-[#111111]">
                                     Rp 250.000/hari
                                 </p>
@@ -165,10 +169,9 @@
                                     type="checkbox"
                                     name="driver"
                                     value="1"
-                                    {{ old('driver') ? 'checked' : '' }}
-                                    class="w-5 h-5">
+                                    {{ !$driverTersedia ? 'disabled' : '' }}
+                                    class="w-5 h-5 disabled:opacity-50 disabled:cursor-not-allowed">
                             </div>
-
                         </div>
 
                         <div class="w-full h-[1px] bg-[#E5E7EB]"></div>

@@ -331,29 +331,37 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
 
-            @foreach($rentalAktif as $rental)
-
             <div class="flex items-center justify-center">
-
-                @if($rental->logo_perusahaan)
-
-                    <img
-                        src="{{ asset($rental->logo_perusahaan) }}"
-                        alt="{{ $rental->nama_rental }}"
-                        class="w-full h-full object-contain"
-                    >
-
-                @else
-
-                    <p class="text-[#0B1F67] font-semibold text-center px-4">
-                        {{ $rental->nama_rental }}
-                    </p>
-
-                @endif
-
+                <img
+                    src="{{ asset('images/logo/logo-rental-1.png') }}"
+                    alt="Rental 1"
+                    class="w-full h-full object-contain"
+                >
             </div>
 
-            @endforeach
+            <div class="flex items-center justify-center">
+                <img
+                    src="{{ asset('images/logo/logo-rental-2.png') }}"
+                    alt="Rental 2"
+                    class="w-full h-full object-contain"
+                >
+            </div>
+
+            <div class="flex items-center justify-center">
+                <img
+                    src="{{ asset('images/logo/logo-rental-3.png') }}"
+                    alt="Rental 3"
+                    class="w-full h-full object-contain"
+                >
+            </div>
+
+            <div class="flex items-center justify-center">
+                <img
+                    src="{{ asset('images/logo/logo-rental-4.png') }}"
+                    alt="Rental 4"
+                    class="w-full h-full object-contain"
+                >
+            </div>
 
         </div>
 

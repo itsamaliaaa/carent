@@ -25,7 +25,6 @@ class BookingController extends Controller
         return view('customer.riwayat', compact('bookings'));
     }
 
-    // aziza
     public function create(Request $request, $mobil_id)
     {
         $mobil = Mobil::with([
@@ -58,6 +57,9 @@ class BookingController extends Controller
 
         $subtotal = $jumlahHari * $hargaPerHari;
         $total = $subtotal + $deposit;
+        $driverTersedia = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->exists();
 
         return view('customer.booking.create', compact(
             'mobil',
@@ -69,7 +71,8 @@ class BookingController extends Controller
             'jumlahHari',
             'subtotal',
             'total',
-            'deposit'
+            'deposit',
+            'driverTersedia'
         ));
     }
 
