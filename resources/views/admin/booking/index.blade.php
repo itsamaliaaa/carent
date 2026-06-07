@@ -100,10 +100,10 @@
                         @php
                         $statusClass = match($booking->status_booking) {
                         'menunggu_konfirmasi' => 'bg-[#FFFDE7] text-[#FBC02D]',
-                        'dikonfirmasi' => 'bg-[#E8F5E9] text-[#388E3C]',
+                        'dikonfirmasi' => 'bg-[#E3F2FD] text-[#1565C0]',
                         'sedang_berlangsung' => 'bg-[#EDE7F6] text-[#5E35B1]',
                         'deposit_kembali' => 'bg-[#FFF3E0] text-[#E65100]',
-                        'selesai' => 'bg-[#E3F2FD] text-[#1565C0]',
+                        'selesai' => 'bg-[#E8F5E9] text-[#388E3C]',
                         'dibatalkan' => 'bg-[#FCE4EC] text-[#C62828]',
                         'ditolak' => 'bg-[#F3E5F5] text-[#6A1B9A]',
                         default => 'bg-gray-100 text-gray-500',
