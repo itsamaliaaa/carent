@@ -178,663 +178,325 @@
 
 
     <form id="filterForm" action="{{ route('katalog') }}" method="GET">
-
-    {{-- FILTER --}}
-    <section class="mt-6 bg-[#E7E9F2] rounded-[10px] px-10 py-4">
         
         {{-- FILTER --}}
-        <input type="hidden" name="kategori" id="kategoriInput" value="{{ request('kategori') }}">
-        <input type="hidden" name="transmisi" id="transmisiInput" value="{{ request('transmisi') }}">
-        <input type="hidden" name="kapasitas" id="kapasitasInput" value="{{ request('kapasitas') }}">
-
-        {{-- SEARCH & CEK KETERSEDIAAN --}}
-        <input type="hidden" name="lokasi" value="{{ request('lokasi') }}">
-        <input type="hidden" name="tanggal_sewa" value="{{ request('tanggal_sewa') }}">
-        <input type="hidden" name="waktu_ambil" value="{{ request('waktu_ambil') }}">
-        <input type="hidden" name="tanggal_kembali" value="{{ request('tanggal_kembali') }}">
-        <input type="hidden" name="waktu_kembali" value="{{ request('waktu_kembali') }}">
-        <input type="hidden" name="cari" value="{{ request('cari') }}">
-
-        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-center gap-12">
-
-            {{-- KATEGORI --}}
-            <div class="flex flex-col gap-3 lg:w-[42%]">
-
-                <p class="text-xs font-semibold text-[#545454] uppercase">
-                    Kategori
-                </p>
-
-                <div class="flex flex-wrap items-center gap-2">
-
-                    <button type="button"
-                        onclick="setFilter('kategori','')"
-                        class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kategori') == '' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Semua
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('kategori','keluarga')"
-                        class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kategori') == 'keluarga' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Keluarga
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('kategori','harian')"
-                        class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kategori') == 'harian' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Harian
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('kategori','rombongan')"
-                        class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kategori') == 'rombongan' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Rombongan
-                    </button>
-
-                </div>
-
-            </div>
-
-            {{-- TRANSMISI --}}
-            <div class="flex flex-col gap-3 lg:w-[24%]">
-
-                <p class="text-xs font-semibold text-[#545454] uppercase">
-                    Transmisi
-                </p>
-
-                <div class="flex flex-wrap gap-2">
-
-                    <button type="button"
-                        onclick="setFilter('transmisi','')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('transmisi') == '' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Semua
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('transmisi','matic')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('transmisi') == 'matic' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Matic
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('transmisi','manual')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('transmisi') == 'manual' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        Manual
-                    </button>
-
-                </div>
-
-            </div>
-
-            {{-- KAPASITAS --}}
-            <div class="flex flex-col gap-3 lg:w-[26%]">
-
-                <p class="text-xs font-semibold text-[#545454] uppercase">
-                    Kapasitas
-                </p>
-
-                <div class="flex flex-wrap gap-2">
-                    
-                    <button type="button"
-                        onclick="setFilter('kapasitas','5')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kapasitas') == '5' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        5 kursi
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('kapasitas','7')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kapasitas') == '7' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        7 kursi
-                    </button>
-
-                    <button type="button"
-                        onclick="setFilter('kapasitas','12')"
-                        class="px-4 py-1.5 rounded-full text-sm font-medium
-                        {{ request('kapasitas') == '12' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
-                        12+ kursi
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    {{-- SEARCH --}}
-    <section class="mt-6">
-
-        <div class="flex flex-col sm:flex-row gap-4">
-
-            <div class="relative flex-1">
-
-                <img
-                    src="{{ asset('images/icons/search.svg') }}"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5"
-                >
-
-                <input
-                    type="text"
-                    name="cari"
-                    value="{{ request('cari') }}"
-                    placeholder="Cari Tipe Mobil"
-                    class="w-full h-12 rounded-[8px] border border-[#D9D9D9] bg-white pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67]"
-                >
-
-            </div>
-
-            <button
-                type="submit"
-                class="flex w-full sm:w-[166px] h-12 px-7 py-[14px] justify-center items-center rounded-[8px] bg-[#0B1F67] hover:bg-[#08184f] text-white text-sm font-semibold transition"
-            >
-                Cari
-            </button>
+        <section class="mt-6 bg-[#E7E9F2] rounded-[10px] px-10 py-4">
         
-        </div>
+            {{-- FILTER --}}
+            <input type="hidden" name="kategori" id="kategoriInput" value="{{ request('kategori') }}">
+            <input type="hidden" name="transmisi" id="transmisiInput" value="{{ request('transmisi') }}">
+            <input type="hidden" name="kapasitas" id="kapasitasInput" value="{{ request('kapasitas') }}">
+
+            {{-- SEARCH & CEK KETERSEDIAAN --}}
+            <input type="hidden" name="lokasi" value="{{ request('lokasi') }}">
+            <input type="hidden" name="tanggal_sewa" value="{{ request('tanggal_sewa') }}">
+            <input type="hidden" name="waktu_ambil" value="{{ request('waktu_ambil') }}">
+            <input type="hidden" name="tanggal_kembali" value="{{ request('tanggal_kembali') }}">
+            <input type="hidden" name="waktu_kembali" value="{{ request('waktu_kembali') }}">
+            <input type="hidden" name="cari" value="{{ request('cari') }}">
+
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-center gap-12">
+
+                {{-- KATEGORI --}}
+                <div class="flex flex-col gap-3 lg:w-[42%]">
+
+                    <p class="text-xs font-semibold text-[#545454] uppercase">
+                        Kategori
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-2">
+
+                        <button type="button"
+                            onclick="setFilter('kategori','')"
+                            class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kategori') == '' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Semua
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('kategori','keluarga')"
+                            class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kategori') == 'keluarga' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Keluarga
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('kategori','harian')"
+                            class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kategori') == 'harian' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Harian
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('kategori','rombongan')"
+                            class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kategori') == 'rombongan' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Rombongan
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {{-- TRANSMISI --}}
+                <div class="flex flex-col gap-3 lg:w-[24%]">
+
+                    <p class="text-xs font-semibold text-[#545454] uppercase">
+                        Transmisi
+                    </p>
+
+                    <div class="flex flex-wrap gap-2">
+
+                        <button type="button"
+                            onclick="setFilter('transmisi','')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('transmisi') == '' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Semua
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('transmisi','matic')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('transmisi') == 'matic' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Matic
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('transmisi','manual')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('transmisi') == 'manual' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            Manual
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {{-- KAPASITAS --}}
+                <div class="flex flex-col gap-3 lg:w-[26%]">
+
+                    <p class="text-xs font-semibold text-[#545454] uppercase">
+                        Kapasitas
+                    </p>
+
+                    <div class="flex flex-wrap gap-2">
+                        
+                        <button type="button"
+                            onclick="setFilter('kapasitas','5')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kapasitas') == '5' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            5 kursi
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('kapasitas','7')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kapasitas') == '7' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            7 kursi
+                        </button>
+
+                        <button type="button"
+                            onclick="setFilter('kapasitas','12')"
+                            class="px-4 py-1.5 rounded-full text-sm font-medium
+                            {{ request('kapasitas') == '12' ? 'bg-[#0B1F67] text-white' : 'bg-white border border-[#D9D9D9]' }}">
+                            12+ kursi
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {{-- SEARCH --}}
+        <section class="mt-6">
+
+            <div class="flex flex-col sm:flex-row gap-4">
+
+                <div class="relative flex-1">
+
+                    <img
+                        src="{{ asset('images/icons/search.svg') }}"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5"
+                    >
+
+                    <input
+                        type="text"
+                        name="cari"
+                        value="{{ request('cari') }}"
+                        placeholder="Cari Tipe Mobil"
+                        class="w-full h-12 rounded-[8px] border border-[#D9D9D9] bg-white pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1F67]"
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="flex w-full sm:w-[166px] h-12 px-7 py-[14px] justify-center items-center rounded-[8px] bg-[#0B1F67] hover:bg-[#08184f] text-white text-sm font-semibold transition"
+                >
+                    Cari
+                </button>
+        
+            </div>
         </section>
     </form>
 
-    @if($isSearch)
+
     <section class="mt-14">
 
         <div class="mb-8">
 
-            <h2 class="text-black text-2xl font-semibold leading-[36px]">
-                {{ $mobilTersedia->count() }} Mobil Yang Tersedia
-            </h2>
+            @if($isFilter)
 
-            <p class="text-[#545454] text-base font-medium leading-[28px]">
-                Pilih mobil yang paling cocok buat perjalananmu
-            </p>
+                <h2 class="text-black text-2xl font-semibold leading-[36px]">
+                    {{ $mobils->total() }} Mobil Yang Tersedia
+                </h2>
+
+                <p class="text-[#545454] text-base font-medium leading-[28px]">
+                    Pilih mobil yang paling cocok buat perjalananmu
+                </p>
+
+            @else
+
+                <h2 class="text-black text-2xl font-semibold leading-[36px]">
+                    Daftar Mobil
+                </h2>
+
+                <p class="text-[#545454] text-base font-medium leading-[28px]">
+                    Temukan mobil yang sesuai kebutuhanmu
+                </p>
+
+            @endif
 
         </div>
+        
+        @if($mobils->count())
 
-        @if($mobilTersedia->count() > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                @foreach($mobils as $mobil)
 
-            @foreach($mobilTersedia as $mobil)
-
-            {{-- CARD --}}
-            <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
-                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
-            >
-
-                <div class="relative">
-
-                    <img
-                        src="{{ $mobil->fotoPrimary
-                            ? asset('storage/' . $mobil->fotoPrimary->url_foto)
-                            : asset('images/default-car.png') }}"
-                        alt="{{ $mobil->nama_mobil }}"
-                        class="w-full h-[220px] sm:h-[210px] object-cover"
+                    {{-- CARD MOBIL --}}
+                    <a
+                        href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'katalog']) }}"
+                        class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
                     >
 
-                    @php
-                        $isAvailable = $mobil->status == 'tersedia';
-                    @endphp
+                        {{-- IMAGE --}}
+                        <div class="relative">
 
-                    <div class="absolute top-4 left-4 text-white text-xs font-medium px-3 py-1 rounded-full
-                        {{ $isAvailable ? 'bg-green-500' : 'bg-red-500' }}">
-                        
-                        {{ $isAvailable ? 'Tersedia' : 'Disewakan' }}
-                    </div>
+                            <img
+                                src="{{ $mobil->fotoPrimary
+                                    ? asset('storage/' . $mobil->fotoPrimary->url_foto)
+                                    : asset('images/default-car.png') }}"
+                                alt="{{ $mobil->nama_mobil }}"
+                                class="w-full h-[190px] sm:h-[210px] object-cover"
+                            >
 
-                </div>
+                            <div class="absolute top-4 left-4 bg-green-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                Tersedia
+                            </div>
 
-                <div class="flex flex-col flex-1 p-5">
-
-                    <h3 class="text-black text-lg font-semibold">
-                        {{ $mobil->nama_mobil }} {{ $mobil->tahun }}
-                    </h3>
-
-                    <div class="flex items-center gap-2 mt-2">
-
-                        <div class="text-yellow-400 text-sm">
-                            ★★★★★
                         </div>
 
-                        <span class="text-sm font-medium text-gray-700">
-                            4.9
-                        </span>
+                        {{-- CONTENT --}}
+                        <div class="flex flex-col flex-1 p-5">
 
-                        <span class="text-sm text-gray-400">
-                            (50 Ulasan)
-                        </span>
+                            <h3 class="text-black text-base font-semibold leading-[28px] w-full">
+                                {{ $mobil->nama_mobil }} {{ $mobil->tahun }}
+                            </h3>
 
-                    </div>
+                            {{-- RATING --}}
+                            <div class="flex items-center gap-2 mt-2">
 
-                    <div class="flex items-center gap-2 mt-4 text-sm text-gray-500">
+                                @php
+                                    $rating = round($mobil->reviews_avg_rating ?? 0);
+                                @endphp
 
-                        <span>
-                            {{ ucfirst($mobil->transmisi) }}
-                        </span>
+                                <div class="text-yellow-400 text-sm">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        {{ $i <= $rating ? '★' : '☆' }}
+                                    @endfor
+                                </div>
 
-                        <span>•</span>
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
+                                </span>
 
-                        <span>
-                            {{ $mobil->kapasitas_penumpang }} Kursi
-                        </span>
+                                <span class="text-sm text-gray-400">
+                                    ({{ $mobil->reviews_count }} Ulasan)
+                                </span>
 
-                    </div>
+                            </div>
 
-                    <div class="w-full h-[1px] bg-[#E5E7EB] mt-4"></div>
+                            {{-- INFO --}}
+                            <div class="flex items-center gap-2 mt-4 text-sm text-gray-500">
 
-                    <div class="flex items-end justify-between mt-4">
+                                <span>
+                                    {{ ucfirst($mobil->transmisi) }}
+                                </span>
 
-                        <p class="text-[#545454] text-sm">
-                            Mulai dari
-                        </p>
+                                <span>•</span>
 
-                        <p class="text-[#06123A] text-lg font-semibold">
-                            Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}/hari
-                        </p>
+                                <span>
+                                    {{ $mobil->kapasitas_penumpang }} Kursi
+                                </span>
 
-                    </div>
+                            </div>
 
-                </div>
+                            <div class="w-full h-[1px] bg-[#C1C1C1] mt-3"></div>
 
-            </a>
+                            {{-- PRICE --}}
+                            <div class="flex items-end justify-between mt-3">
 
-            @endforeach
+                                <p class="text-[#545454] text-sm font-normal leading-6">
+                                    Mulai dari
+                                </p>
 
-        </div>
+                                <p class="text-[#06123A] text-base font-semibold leading-6">
+                                    Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}/hari
+                                </p>
+
+                            </div>
+                        </div>
+                    </a>
+
+                 @endforeach
+
+            </div>
 
         @else
 
-        <div class="text-center py-20">
+            <div class="text-center py-20">
+                <h3 class="text-xl font-semibold text-gray-700">
+                    Mobil tidak ditemukan
+                </h3>
 
-            <h3 class="text-xl font-semibold text-gray-700">
-                Mobil tidak ditemukan
-            </h3>
-
-            <p class="text-gray-500 mt-2">
-                Coba ubah filter pencarianmu
-            </p>
-
-        </div>
+                <p class="text-gray-500 mt-2">
+                    Coba ubah filter pencarianmu
+                </p>
+            </div>
 
         @endif
-
     </section>
 
-    @else
+    <!-- PAGINATION -->
+    @if($mobils->hasPages())
 
-    {{-- MOBIL KELUARGA --}}
-    <section class="mt-14">
+        <section class="mt-16 flex justify-end">
+            {{ $mobils->links() }}
+        </section>
 
-        <div class="mb-8">
-
-            <h2 class="text-black text-2xl font-semibold leading-[36px]">
-                Mobil Keluarga
-            </h2>
-
-            <p class="text-[#545454] text-base font-medium leading-[28px]">
-                Nyaman untuk perjalanan bersama keluarga
-            </p>
-
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-
-            @foreach($mobilKeluarga as $mobil)
-
-            <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
-                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
-            >
-
-                {{-- IMAGE --}}
-                <div class="relative">
-
-                    <img
-                        src="{{ $mobil->fotoPrimary
-                            ? asset('storage/' . $mobil->fotoPrimary->url_foto)
-                            : asset('images/default-car.png') }}"
-                        alt="{{ $mobil->nama_mobil }}"
-                        class="w-full h-[220px] sm:h-[210px] object-cover"
-                    >
-
-                    @php
-                        $isAvailable = $mobil->status == 'tersedia';
-                    @endphp
-
-                    <div class="absolute top-4 left-4 text-white text-xs font-medium px-3 py-1 rounded-full
-                        {{ $isAvailable ? 'bg-green-500' : 'bg-red-500' }}">
-                        
-                        {{ $isAvailable ? 'Tersedia' : 'Disewakan' }}
-                    </div>
-
-                </div>
-
-                {{-- CONTENT --}}
-                <div class="flex flex-col flex-1 p-5">
-
-                    <h3 class="text-black text-lg font-semibold">
-                        {{ $mobil->nama_mobil }} {{ $mobil->tahun }}
-                    </h3>
-
-                    {{-- RATING --}}
-                    <div class="flex items-center gap-2 mt-2">
-
-                        <div class="text-yellow-400 text-sm">
-                            ★★★★★
-                        </div>
-
-                        <span class="text-sm font-medium text-gray-700">
-                            4.9
-                        </span>
-
-                        <span class="text-sm text-gray-400">
-                            (50 Ulasan)
-                        </span>
-
-                    </div>
-
-                    {{-- INFO --}}
-                    <div class="flex items-center gap-2 mt-4 text-sm text-gray-500">
-
-                        <span>
-                            {{ ucfirst($mobil->transmisi) }}
-                        </span>
-
-                        <span>•</span>
-
-                        <span>
-                            {{ $mobil->kapasitas_penumpang }} Kursi
-                        </span>
-
-                    </div>
-
-                    <div class="w-full h-[1px] bg-[#E5E7EB] mt-4"></div>
-
-                    {{-- PRICE --}}
-                    <div class="flex items-end justify-between mt-4">
-
-                        <p class="text-[#545454] text-sm">
-                            Mulai dari
-                        </p>
-
-                        <p class="text-[#06123A] text-lg font-semibold">
-                            Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}/hari
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </a>
-
-            @endforeach
-
-        </div>
-
-    </section>
-
-
-    {{-- MOBIL HARIAN --}}
-    <section class="mt-14">
-
-        <div class="mb-8">
-
-            <h2 class="text-black text-2xl font-semibold leading-[36px]">
-                Mobil Harian
-            </h2>
-
-            <p class="text-[#545454] text-base font-medium leading-[28px]">
-                Praktis dan irit untuk kebutuhan sehari-hari
-            </p>
-
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-
-            @foreach($mobilHarian as $mobil)
-
-            <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
-                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
-            >
-                <div class="relative">
-
-                    <img
-                        src="{{ $mobil->fotoPrimary
-                            ? asset('storage/' . $mobil->fotoPrimary->url_foto)
-                            : asset('images/default-car.png') }}"
-                        alt="{{ $mobil->nama_mobil }}"
-                        class="w-full h-[220px] sm:h-[210px] object-cover"
-                    >
-
-                    @php
-                        $isAvailable = $mobil->status == 'tersedia';
-                    @endphp
-
-                    <div class="absolute top-4 left-4 text-white text-xs font-medium px-3 py-1 rounded-full
-                        {{ $isAvailable ? 'bg-green-500' : 'bg-red-500' }}">
-                        
-                        {{ $isAvailable ? 'Tersedia' : 'Disewakan' }}
-                    </div>
-
-                </div>
-
-                <div class="flex flex-col flex-1 p-5">
-
-                    <h3 class="text-black text-lg font-semibold">
-                        {{ $mobil->nama_mobil }} {{ $mobil->tahun }}
-                    </h3>
-
-                    <div class="flex items-center gap-2 mt-2">
-
-                        <div class="text-yellow-400 text-sm">
-                            ★★★★★
-                        </div>
-
-                        <span class="text-sm font-medium text-gray-700">
-                            4.9
-                        </span>
-
-                        <span class="text-sm text-gray-400">
-                            (50 Ulasan)
-                        </span>
-
-                    </div>
-
-                    <div class="flex items-center gap-2 mt-4 text-sm text-gray-500">
-
-                        <span>
-                            {{ ucfirst($mobil->transmisi) }}
-                        </span>
-
-                        <span>•</span>
-
-                        <span>
-                            {{ $mobil->kapasitas_penumpang }} Kursi
-                        </span>
-
-                    </div>
-
-                    <div class="w-full h-[1px] bg-[#E5E7EB] mt-4"></div>
-
-                    <div class="flex items-end justify-between mt-4">
-
-                        <p class="text-[#545454] text-sm">
-                            Mulai dari
-                        </p>
-
-                        <p class="text-[#06123A] text-lg font-semibold">
-                            Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}/hari
-                        </p>
-
-                    </div>
-
-                </div>
-            </a>
-
-            @endforeach
-
-        </div>
-
-    </section>
-
-
-    {{-- MOBIL ROMBONGAN --}}
-    <section class="mt-14">
-
-        <div class="mb-8">
-
-            <h2 class="text-black text-2xl font-semibold leading-[36px]">
-                Mobil Rombongan
-            </h2>
-
-            <p class="text-[#545454] text-base font-medium leading-[28px]">
-                Cocok untuk perjalanan grup atau wisata
-            </p>
-
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-
-            @foreach($mobilRombongan as $mobil)
-
-            <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
-                class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
-            >
-
-                <div class="relative">
-
-                    <img
-                        src="{{ $mobil->fotoPrimary
-                            ? asset('storage/' . $mobil->fotoPrimary->url_foto)
-                            : asset('images/default-car.png') }}"
-                        alt="{{ $mobil->nama_mobil }}"
-                        class="w-full h-[220px] sm:h-[210px] object-cover"
-                    >
-
-                    @php
-                        $isAvailable = $mobil->status == 'tersedia';
-                    @endphp
-
-                    <div class="absolute top-4 left-4 text-white text-xs font-medium px-3 py-1 rounded-full
-                        {{ $isAvailable ? 'bg-green-500' : 'bg-red-500' }}">
-                        
-                        {{ $isAvailable ? 'Tersedia' : 'Disewakan' }}
-                    </div>
-
-                </div>
-
-                <div class="flex flex-col flex-1 p-5">
-
-                    <h3 class="text-black text-lg font-semibold">
-                        {{ $mobil->nama_mobil }} {{ $mobil->tahun }}
-                    </h3>
-
-                    <div class="flex items-center gap-2 mt-2">
-
-                        <div class="text-yellow-400 text-sm">
-                            ★★★★★
-                        </div>
-
-                        <span class="text-sm font-medium text-gray-700">
-                            4.9
-                        </span>
-
-                        <span class="text-sm text-gray-400">
-                            (50 Ulasan)
-                        </span>
-
-                    </div>
-
-                    <div class="flex items-center gap-2 mt-4 text-sm text-gray-500">
-
-                        <span>
-                            {{ ucfirst($mobil->transmisi) }}
-                        </span>
-
-                        <span>•</span>
-
-                        <span>
-                            {{ $mobil->kapasitas_penumpang }} Kursi
-                        </span>
-
-                    </div>
-
-                    <div class="w-full h-[1px] bg-[#E5E7EB] mt-4"></div>
-
-                    <div class="flex items-end justify-between mt-4">
-
-                        <p class="text-[#545454] text-sm">
-                            Mulai dari
-                        </p>
-
-                        <p class="text-[#06123A] text-lg font-semibold">
-                            Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}/hari
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </a>
-
-            @endforeach
-
-        </div>
-
-    </section>
-
-
-    {{-- PAGINATION --}}
-    <section class="mt-16 flex justify-end">
-
-        <div class="flex items-center border border-[#0B1F67] rounded overflow-hidden">
-
-            <button class="w-10 h-10 flex items-center justify-center border-r border-[#0B1F67] text-[#0B1F67]">
-                <i class="fa-solid fa-chevron-left text-sm"></i>
-            </button>
-
-            <button class="w-10 h-10 bg-[#0B1F67] text-white text-sm font-medium">
-                1
-            </button>
-
-            <button class="w-10 h-10 border-l border-[#0B1F67] text-[#0B1F67] text-sm font-medium">
-                2
-            </button>
-
-            <button class="w-10 h-10 border-l border-[#0B1F67] text-[#0B1F67] text-sm font-medium">
-                ...
-            </button>
-
-            <button class="w-10 h-10 border-l border-[#0B1F67] text-[#0B1F67] text-sm font-medium">
-                7
-            </button>
-
-            <button class="w-10 h-10 border-l border-[#0B1F67] text-[#0B1F67]">
-                <i class="fa-solid fa-chevron-right text-sm"></i>
-            </button>
-
-        </div>
-
-    </section>
     @endif
 
 </div>
 
 <script>
+
     function setFilter(type, value) {
-
         document.getElementById(type + 'Input').value = value;
-
         document.getElementById('filterForm').submit();
     }
 

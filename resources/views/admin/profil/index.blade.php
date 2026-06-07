@@ -107,14 +107,14 @@
             <div class="mt-5">
 
                 <label class="block text-sm text-gray-600 mb-2">
-                    Link Google Maps
+                    Link Google Maps (Embed)
                 </label>
 
                 <input
                     type="text"
                     name="google_maps"
                     value="{{ old('google_maps', $rental->google_maps ?? '') }}"
-                    placeholder="https://maps.app.goo.gl/..."
+                    placeholder="https://www.google.com/maps/embed?pb=..."
                     class="w-full h-11 border border-[#BDBDBD] rounded-[10px] px-4 text-sm">
 
                     @error('google_maps')
@@ -159,37 +159,57 @@
                     Pilihan Bank
                 </label>
 
-                <div class="flex flex-wrap gap-6">
+                <div class="flex flex-wrap gap-4">
 
                     @php
-                        $banks = ['BSI', 'BRI', 'BNI', 'BCA', 'Mandiri'];
+                        $banks = [
+                            'BCA' => 'images/Bank/BCA.png',
+                            'BNI' => 'images/Bank/BNI.png',
+                            'BRI' => 'images/Bank/BRI.png',
+                            'BSI' => 'images/Bank/BSI.png',
+                            'Mandiri' => 'images/Bank/Mandiri.png',
+                        ];
                     @endphp
 
-                    @foreach($banks as $namaBank)
+                    @foreach($banks as $namaBank => $logo)
 
-                        <label class="flex items-center gap-2 cursor-pointer">
+                        <label class="cursor-pointer">
 
                             <input
                                 type="radio"
                                 name="nama_bank"
                                 value="{{ $namaBank }}"
-                                {{ ($rekening->nama_bank ?? '') == $namaBank ? 'checked' : '' }}>
+                                class="peer hidden"
+                                {{ old('nama_bank', $rekening->nama_bank ?? '') == $namaBank ? 'checked' : '' }}>
 
-                                @error('nama_bank')
-                                    <p class="text-red-500 text-sm mt-1">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                            <div
+                                class="w-[138px] h-[83px]
+                                bg-white border border-gray-200
+                                rounded-xl flex items-center justify-center
+                                p-3 transition-all
+                                hover:border-[#1D2B6B]
+                                peer-checked:border-[#1D2B6B]
+                                peer-checked:ring-2
+                                peer-checked:ring-[#1D2B6B]">
 
-                            <span class="text-sm text-gray-700">
-                                {{ $namaBank }}
-                            </span>
+                                <img
+                                    src="{{ asset($logo) }}"
+                                    alt="{{ $namaBank }}"
+                                    class="w-full h-full object-contain">
+
+                            </div>
 
                         </label>
 
                     @endforeach
 
                 </div>
+
+                @error('nama_bank')
+                    <p class="text-red-500 text-sm mt-2">
+                        {{ $message }}
+                    </p>
+                @enderror
 
             </div>
 

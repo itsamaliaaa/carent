@@ -11,7 +11,9 @@ class RiwayatStatusBooking extends Model
 
     protected $table = 'riwayat_status_booking';
     protected $primaryKey = 'id_riwayat';
-    public $timestamps = false; // ← tambahkan ini
+    public $timestamps = false;
+
+    public $timestamps = false;
 
     protected $fillable = [
         'booking_id', 'status_lama', 'status_baru', 'diubah_oleh', 'waktu_perubahan', 'keterangan'

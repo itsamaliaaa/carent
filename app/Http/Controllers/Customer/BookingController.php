@@ -9,6 +9,8 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\Driver;
 use App\Models\Pembayaran;
+use App\Models\RiwayatStatusBooking;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class BookingController extends Controller
@@ -29,7 +31,10 @@ class BookingController extends Controller
         $mobil = Mobil::with([
             'rental.rekenings',
             'fotos'
-        ])->findOrFail($mobil_id);
+        ])
+        ->withAvg('reviews', 'rating')
+        ->withCount('reviews')
+        ->findOrFail($mobil_id);
 
         $tglAmbil = $request->tglAmbil;
         $tglKembali = $request->tglKembali;
@@ -235,5 +240,40 @@ class BookingController extends Controller
             'mobil' => $mobil,
             'driver' => $driver
         ]);
+    }
+    public function batalkanBooking(Request $request, $booking_id)
+    {
+        $request->validate([
+            'alasan_pembatalan' => 'required|string|max:255'
+        ]);
+
+        $booking = Booking::findOrFail($booking_id);
+
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($booking->status_booking !== 'menunggu_konfirmasi') {
+            return back()->withErrors(['msg' => 'Booking ini sudah tidak dapat dibatalkan.']);
+        }
+
+        $statusLama = $booking->status_booking;
+
+        $booking->update([
+            'status_booking' => 'dibatalkan',
+            'alasan_pembatalan' => $request->alasan_pembatalan,
+            'tanggal_pembatalan' => now(),
+            'dibatalkan_oleh' => Auth::id(), 
+        ]);
+
+        RiwayatStatusBooking::create([
+            'booking_id' => $booking->booking_id,
+            'status_lama' => $statusLama,
+            'status_baru' => 'dibatalkan',
+            'diubah_oleh' => Auth::user()->user_id, 
+            'waktu_perubahan' => now()
+        ]);
+
+        return back()->with('success', 'Booking berhasil dibatalkan.');
     }
 }

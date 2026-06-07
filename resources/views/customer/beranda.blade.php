@@ -206,7 +206,7 @@
 
             {{-- CARD MOBIL --}}
             <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'beranda']) }}"
                 class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
             >
                 {{-- IMAGE --}}
@@ -220,7 +220,7 @@
                         class="w-full h-[190px] sm:h-[210px] object-cover"
                     >
 
-                    <div class="absolute top-4 left-4 bg-[#0B1F67] text-white text-xs font-medium px-3 py-1 rounded-full">
+                    <div class="absolute top-4 left-4 bg-green-600 text-white text-xs font-medium px-3 py-1 rounded-full">
                         Tersedia
                     </div>
 
@@ -236,16 +236,22 @@
                     {{-- RATING --}}
                     <div class="flex items-center gap-2 mt-2">
 
+                        @php
+                            $rating = round($mobil->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="text-yellow-400 text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $rating ? '★' : '☆' }}
+                            @endfor
                         </div>
 
                         <span class="text-sm font-medium text-gray-700">
-                            4.9
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
                         </span>
 
                         <span class="text-sm text-gray-400">
-                            (50 Ulasan)
+                            ({{ $mobil->reviews_count }} Ulasan)
                         </span>
 
                     </div>
@@ -373,7 +379,7 @@
             @foreach($mobilKeluarga as $mobil)
 
             <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'beranda']) }}"
                 class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
             >
 
@@ -404,16 +410,22 @@
                     {{-- RATING --}}
                     <div class="flex items-center gap-2 mt-2">
 
+                        @php
+                            $rating = round($mobil->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="text-yellow-400 text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $rating ? '★' : '☆' }}
+                            @endfor
                         </div>
 
                         <span class="text-sm font-medium text-gray-700">
-                            4.9
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
                         </span>
 
                         <span class="text-sm text-gray-400">
-                            (50 Ulasan)
+                            ({{ $mobil->reviews_count }} Ulasan)
                         </span>
 
                     </div>
@@ -477,7 +489,7 @@
             @foreach($mobilHarian as $mobil)
 
             <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'beranda']) }}"
                 class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
             >
 
@@ -508,16 +520,22 @@
                     {{-- RATING --}}
                     <div class="flex items-center gap-2 mt-2">
 
+                        @php
+                            $rating = round($mobil->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="text-yellow-400 text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $rating ? '★' : '☆' }}
+                            @endfor
                         </div>
 
                         <span class="text-sm font-medium text-gray-700">
-                            4.9
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
                         </span>
 
                         <span class="text-sm text-gray-400">
-                            (50 Ulasan)
+                            ({{ $mobil->reviews_count }} Ulasan)
                         </span>
 
                     </div>
@@ -582,7 +600,7 @@
             @foreach($mobilRombongan as $mobil)
 
             <a
-                href="{{ route('mobil.detail', $mobil->mobil_id) }}"
+                href="{{ route('mobil.detail', ['id' => $mobil->mobil_id,'from' => 'beranda']) }}"
                 class="flex flex-col w-full sm:max-w-[344px] rounded-[25px] border border-[#D9D9D9] bg-[#FEFEFE] overflow-hidden transition duration-200 hover:ring-2 hover:ring-[#0B1F67] hover:border-transparent"
             >
 
@@ -613,16 +631,22 @@
                     {{-- RATING --}}
                     <div class="flex items-center gap-2 mt-2">
 
+                        @php
+                            $rating = round($mobil->reviews_avg_rating ?? 0);
+                        @endphp
+
                         <div class="text-yellow-400 text-sm">
-                            ★★★★★
+                            @for ($i = 1; $i <= 5; $i++)
+                                {{ $i <= $rating ? '★' : '☆' }}
+                            @endfor
                         </div>
 
                         <span class="text-sm font-medium text-gray-700">
-                            4.9
+                            {{ number_format($mobil->reviews_avg_rating ?? 0, 1) }}
                         </span>
 
                         <span class="text-sm text-gray-400">
-                            (50 Ulasan)
+                            ({{ $mobil->reviews_count }} Ulasan)
                         </span>
 
                     </div>
