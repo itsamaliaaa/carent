@@ -34,8 +34,11 @@ class BookingController extends Controller
             });
         }
 
-        if ($request->filled('tanggal_sewa')) {
-            $query->whereDate('tanggal_sewa', $request->tanggal_sewa);
+        if ($request->filled('start_date')) {
+            $query->whereDate('tanggal_sewa', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('tanggal_sewa', '<=', $request->end_date);
         }
 
         $bookings      = $query->paginate(3)->withQueryString();
@@ -56,10 +59,9 @@ class BookingController extends Controller
             'pembayaran',
             'riwayatStatus',
             'review',
-        ])->where('booking_id', $kodeBooking)->firstOrFail();
+        ])->where('kode_booking', $kodeBooking)->firstOrFail();
 
         $statusOptions = $this->statusOptions();
-
         return view('admin.booking.detail', compact('booking', 'statusOptions'));
     }
 
@@ -69,13 +71,12 @@ class BookingController extends Controller
      */
     public function updateStatus(Request $request, string $kodeBooking)
     {
-        $booking = Booking::where('booking_id', $kodeBooking)->firstOrFail();
+        $booking = Booking::where('kode_booking', $kodeBooking)->firstOrFail();
 
         $validated = $request->validate([
             'status_booking' => ['required', Rule::in(array_keys($this->statusOptions()))],
         ]);
 
-        // Tidak ada yang perlu diupdate jika status sama
         if ($booking->status_booking === $validated['status_booking']) {
             return back()->with('info', 'Status tidak berubah.');
         }
@@ -85,16 +86,14 @@ class BookingController extends Controller
         DB::transaction(function () use ($booking, $validated, $statusLama) {
             $booking->update(['status_booking' => $validated['status_booking']]);
 
-            // Jika status baru adalah "dikonfirmasi", verifikasi pembayaran sekaligus
             if ($validated['status_booking'] === 'dikonfirmasi' && $booking->pembayaran) {
                 $booking->pembayaran->update([
-                    'status_pembayaran' => 'verified',
+                    'status_pembayaran' => 'lunas', // ← fix: 'verified' tidak ada di enum
                     'verified_by'       => Auth::id(),
                     'verified_at'       => now(),
                 ]);
             }
 
-            // Jika status baru adalah "dibatalkan" atau "ditolak", catat waktu & penyewa
             if (in_array($validated['status_booking'], ['dibatalkan', 'ditolak'])) {
                 $booking->update([
                     'tanggal_pembatalan' => now(),
@@ -107,13 +106,13 @@ class BookingController extends Controller
                 'status_lama' => $statusLama,
                 'status_baru' => $validated['status_booking'],
                 'diubah_oleh' => Auth::id(),
-                'catatan'     => 'Status diubah oleh admin',
+                'waktu_perubahan'  => now(),
+                'keterangan'  => 'Status diubah oleh admin'
             ]);
         });
 
         return redirect()
-            ->route('booking.show', $booking->booking_id)
-            ->with('success', 'Status booking berhasil diperbarui.');
+            ->route('admin.booking.index', $booking->kode_booking);
     }
 
     /**
@@ -122,7 +121,7 @@ class BookingController extends Controller
     public function downloadBuktiTransfer(string $kodeBooking)
     {
         $booking = Booking::with('pembayaran')
-            ->where('booking_id', $kodeBooking)
+            ->where('kode_booking', $kodeBooking)
             ->firstOrFail();
 
         $pembayaran = $booking->pembayaran;
@@ -139,7 +138,7 @@ class BookingController extends Controller
 
         return response()->download(
             $path,
-            'bukti-transfer-' . $booking->booking_id . '.' . pathinfo($path, PATHINFO_EXTENSION)
+            'bukti-transfer-' . $booking->kode_booking . '.' . pathinfo($path, PATHINFO_EXTENSION)
         );
     }
 
@@ -153,11 +152,11 @@ class BookingController extends Controller
         return [
             'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
             'dikonfirmasi'        => 'Dikonfirmasi',
-            'sedang_berlangsung'  => 'Sedang Berlangsung',
+            'berjalan'            => 'Sedang Berlangsung',
             'deposit_kembali'     => 'Deposit Kembali',
             'selesai'             => 'Selesai',
             'dibatalkan'          => 'Dibatalkan',
-            'ditolak'             => 'Ditolak',
+            'ditolak'             => 'Ditolak'
         ];
     }
 }

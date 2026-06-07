@@ -14,11 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('flex');
     }
 
-    function jalankanLoading(formId) {
+    function jalankanLoading(formId, feedbackId) {
         showModal('loadingModal');
 
         const lingkaran = document.getElementById('progressCircle');
         const teks = document.getElementById('progressText');
+
+        // Reset setiap kali loading dibuka
+        lingkaran.style.strokeDashoffset = 314;
+        teks.innerText = '0%';
+
         let progress = 0;
 
         const interval = setInterval(() => {
@@ -28,52 +33,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (progress >= 100) {
                 clearInterval(interval);
-                document.getElementById(formId).submit();
+                hideModal('loadingModal');
+
+                if (feedbackId) {
+                    showModal(feedbackId);
+                    setTimeout(() => {
+                        hideModal(feedbackId);
+                        document.getElementById(formId)?.submit();
+                    }, 2000);
+                } else {
+                    document.getElementById(formId)?.submit();
+                }
             }
         }, 200);
     }
 
-    // BUKA CONFIRM MODAL
+    // BUKA CONFIRM MODAL — isi data-submit dari data-target-submit
     document.querySelectorAll('[data-confirm]').forEach(button => {
-        button.addEventListener('click', () => {
-            const modalId = button.dataset.confirm;
-            const targetSubmit = button.dataset.targetSubmit;
-            const targetFeedback = button.dataset.feedback;
+    button.addEventListener('click', () => {
+        const modalId = button.dataset.confirm;
+        const targetSubmit = button.dataset.targetSubmit;
+        const targetFeedback = button.dataset.feedback;
 
-            if (targetSubmit) {
-                const modal = document.getElementById(modalId);
-                const submitBtn = modal?.querySelector('[data-submit]');
-                if (submitBtn) {
-                    submitBtn.dataset.submit = targetSubmit;
-                    if (targetFeedback) submitBtn.dataset.feedback = targetFeedback;
-                }
+        const modal = document.getElementById(modalId);
+        const submitBtn = modal?.querySelector('[data-submit]');
+
+        if (submitBtn) {
+            if (targetSubmit) submitBtn.dataset.submit = targetSubmit;
+            if (targetFeedback) submitBtn.dataset.feedback = targetFeedback;
+            
+            // Simpan alpine element jika ada
+            const alpineEl = button.closest('[x-data]');
+            if (alpineEl) {
+                submitBtn.dataset.alpineClose = 'true';
+                submitBtn._alpineEl = alpineEl;
             }
+        }
 
-            showModal(modalId);
-        });
+        showModal(modalId);
     });
+});
 
     // TUTUP MODAL
     document.querySelectorAll('[data-close]').forEach(button => {
         button.addEventListener('click', () => hideModal(button.dataset.close));
     });
 
-    // KONFIRMASI → LOADING → SUBMIT FORM → FEEDBACK
+    // KONFIRMASI → LOADING → FEEDBACK → SUBMIT
     document.querySelectorAll('[data-submit]').forEach(button => {
-        button.addEventListener('click', () => {
-            const confirmModalId = button.closest('[id]').id;
-            hideModal(confirmModalId);
+    button.addEventListener('click', () => {
+        const confirmModalId = button.closest('[id]').id;
+        hideModal(confirmModalId);
 
-            const formId = button.dataset.submit;
-            const feedbackId = button.dataset.feedback;
+        // Close Alpine modal saat Ya dipencet
+        if (button._alpineEl) {
+            const alpineData = Alpine.$data(button._alpineEl);
+            if (alpineData.openEdit !== undefined) alpineData.openEdit = false;
+            if (alpineData.popUpTambah !== undefined) alpineData.popUpTambah = false;
+        }
 
-            jalankanLoading(formId);
+        const formId = button.dataset.submit;
+        const feedbackId = button.dataset.feedback;
 
-            if (feedbackId) {
-                setTimeout(() => showModal(feedbackId), 3500);
-                setTimeout(() => hideModal(feedbackId), 6000);
-            }
-        });
+        if (!formId) {
+            console.warn('form ID kosong!');
+            return;
+        }
+
+        jalankanLoading(formId, feedbackId);
     });
-
+});
 });

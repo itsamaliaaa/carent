@@ -47,7 +47,7 @@
                 </div>
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">No. Telepon</label>
-                    <input type="tel" name="no_telepon" required placeholder="Contoh: +62 xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    <input type="tel" name="no_telepon" required placeholder="Contoh: 08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
                 </div>
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">Foto</label>
@@ -62,6 +62,7 @@
                 </div>
                 <button type="button"
                     data-confirm="tambahConfirmDriver"
+                    data-feedback="successTambahDriver"
                     class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Tambah</button>
             </form>
         </div>
@@ -85,13 +86,13 @@
                 <div class="flex flex-col gap-3">
                     @foreach ($drivers as $driver)
                     <div class="grid grid-cols-[1.3fr_1fr_0.9fr_1.5fr_1.1fr_1.5fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
-                        <div class="text-[14px] font-semibold truncate">{{ $driver->nama_driver }}</div>
+                        <div class="text-[14px] truncate">{{ $driver->nama_driver }}</div>
                         <div class="flex justify-start">
                             <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
                         </div>
-                        <div class="text-[14px] font-semibold">{{ $driver->umur }} tahun</div>
-                        <div class="text-[13px] font-semibold break-all">{{ $driver->no_telepon ?? '-' }}</div>
-                        <div class="text-[14px] font-semibold">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
+                        <div class="text-[14px]">{{ $driver->umur }} tahun</div>
+                        <div class="text-[13px] font-normal break-all">{{ implode(' ', str_split($driver->no_telepon, 4)) }}</div>
+                        <div class="text-[14px]">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
 
                         <div>
                             <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
@@ -115,6 +116,7 @@
                                         <button type="button" @click="openEdit = false" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">&times;</button>
                                     </div>
 
+                                    {{-- Form Edit Driver --}}
                                     <form id="formEditDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.update', $driver) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
@@ -293,7 +295,7 @@
 </div>
 
 {{-- FEEDBACK TAMBAH --}}
-<div id="successTambahDriver" class="fixed inset-0 z-[90] hidden items-center justify-center">
+<div id="successTambahDriver" class="fixed inset-0 z-[110] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
         <div class="flex justify-center">
@@ -304,7 +306,7 @@
 </div>
 
 {{-- FEEDBACK EDIT --}}
-<div id="successEditDriver" class="fixed inset-0 z-[90] hidden items-center justify-center">
+<div id="successEditDriver" class="fixed inset-0 z-[110] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
         <div class="flex justify-center">
@@ -315,7 +317,7 @@
 </div>
 
 {{-- FEEDBACK HAPUS --}}
-<div id="successHapusDriver" class="fixed inset-0 z-[90] hidden items-center justify-center">
+<div id="successHapusDriver" class="fixed inset-0 z-[110] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
         <div class="flex justify-center">

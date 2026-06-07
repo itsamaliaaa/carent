@@ -35,7 +35,7 @@
             <div class="min-w-[1100px]"> {{-- Sedikit diperlebar untuk mengakomodasi teks panjang --}}
 
                 {{-- Header dengan kolom yang disesuaikan --}}
-                <div class="grid grid-cols-[1.5fr_0.8fr_0.6fr_0.8fr_1.2fr_1.2fr_0.9fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
+                <div class="grid grid-cols-[1.1fr_0.8fr_0.6fr_0.8fr_1.2fr_1.3fr_1.1fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
                     <div>Nama Mobil</div>
                     <div>Foto</div>
                     <div>Tahun</div>
@@ -43,15 +43,15 @@
                     <div>Sewa Dasar (per hari)</div>
                     <div>Kapasitas penumpang</div>
                     <div>Status</div>
-                    <div class="text-center">Aksi</div>
+                    <div>Aksi</div>
                 </div>
 
                 {{-- Baris Data --}}
                 <div class="flex flex-col gap-3">
                     @foreach ($mobils as $mobil)
-                    <div class="grid grid-cols-[1.5fr_0.8fr_0.6fr_0.8fr_1.2fr_1.2fr_0.9fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
+                    <div class="grid grid-cols-[1.1fr_0.8fr_0.6fr_0.8fr_1.2fr_1.3fr_1.1fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
 
-                        <div class="text-[14px] font-semibold truncate">{{ $mobil->nama_mobil }}</div>
+                        <div class="text-[14px] truncate">{{ $mobil->nama_mobil }}</div>
 
                         <div class="flex justify-start">
                             @if($mobil->fotoPrimary)
@@ -61,14 +61,14 @@
                             @endif
                         </div>
 
-                        <div class="text-[14px] font-semibold">{{ $mobil->tahun }}</div>
-                        <div class="text-[14px] font-semibold capitalize">{{ $mobil->transmisi }}</div>
-                        <div class="text-[14px] font-semibold">Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}</div>
-                        <div class="text-[14px] font-semibold">{{ $mobil->kapasitas_penumpang }} Orang</div>
+                        <div class="text-[14px]">{{ $mobil->tahun }}</div>
+                        <div class="text-[14px] capitalize">{{ $mobil->transmisi }}</div>
+                        <div class="text-[14px]">Rp {{ number_format($mobil->harga_per_hari, 0, ',', '.') }}</div>
+                        <div class="text-[14px]">{{ $mobil->kapasitas_penumpang }} Orang</div>
 
                         <div>
-                            <span class="{{ $mobil->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#FFF3E0] text-[#EF6C00]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
-                                {{ ucfirst($mobil->status) }}
+                            <span class="{{ strtolower($mobil->status) == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
+                                {{ strtolower($mobil->status) == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
                             </span>
                         </div>
 
@@ -175,6 +175,17 @@
 
     </div>
 
+</div>
+
+{{-- FEEDBACK TAMBAH MOBIL --}}
+<div id="successTambahMobil" class="fixed inset-0 z-[110] items-center justify-center" style="display: none;">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
+        <div class="flex justify-center">
+            <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24" alt="Success">
+        </div>
+        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
+    </div>
 </div>
 
 @endsection

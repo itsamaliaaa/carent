@@ -17,7 +17,7 @@
         </div>
 
         <div class="overflow-y-auto pr-2 flex-grow">
-            <form action="{{ route('admin.mobil.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="formTambahMobil" action="{{ route('admin.mobil.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-5">
@@ -61,7 +61,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kapasitas</label>
-                        <input type="text" name="kapasitas" placeholder="Contoh: 7"
+                        <input type="text" name="kapasitas_penumpang" placeholder="Contoh: 7"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                     </div>
 
@@ -191,7 +191,7 @@
                     </div>
 
                     <!-- Dropdown Status -->
-                    <div x-data="{ open: false, selected: 'Tersedia' }">
+                    <div x-data="{ open: false, selected: 'Tersedia' }" class="relative z-20">
                         <input type="hidden" name="status" :value="selected">
                         <label class="text-sm font-medium text-gray-700 mb-1 block">Status</label>
                         <div class="relative">
@@ -224,7 +224,10 @@
 
                 </div>
 
-                <div id="foto-preview-container" class="hidden items-center gap-2 overflow-x-auto mt-3 p-2 w-full rounded-lg" style="white-space: nowrap;"></div>
+                <div id="foto-preview-container"
+                    class="hidden items-center gap-2 overflow-x-auto mt-3 p-2 pt-4 w-full rounded-lg"
+                    style="white-space: nowrap;">
+                </div>
 
                 <div class="mt-5">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Prasayarat Kendaraan</label>
@@ -232,129 +235,121 @@
                         class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
                 </div>
 
-                <button type="submit" onclick="document.getElementById('konfirmasiTambahMobil').classList.remove('hidden'); document.getElementById('tambahConfirmMobil').classList.add('flex');" class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
+                <button type="button"
+                    data-confirm="konfirmasiTambahMobil"
+                    data-target-submit="formTambahMobil"
+                    data-feedback="successTambahMobil"
+                    class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
                     Tambah
                 </button>
             </form>
         </div>
     </div>
 </div>
-
 <script>
+    // ===== HITUNG TOTAL =====
     function hitungTotal() {
         const sewa = parseInt(document.getElementById('sewa_dasar_input')?.value) || 0;
         const driver = parseInt(document.getElementById('driver_input')?.value) || 0;
 
         document.getElementById('total_display').value = sewa > 0 ?
-            'Rp ' + sewa.toLocaleString('id-ID') :
-            '';
+            'Rp ' + sewa.toLocaleString('id-ID') : '';
 
         document.getElementById('total_driver_display').value = sewa > 0 ?
-            'Rp ' + (sewa + driver).toLocaleString('id-ID') :
-            '';
+            'Rp ' + (sewa + driver).toLocaleString('id-ID') : '';
     }
 
+    // ===== FOTO PREVIEW =====
     let selectedFiles = [];
 
     function handleFotoPreview(event) {
         const newFiles = Array.from(event.target.files);
         if (newFiles.length === 0) return;
+
         newFiles.forEach(newFile => {
             const isDuplicate = selectedFiles.some(f => f.name === newFile.name && f.size === newFile.size);
             if (!isDuplicate) selectedFiles.push(newFile);
         });
+
         renderPreviews();
     }
 
     function renderPreviews() {
         const container = document.getElementById('foto-preview-container');
         container.innerHTML = '';
+
         if (selectedFiles.length === 0) {
             container.classList.add('hidden');
             container.classList.remove('flex');
             return;
         }
+
         container.classList.remove('hidden');
         container.classList.add('flex');
+
         selectedFiles.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const wrapper = document.createElement('div');
-                wrapper.className = 'relative flex-shrink-0';
+                wrapper.className = 'relative flex-shrink-0 flex flex-col items-center';
                 wrapper.innerHTML = `
+                    <button type="button" onclick="removePhoto(${index})"
+                        class="absolute -top-2.5 -right-2.5 z-10 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow-md">✕</button>
                     <img src="${e.target.result}" class="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm">
-                    <button type="button" onclick="removePhoto(${index})" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 transition-colors shadow">✕</button>
-                    <span class="block text-center text-[10px] text-gray-400 mt-0.5 w-20 truncate">${file.name}</span>
+                    <span class="block text-center text-[10px] text-gray-400 mt-1 w-20 truncate">${file.name}</span>
                 `;
                 container.appendChild(wrapper);
             };
             reader.readAsDataURL(file);
         });
+
+        syncFileInput();
     }
 
     function removePhoto(index) {
         selectedFiles.splice(index, 1);
         renderPreviews();
     }
+
+    function syncFileInput() {
+        try {
+            const dt = new DataTransfer();
+            selectedFiles.forEach(f => dt.items.add(f));
+            document.getElementById('foto-input').files = dt.files;
+        } catch (e) {}
+    }
 </script>
 
-{{-- LOADING --}}
-<div id="loadingModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] hidden items-center justify-center">
-    <div class="relative w-32 h-32">
-        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10" />
-            <circle id="progressCircle" cx="60" cy="60" r="50" fill="none" stroke="#0B1F67" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition: stroke-dashoffset 0.3s ease" />
-        </svg>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <span id="progressText" class="text-2xl font-bold text-[#0B1F67]">0%</span>
-        </div>
-    </div>
-</div>
-
-<!-- feedback tambah mobil -->
-<div
-    id="successTambahMobil"
-    class="fixed inset-0 z-[90] hidden items-center justify-center">
-
-    <div class="absolute inset-0 bg-black/50"></div>
-
-    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-
-        <div class="flex justify-center">
-
-            <div class="w-24 h-24 flex items-center justify-center">
-
-                <img
-                    src="{{ asset('images/icons/check-circle.svg') }}"
-                    alt="Success">
-
-            </div>
-
-        </div>
-
-        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
-
-    </div>
-
-</div>
-
-<!-- confirm tambah mobil -->
-<div id="konfirmasiTambahMobil" class="fixed inset-0 z-[70] hidden items-center justify-center">
+{{-- KONFIRMASI TAMBAH MOBIL --}}
+<div id="konfirmasiEditMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/50"></div>
     <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
-        <p class="text-[24px] font-semibold leading-[36px] text-[#050E2D]">
-            Apakah kamu yakin ingin menambahkan mobil ini?
+        <p class="text-[24px] font-semibold text-[#050E2D]">
+            Apakah kamu yakin ingin menyimpan perubahan ini?
         </p>
         <div class="flex gap-4 mt-8">
-            <button type="button" id="confirmMobilBtn"
+            <button type="button"
+                onclick="document.getElementById('formEditMobil').submit()"
                 class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">
                 Ya
             </button>
-            <button type="button" id="closeConfirmMobilBtn"
+            <button type="button"
+                data-close="konfirmasiEditMobil"
                 class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">
                 Tidak
             </button>
         </div>
+    </div>
+</div>
+
+{{-- FEEDBACK TAMBAH MOBIL --}}
+<div id="successTambahMobil" class="fixed inset-0 z-[110] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
+        <div class="flex justify-center">
+            <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24" alt="Success">
+        </div>
+        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
     </div>
 </div>
 
