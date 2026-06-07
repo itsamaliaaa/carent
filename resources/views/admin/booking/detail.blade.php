@@ -27,7 +27,11 @@
                         <div class="grid grid-cols-2 gap-8">
                             <div>
                                 <label class="text-xs text-gray-400">Nama</label>
-                                <div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm border border-gray-100">{{ $booking->nama_pengendara ?? $booking->user->name ?? '-' }}</div>
+                                <div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm border border-gray-100">
+                                    {{ $booking->pakai_driver
+                                        ? $booking->user->nama_lengkap
+                                        : $booking->nama_pengendara }}
+                                </div>
                             </div>
                             <div>
                                 <label class="text-xs text-gray-400">Kode Booking</label>
@@ -42,7 +46,11 @@
                             </div>
                             <div>
                                 <label class="text-xs text-gray-400">Nomor Telephone</label>
-                                <div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm border border-gray-100">{{ $booking->no_telp_pengendara ?? '-' }}</div>
+                                <div class="mt-2 p-3 bg-gray-50 rounded-lg text-sm border border-gray-100">
+                                    {{ $booking->pakai_driver
+                                        ? $booking->user->no_telp
+                                        : $booking->no_telp_pengendara }}
+                                </div>
                             </div>
                         </div>
 
@@ -149,12 +157,18 @@
                     <div class="border border-gray-200 rounded-xl p-5 space-y-3 mt-2">
                         @php $rincian = $booking->rincian_harga ?? []; @endphp
                         <div class="flex justify-between text-sm text-gray-600">
-                            <span>Sewa dasar (1 hari)</span>
-                            <span>Rp {{ number_format($booking->mobil->harga_per_hari ?? 0, 0, ',', '.') }}</span>
+                            <span>
+                                Sewa Mobil ({{ $rincian['jumlah_hari'] ?? 1 }} hari)
+                            </span>
+                            <span>
+                                Rp {{ number_format($rincian['subtotal_mobil'] ?? 0, 0, ',', '.') }}
+                            </span>
                         </div>
                         <div class="flex justify-between text-sm text-gray-600">
                             <span>Driver</span>
-                            <span>{{ !empty($rincian['harga_driver']) ? 'Rp '.number_format($rincian['harga_driver'], 0, ',', '.') : '-' }}</span>
+                            <span>
+                                Rp {{ number_format($rincian['harga_driver'] ?? 0, 0, ',', '.') }}
+                            </span>
                         </div>
                         <div class="flex justify-between text-sm text-gray-600">
                             <span>Deposit (dikembalikan)</span>
@@ -200,7 +214,7 @@
                             <p class="text-xs text-gray-400 mt-0.5">
                                 {{ $booking->driver->umur ? $booking->driver->umur . ' tahun' : '-' }}
                                 <span class="mx-1">•</span>
-                                {{ $booking->driver->no_telepon ?? '-' }}
+                                {{ $booking->driver->no_telp ?? '-' }}
                             </p>
                         </div>
                     </div>
