@@ -295,13 +295,60 @@
                     </div>
                 </div>
 
-                {{-- Prasyarat --}}
                 <div class="mt-5">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Prasyarat Kendaraan</label>
-                    <input type="text" name="prasayarat" value="{{ old('prasayarat', $mobil->prasyarat_kendaraan) }}"
-                        placeholder="Contoh: SIM A aktif, usia min. 21 tahun"
-                        class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
-                    @error('prasayarat')
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        Prasyarat Kendaraan
+                    </label>
+
+                    <div id="list-prasyarat" class="flex flex-col gap-2">
+
+                        @php
+                        $prasyaratList = old(
+                        'prasyarat',
+                        $mobil->prasyarat_kendaraan
+                        ? explode("\n", $mobil->prasyarat_kendaraan)
+                        : ['']
+                        );
+                        @endphp
+
+                        @foreach($prasyaratList as $item)
+                        <div class="poin-row flex items-center gap-2">
+                            <span class="text-[#0b1f67] font-bold text-sm mt-0.5">•</span>
+
+                            <input
+                                type="text"
+                                name="prasyarat[]"
+                                value="{{ $item }}"
+                                placeholder="Contoh: SIM A aktif"
+                                class="poin-input flex-1 border border-gray-300 rounded-lg py-2.5 px-3.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition">
+
+                            <button
+                                type="button"
+                                onclick="hapusPoin(this)"
+                                class="btn-hapus-poin w-7 h-7 flex items-center justify-center text-red-400 hover:text-red-600 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="w-4 h-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        @endforeach
+
+                    </div>
+
+                    <button type="button"
+                        onclick="tambahPoin('list-prasyarat', 'prasyarat')"
+                        class="mt-3 flex items-center gap-1 text-[#0b1f67] text-sm font-semibold hover:underline">
+                        + Tambah Poin
+                    </button>
+
+                    @error('prasyarat')
                     <span class="text-red-500 text-xs">{{ $message }}</span>
                     @enderror
                 </div>
@@ -316,6 +363,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- KONFIRMASI EDIT --}}
 <div id="konfirmasiEditMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
