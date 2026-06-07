@@ -274,7 +274,7 @@
             {{-- Form --}}
             <form
                 id="formBatalBooking-{{ $booking->booking_id }}"
-                action="{{ route('booking.batal', $booking->booking_id) }}"
+                action="{{ route('customer.booking.batal', $booking->booking_id) }}"
                 method="POST">
                 @csrf
 
