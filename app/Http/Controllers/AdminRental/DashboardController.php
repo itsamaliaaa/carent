@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Pembayaran;
 use App\Models\Rental;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,41 +16,41 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $adminId = auth()->id();
-        $rental = Rental::where('admin_id', $adminId)->first();
+        $rental  = Rental::where('admin_id', $adminId)->first();
 
         if (!$rental) {
             abort(403, 'Rental tidak ditemukan');
         }
 
-        // Rating & total penilaian 
-        $reviews     = \App\Models\Review::whereHas('booking', function ($q) use ($rental) {
-            $q->where('rental_id', $rental->rental_id);
-        })->where('status_tampilkan', true)->get();
+        // RATING & ULASAN
+        $reviews     = Review::whereHas('booking', function ($q) use ($rental) {
+                            $q->where('rental_id', $rental->rental_id);
+                        })->where('status_tampilkan', true)->get();
         $avgRating   = $reviews->avg('rating') ?? 0;
         $totalReview = $reviews->count();
 
         $today = Carbon::today();
 
-        // Helper
+        // QUERY PEMBAYARAN (helper)─
         $queryPembayaran = Pembayaran::whereHas('booking', function ($q) use ($rental) {
             $q->where('rental_id', $rental->rental_id);
         })->where('status_pembayaran', 'lunas');
 
-        $pendapatanHariIni = (clone $queryPembayaran)->whereDate('tanggal_bayar', $today)->sum('jumlah_bayar');
-        $pendapatanBulanIni = (clone $queryPembayaran)->whereMonth('tanggal_bayar', now()->month)->whereYear('tanggal_bayar', now()->year)->sum('jumlah_bayar');
+        $pendapatanHariIni     = (clone $queryPembayaran)->whereDate('tanggal_bayar', $today)->sum('jumlah_bayar');
+        $pendapatanBulanIni    = (clone $queryPembayaran)->whereMonth('tanggal_bayar', now()->month)->whereYear('tanggal_bayar', now()->year)->sum('jumlah_bayar');
         $pendapatanKeseluruhan = (clone $queryPembayaran)->sum('jumlah_bayar');
 
-        // Transaksi berhasil
+        // TRANSAKSI BERHASIL
         $transaksiBerhasil = Booking::where('rental_id', $rental->rental_id)
             ->where('status_booking', 'selesai')
             ->count();
 
-        // Top 5 mobil paling laris
+        // TOP 5 MOBIL PALING LARIS
         $topMobil = DB::table('mobil')
             ->join('booking', 'mobil.mobil_id', '=', 'booking.mobil_id')
             ->leftJoin('foto_mobil', function ($join) {
                 $join->on('mobil.mobil_id', '=', 'foto_mobil.mobil_id')
-                    ->where('foto_mobil.is_primary', '=', 1);
+                     ->where('foto_mobil.is_primary', '=', 1);
             })
             ->where('booking.rental_id', $rental->rental_id)
             ->where('booking.status_booking', 'selesai')
@@ -63,7 +64,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // Penyewaan per mobil bulan ini
+        // PENYEWAAN PER MOBIL BULAN INI─
         $penyewaanPerMobil = DB::table('mobil')
             ->join('booking', 'mobil.mobil_id', '=', 'booking.mobil_id')
             ->where('booking.rental_id', $rental->rental_id)
@@ -75,8 +76,8 @@ class DashboardController extends Controller
             ->orderByDesc('total_booking')
             ->get();
 
-        // Filter pendapatan berdasarkan tanggal
-        $pendapatanFilter = 0; 
+        // FILTER PENDAPATAN BERDASARKAN TANGGAL
+        $pendapatanFilter      = 0;
         $jumlahTransaksiFilter = 0;
 
         if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -99,8 +100,8 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'rental',
-            'avgRating',      
-            'totalReview',   
+            'avgRating',
+            'totalReview',
             'pendapatanHariIni',
             'pendapatanBulanIni',
             'pendapatanKeseluruhan',
@@ -110,7 +111,7 @@ class DashboardController extends Controller
             'pendapatanFilter',
             'jumlahTransaksiFilter',
             'displayPeriodeStr',
-            'displayRata' 
+            'displayRata',
         ));
     }
 }

@@ -27,10 +27,10 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
         @php
             $statsData = [
-                ['label' => 'Total Pendapatan Hari Ini', 'value' => $pendapatanHariIni ?? 0, 'is_currency' => true],
-                ['label' => 'Total Pendapatan Bulan Ini', 'value' => $pendapatanBulanIni ?? 0, 'is_currency' => true],
-                ['label' => 'Total Pendapatan Keseluruhan', 'value' => $pendapatanKeseluruhan ?? 0, 'is_currency' => true],
-                ['label' => 'Jumlah Transaksi Berhasil', 'value' => $transaksiBerhasil ?? 0, 'is_currency' => false]
+                ['label' => 'Total Pendapatan Hari Ini',      'value' => $pendapatanHariIni      ?? 0, 'is_currency' => true],
+                ['label' => 'Total Pendapatan Bulan Ini',     'value' => $pendapatanBulanIni     ?? 0, 'is_currency' => true],
+                ['label' => 'Total Pendapatan Keseluruhan',   'value' => $pendapatanKeseluruhan  ?? 0, 'is_currency' => true],
+                ['label' => 'Jumlah Transaksi Berhasil',      'value' => $transaksiBerhasil      ?? 0, 'is_currency' => false],
             ];
         @endphp
 
@@ -39,7 +39,16 @@
             <p class="text-sm text-gray-400 leading-tight w-3/4">{{ $stat['label'] }}</p>
             <p class="text-[32px] font-bold text-[#2D3748] text-right">
                 @if($stat['is_currency'])
-                    Rp {{ $stat['value'] >= 1000000 ? number_format($stat['value'] / 1000000, 1, ',', '.') . ' jt' : number_format($stat['value'] / 1000, 0, ',', '.') . ' rb' }}
+                    @php $val = $stat['value']; @endphp
+                    @if($val >= 1000000000)
+                        Rp {{ number_format($val / 1000000000, 1, ',', '.') }} M
+                    @elseif($val >= 1000000)
+                        Rp {{ number_format($val / 1000000, 1, ',', '.') }} jt
+                    @elseif($val >= 1000)
+                        Rp {{ number_format($val / 1000, 0, ',', '.') }} rb
+                    @else
+                        Rp {{ number_format($val, 0, ',', '.') }}
+                    @endif
                 @else
                     {{ number_format($stat['value'], 0, ',', '.') }}
                 @endif
