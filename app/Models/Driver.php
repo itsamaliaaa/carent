@@ -21,4 +21,11 @@ class Driver extends Model
         'tarif_harian',
         'status'
     ];
+
+    protected $appends = ['umur'];
+
+    public function getUmurAttribute()
+    {
+        return \Carbon\Carbon::parse($this->tgl_lahir)->age;
+    }
 }

@@ -116,6 +116,7 @@
                                 type="date"
                                 name="tgl_lahir"
                                 value="{{ old('tgl_lahir') }}"
+                                max="{{ now()->subYears(17)->format('Y-m-d') }}"
                                 class="w-full h-12 border border-[#D9D9D9] rounded-[8px] px-4 text-sm">
 
                             @error('tgl_lahir')
