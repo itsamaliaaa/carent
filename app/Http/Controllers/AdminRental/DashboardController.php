@@ -31,7 +31,7 @@ class DashboardController extends Controller
 
         $today = Carbon::today();
 
-        // QUERY PEMBAYARAN (helper)─
+        // QUERY PEMBAYARAN (helper)
         $queryPembayaran = Pembayaran::whereHas('booking', function ($q) use ($rental) {
             $q->where('rental_id', $rental->rental_id);
         })->where('status_pembayaran', 'lunas');
@@ -64,7 +64,7 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // PENYEWAAN PER MOBIL BULAN INI─
+        // PENYEWAAN PER MOBIL BULAN INI
         $penyewaanPerMobil = DB::table('mobil')
             ->join('booking', 'mobil.mobil_id', '=', 'booking.mobil_id')
             ->where('booking.rental_id', $rental->rental_id)

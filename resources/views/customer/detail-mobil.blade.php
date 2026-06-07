@@ -160,7 +160,6 @@
                         ? number_format($reviews->avg('rating'), 1)
                         : '0.0';
 
-                    $totalTrip = $mobil->rental->jumlah_trip ?? 0;
 
                     $joinDate = $mobil->rental->created_at
                         ? \Carbon\Carbon::parse($mobil->rental->created_at)->translatedFormat('F Y')

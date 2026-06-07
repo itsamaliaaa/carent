@@ -264,8 +264,13 @@ class CatalogController extends Controller
             'aktif'
         )->first();
 
+        $totalTrip = $mobil->bookings()
+        ->where('status_booking', 'selesai')
+        ->count();
+
         return view('customer.detail-mobil', compact(
             'mobil',
+            'totalTrip',
             'reviews',
             'mobilTerkait',
             'rentalRating',

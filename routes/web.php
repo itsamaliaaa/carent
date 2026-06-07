@@ -60,8 +60,6 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::get('/profil', [Customer\ProfileController::class, 'index'])->name('profil');
     Route::put('/profil', [Customer\ProfileController::class, 'update'])->name('profil.update');
     Route::put('/profil/password', [Customer\ProfileController::class, 'updatePassword'])->name('profil.password');
-    Route::get('/notifikasi', [Customer\NotifikasiController::class, 'index'])->name('notifikasi');
-    Route::post('/notifikasi/read-all', [Customer\NotifikasiController::class, 'readAll'])->name('notifikasi.readAll');
 });
 
 // ADMIN RENTAL ROUTES
