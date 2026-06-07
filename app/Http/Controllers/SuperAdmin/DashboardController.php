@@ -21,6 +21,26 @@ class DashboardController extends Controller
         $rentalBaru      = Rental::whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
         $userBaru        = User::where('role', 'customer')->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
 
+        // Perbandingan bulan lalu
+        $transaksiLalu   = Booking::where('status_booking', 'selesai')
+        ->whereMonth('created_at', now()->subMonth()->month)
+        ->whereYear('created_at', now()->subMonth()->year)
+        ->count();
+
+        $pendapatanLalu  = Pembayaran::where('status_pembayaran', 'lunas')
+        ->whereMonth('tanggal_bayar', now()->subMonth()->month)
+        ->whereYear('tanggal_bayar', now()->subMonth()->year)
+        ->sum('jumlah_bayar');
+
+        // Hitung persentase perubahan
+        $persenTransaksi  = $transaksiLalu > 0
+        ? round((($totalTransaksi - $transaksiLalu) / $transaksiLalu) * 100, 1)
+        : 0;
+
+        $persenPendapatan = $pendapatanLalu > 0
+        ? round((($totalPendapatan - $pendapatanLalu) / $pendapatanLalu) * 100, 1)
+        : 0;
+
         // Validasi tanggal
         $request->validate([
             'dari'   => 'nullable|date',
@@ -72,6 +92,10 @@ class DashboardController extends Controller
             'totalRental',
             'totalPendapatan',
             'totalUser',
+            'transaksiLalu', 
+            'pendapatanLalu',
+            'persenTransaksi', 
+            'persenPendapatan',
             'rentalBaru',
             'userBaru',
             'daftarRental',

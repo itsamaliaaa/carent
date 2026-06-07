@@ -3,48 +3,50 @@
 @section('content')
 <div class="p-6 flex flex-col gap-6">
 
-    {{-- Kartu Statistik --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+{{-- Kartu Statistik --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        {{-- Total Transaksi --}}
-        <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
-            <p class="text-xs text-gray-400 text-right">Total Transaksi</p>
-            <p class="text-3xl font-bold text-gray-900">{{ number_format($totalTransaksi, 0, ',', '.') }}</p>
-            <p class="text-xs text-red-500 flex items-center gap-1">
-                <span>↓</span> 7,3% dari bulan lalu
-            </p>
-        </div>
-
-        {{-- Jumlah Rental --}}
-        <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
-            <p class="text-xs text-gray-400 text-right">Jumlah Rental</p>
-            <p class="text-3xl font-bold text-gray-900">{{ $totalRental }}</p>
-            <p class="text-xs text-green-500 flex items-center gap-1">
-                <span>↑</span> {{ $rentalBaru }} rental baru
-            </p>
-        </div>
-
-        {{-- Total Pendapatan --}}
-        <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
-            <p class="text-xs text-gray-400 text-right">Total Pendapatan</p>
-            <p class="text-3xl font-bold text-gray-900">
-                Rp {{ ($totalPendapatan) }}
-            </p>
-            <p class="text-xs text-red-500 flex items-center gap-1">
-                <span>↓</span> 15,4% dari bulan lalu
-            </p>
-        </div>
-
-        {{-- Jumlah Pengguna --}}
-        <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
-            <p class="text-xs text-gray-400 text-right">Jumlah Pengguna</p>
-            <p class="text-3xl font-bold text-gray-900">{{ number_format($totalUser, 0, ',', '.') }}</p>
-            <p class="text-xs text-green-500 flex items-center gap-1">
-                <span>↑</span> {{ $userBaru }} pengguna baru
-            </p>
-        </div>
-
+    {{-- Total Transaksi --}}
+    <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
+        <p class="text-xs text-gray-400 text-right">Total Transaksi</p>
+        <p class="text-3xl font-bold text-gray-900">{{ number_format($totalTransaksi, 0, ',', '.') }}</p>
+        <p class="text-xs flex items-center gap-1 {{ $persenTransaksi >= 0 ? 'text-green-500' : 'text-red-500' }}">
+            <span>{{ $persenTransaksi >= 0 ? '↑' : '↓' }}</span>
+            {{ abs($persenTransaksi) }}% dari bulan lalu
+        </p>
     </div>
+
+    {{-- Jumlah Rental --}}
+    <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
+        <p class="text-xs text-gray-400 text-right">Jumlah Rental</p>
+        <p class="text-3xl font-bold text-gray-900">{{ number_format($totalRental, 0, ',', '.') }}</p>
+        <p class="text-xs text-green-500 flex items-center gap-1">
+            <span>↑</span> {{ $rentalBaru }} rental baru bulan ini
+        </p>
+    </div>
+
+    {{-- Total Pendapatan --}}
+    <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
+        <p class="text-xs text-gray-400 text-right">Total Pendapatan</p>
+        <p class="text-3xl font-bold text-gray-900">
+            Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+        </p>
+        <p class="text-xs flex items-center gap-1 {{ $persenPendapatan >= 0 ? 'text-green-500' : 'text-red-500' }}">
+            <span>{{ $persenPendapatan >= 0 ? '↑' : '↓' }}</span>
+            {{ abs($persenPendapatan) }}% dari bulan lalu
+        </p>
+    </div>
+
+    {{-- Jumlah Pengguna --}}
+    <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col gap-1">
+        <p class="text-xs text-gray-400 text-right">Jumlah Pengguna</p>
+        <p class="text-3xl font-bold text-gray-900">{{ number_format($totalUser, 0, ',', '.') }}</p>
+        <p class="text-xs text-green-500 flex items-center gap-1">
+            <span>↑</span> {{ $userBaru }} pengguna baru bulan ini
+        </p>
+    </div>
+
+</div>
 
     {{-- Laporan Total Pendapatan --}}
     <div class="bg-white rounded-2xl shadow-sm border p-6 flex flex-col gap-5">
