@@ -2,7 +2,9 @@
 
 @section('content')
 
-<div class="flex flex-col gap-4 py-2 px-2" x-data="{ popUpTambah: false }">
+@php $editErrorId = session('edit_error_driver_id'); @endphp
+
+<div class="flex flex-col gap-4 py-2 px-2" x-data="{ popUpTambah: {{ ($errors->any() && !$editErrorId) ? 'true' : 'false' }} }">
 
     {{-- Card --}}
     <div class="bg-white p-7 rounded-[20px] shadow-sm border border-gray-50">
@@ -21,7 +23,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <img src="{{ asset('images/icons/search.svg') }}" class="w-4 h-4 opacity-40" alt="Search Icon">
                     </div>
-                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari Driver" class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-400">
+                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari Driver" class="w-full pl-10 pr-4 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1D2B6B] text-sm text-gray-800">
                 </div>
                 <button class="bg-[#0b1f67] text-white px-5 py-1.5 rounded-lg font-semibold text-[11px] hover:bg-[#0e2781] transition">Cari</button>
             </div>
@@ -39,30 +41,45 @@
                 @csrf
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">Nama Driver</label>
-                    <input type="text" name="nama_driver" required placeholder="Masukkan Nama Driver" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    <input type="text" name="nama_driver" value="{{ old('nama_driver') }}" required placeholder="Masukkan Nama Driver" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    @error('nama_driver')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">Umur Driver</label>
-                    <input type="number" name="umur" required placeholder="Harus Angka" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    <input type="number" name="umur" value="{{ old('umur') }}" required placeholder="Harus Angka" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    @error('umur')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">No. Telepon</label>
-                    <input type="tel" name="no_telepon" required placeholder="Contoh: 08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    <input type="tel" name="no_telepon" value="{{ old('no_telepon') }}" required placeholder="Contoh: 08xx-xxxx-xxxx" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    @error('no_telepon')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="mb-4">
                     <label class="text-gray-600 text-sm mb-2">Foto</label>
-                    <input type="file" name="foto" required
-                        class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden 
-                        file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none
-                        file:hover:bg-[#E5E7EB] file:hover:text-gray-800 file:transition-colors file:duration-200">
+                    <input type="file" name="foto" required class="block w-full text-[14px] text-gray-400 border border-gray-200 rounded-lg overflow-hidden file:bg-[#F3F4F6] file:text-gray-600 file:border-0 file:py-2 file:px-4 file:mr-4 cursor-pointer focus:outline-none file:hover:bg-[#E5E7EB] file:hover:text-gray-800 file:transition-colors file:duration-200">
+                    @error('foto')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
+
                 <div class="mb-6">
                     <label class="text-gray-600 text-sm mb-2">Tarif</label>
-                    <input type="number" name="tarif_harian" required placeholder="Contoh: 250000" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    <input type="number" name="tarif_harian" value="{{ old('tarif_harian') }}" required placeholder="Contoh: 250000" class="w-full border border-gray-200 rounded-lg py-2 px-4 text-sm focus:outline-none focus:border-[#1D2B6B] placeholder-gray-300">
+                    @error('tarif_harian')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
-                <button type="button"
-                    data-confirm="tambahConfirmDriver"
-                    data-feedback="successTambahDriver"
+
+                <button type="button" onclick="cekLaluKonfirmasi('formTambahDriver', 'tambahConfirmDriver')"
                     class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Tambah</button>
             </form>
         </div>
@@ -101,7 +118,7 @@
                         </div>
 
                         {{-- Aksi --}}
-                        <div class="flex justify-start gap-2" x-data="{ openEdit: false }">
+                        <div class="flex justify-start gap-2" x-data="{ openEdit: {{ ($editErrorId == $driver->driver_id && $errors->any()) ? 'true' : 'false' }} }">
 
                             {{-- Tombol Edit --}}
                             <button type="button" @click="openEdit = true" class="w-9 h-9 bg-[#8BC34A] flex justify-center items-center rounded-lg shrink-0">
@@ -123,16 +140,28 @@
 
                                         <div class="mb-4 text-left">
                                             <label class="text-sm text-gray-600 block mb-1">Nama</label>
-                                            <input type="text" name="nama_driver" value="{{ $driver->nama_driver }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            <input type="text" name="nama_driver" value="{{ old('nama_driver', $driver->nama_driver) }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            @error('nama_driver')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
+
                                         <div class="mb-4 text-left">
                                             <label class="text-sm text-gray-600 block mb-1">Umur</label>
-                                            <input type="number" name="umur" value="{{ $driver->umur }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            <input type="number" name="umur" value="{{ old('umur', $driver->umur) }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            @error('umur')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
+
                                         <div class="mb-4 text-left">
                                             <label class="text-sm text-gray-600 block mb-1">No. Telepon</label>
-                                            <input type="tel" name="no_telepon" value="{{ $driver->no_telepon }}" required placeholder="Contoh: +62 xx-xxxx-xxxx" class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            <input type="tel" name="no_telepon" value="{{ old('no_telepon', $driver->no_telepon) }}" required placeholder="Contoh: +62 xx-xxxx-xxxx" class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            @error('no_telepon')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
+
                                         <div class="mb-4" x-data="{ fileName: '{{ $driver->foto ? basename($driver->foto) : 'Tidak ada file yang dipilih' }}' }">
                                             <label class="text-gray-600 text-sm mb-2 block">Foto</label>
                                             <div class="relative flex items-center border border-gray-200 rounded-lg overflow-hidden h-[40px] group transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-100">
@@ -144,14 +173,21 @@
                                                     @change="fileName = $event.target.files[0].name"
                                                     class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
                                             </div>
+                                            @error('foto')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
+
                                         <div class="mb-4 text-left">
                                             <label class="text-sm text-gray-600 block mb-1">Tarif</label>
-                                            <input type="number" name="tarif_harian" value="{{ $driver->tarif_harian }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            <input type="number" name="tarif_harian" value="{{ old('tarif_harian', $driver->tarif_harian) }}" required class="w-full border rounded-lg p-2 text-sm focus:border-[#1D2B6B] outline-none">
+                                            @error('tarif_harian')
+                                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         {{-- Dropdown status driver --}}
-                                        <div class="mb-6 text-left" x-data="{ open: false, selected: '{{ $driver->status }}' }">
+                                        <div class="mb-6 text-left" x-data="{ open: false, selected: '{{ old('status', $driver->status) }}' }">
                                             <input type="hidden" name="status" :value="selected">
                                             <div class="text-sm text-gray-600 mb-2">Status</div>
                                             <div class="relative">
@@ -167,32 +203,27 @@
                                                     class="absolute left-0 z-10 w-full overflow-hidden pt-4"
                                                     style="top: 50%; background-color: white; border-left: 1px solid #d1d5db; border-right: 1px solid #d1d5db; border-bottom: 1px solid #d1d5db; border-radius: 0 0 8px 8px;"
                                                     x-cloak>
-
                                                     <div x-show="selected != 'tersedia'"
                                                         @click="selected = 'tersedia'; open = false"
                                                         style="background-color: white; color: #374151;"
                                                         class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                                         Tersedia
                                                     </div>
-
                                                     <div x-show="selected != 'tidak_tersedia'"
                                                         @click="selected = 'tidak_tersedia'; open = false"
                                                         style="background-color: white; color: #374151;"
                                                         class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                                        onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                                        onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                                         Tidak Tersedia
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <button type="button"
-                                            data-confirm="editConfirmDriver"
-                                            data-target-submit="formEditDriver{{ $driver->driver_id }}"
-                                            data-feedback="successEditDriver"
+                                        <button type="button" onclick="cekLaluKonfirmasi('formEditDriver{{ $driver->driver_id }}', 'editConfirmDriver')"
                                             class="bg-[#0b1f67] w-full text-white py-2 rounded-lg font-semibold text-[13px] hover:bg-[#0e2781]">Edit</button>
                                     </form>
                                 </div>
@@ -202,10 +233,7 @@
                             <form id="formHapusDriver{{ $driver->driver_id }}" action="{{ route('admin.driver.destroy', $driver) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button"
-                                    data-confirm="hapusConfirmDriver"
-                                    data-target-submit="formHapusDriver{{ $driver->driver_id }}"
-                                    data-feedback="successHapusDriver"
+                                <button type="button" onclick="cekLaluKonfirmasi('formHapusDriver{{ $driver->driver_id }}', 'hapusConfirmDriver')"
                                     class="w-9 h-9 bg-[#B74A4A] flex justify-center items-center rounded-lg shrink-0">
                                     <img src="{{ asset('images/icons/delete-01.svg') }}" class="w-5 h-5 brightness-0 invert">
                                 </button>
@@ -224,19 +252,6 @@
     </div>
 </div>
 
-{{-- LOADING --}}
-<div id="loadingModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] hidden items-center justify-center">
-    <div class="relative w-32 h-32">
-        <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10" />
-            <circle id="progressCircle" cx="60" cy="60" r="50" fill="none" stroke="#0B1F67" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transition: stroke-dashoffset 0.3s ease" />
-        </svg>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <span id="progressText" class="text-2xl font-bold text-[#0B1F67]">0%</span>
-        </div>
-    </div>
-</div>
-
 {{-- CONFIRM TAMBAH --}}
 <div id="tambahConfirmDriver" class="fixed inset-0 z-[100] hidden items-center justify-center">
     <div class="absolute inset-0 bg-black/50"></div>
@@ -245,12 +260,9 @@
             Apakah kamu yakin ingin menambahkan driver ini?
         </p>
         <div class="flex gap-4 mt-8">
-            <button type="button"
-                data-submit="formTambahDriver"
-                data-feedback="successTambahDriver"
+            <button type="button" data-submit="" data-feedback="successTambahDriver"
                 class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">Ya</button>
-            <button type="button"
-                data-close="tambahConfirmDriver"
+            <button type="button" data-close="tambahConfirmDriver"
                 class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">Tidak</button>
         </div>
     </div>
@@ -264,12 +276,9 @@
             Apakah kamu yakin ingin mengedit driver ini?
         </p>
         <div class="flex gap-4 mt-8">
-            <button type="button"
-                data-submit=""
-                data-feedback="successEditDriver"
+            <button type="button" data-submit="" data-feedback="successEditDriver"
                 class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">Ya</button>
-            <button type="button"
-                data-close="editConfirmDriver"
+            <button type="button" data-close="editConfirmDriver"
                 class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">Tidak</button>
         </div>
     </div>
@@ -283,12 +292,9 @@
             Apakah kamu yakin ingin menghapus driver ini?
         </p>
         <div class="flex gap-4 mt-8">
-            <button type="button"
-                data-submit=""
-                data-feedback="successHapusDriver"
+            <button type="button" data-submit="" data-feedback="successHapusDriver"
                 class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">Ya</button>
-            <button type="button"
-                data-close="hapusConfirmDriver"
+            <button type="button" data-close="hapusConfirmDriver"
                 class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">Tidak</button>
         </div>
     </div>
@@ -326,5 +332,41 @@
         <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Driver berhasil dihapus</h2>
     </div>
 </div>
+
+<script>
+function cekLaluKonfirmasi(formId, confirmId) {
+    const form = document.getElementById(formId);
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+    const modal = document.getElementById(confirmId);
+    modal.querySelector('[data-submit]').dataset.submit = formId;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+document.addEventListener('click', function (e) {
+    // Tombol "Ya"
+    const yaBtn = e.target.closest('[data-submit]');
+    if (yaBtn && yaBtn.dataset.submit) {
+        const modal = yaBtn.closest('.fixed');
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+        document.getElementById(yaBtn.dataset.submit)?.submit();
+        return;
+    }
+
+    // Tombol "Tidak"
+    const closeBtn = e.target.closest('[data-close]');
+    if (closeBtn) {
+        const modal = document.getElementById(closeBtn.dataset.close);
+        if (modal) {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+    }
+});
+</script>
 
 @endsection

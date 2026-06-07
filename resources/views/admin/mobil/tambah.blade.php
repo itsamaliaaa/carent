@@ -24,45 +24,66 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Mobil</label>
-                        <input type="text" name="nama_mobil" placeholder="Contoh: Toyota Avanza"
+                        <input type="text" name="nama_mobil" required placeholder="Contoh: Toyota Avanza"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('nama_mobil')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Detail</label>
-                        <input type="text" name="detail" placeholder="Contoh: Mobil keluarga"
+                        <input type="text" name="detail" required placeholder="Contoh: Mobil keluarga"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('detail')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Biaya Over Kilometer</label>
-                        <input type="text" name="biaya_over_km" placeholder="Contoh: 5000"
+                        <input type="text" name="biaya_over_km" required placeholder="Contoh: 5000"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('biaya_over_km')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
-                        <input type="text" name="tahun" placeholder="Contoh: 2023"
+                        <input type="text" name="tahun" required placeholder="Contoh: 2023"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('tahun')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Sewa Dasar (per hari)</label>
-                        <input type="number" id="sewa_dasar_input" name="sewa_dasar" placeholder="Contoh: 350000"
+                        <input type="number" id="sewa_dasar_input" name="sewa_dasar" required placeholder="Contoh: 350000"
                             oninput="hitungTotal()"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('sewa_dasar')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Batas KM</label>
-                        <input type="text" name="batas_km" placeholder="Contoh: 200"
+                        <input type="text" name="batas_km" required placeholder="Contoh: 200"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('batas_km')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kapasitas</label>
-                        <input type="text" name="kapasitas_penumpang" placeholder="Contoh: 7"
+                        <input type="text" name="kapasitas_penumpang" required placeholder="Contoh: 7"
                             class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                        @error('kapasitas_penumpang')
+                        <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <!-- Dropdown Asuransi -->
@@ -82,15 +103,15 @@
                                 <div x-show="selected !== 'Termasuk'" @click="selected = 'Termasuk'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Termasuk
                                 </div>
                                 <div x-show="selected !== 'Tidak Termasuk'" @click="selected = 'Tidak Termasuk'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Tidak Termasuk
                                 </div>
                             </div>
@@ -121,15 +142,15 @@
                                 <div x-show="selected !== 'Manual'" @click="selected = 'Manual'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Manual
                                 </div>
                                 <div x-show="selected !== 'Matic'" @click="selected = 'Matic'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Matic
                                 </div>
                             </div>
@@ -153,15 +174,15 @@
                                 <div x-show="selected !== 'Ditanggung Penyewa'" @click="selected = 'Ditanggung Penyewa'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Ditanggung Penyewa
                                 </div>
                                 <div x-show="selected !== 'Sudah Termasuk'" @click="selected = 'Sudah Termasuk'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Sudah Termasuk
                                 </div>
                             </div>
@@ -182,7 +203,7 @@
                             onchange="handleFotoPreview(event)" />
                     </div>
 
-                    {{-- Driver (input angka tarif) --}}
+                    {{-- Driver --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Driver (opsional)</label>
                         <input type="number" id="driver_input" name="driver" placeholder="Contoh: 150000"
@@ -207,15 +228,15 @@
                                 <div x-show="selected !== 'Tersedia'" @click="selected = 'Tersedia'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Tersedia
                                 </div>
                                 <div x-show="selected !== 'Tidak Tersedia'" @click="selected = 'Tidak Tersedia'; open = false"
                                     style="background-color: white; color: #374151;"
                                     class="px-3.5 py-3 text-sm font-normal cursor-pointer transition-all duration-150 leading-6"
-                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B'; this.parentElement.style.borderColor='#1D2B6B';"
-                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151'; this.parentElement.style.borderColor='#d1d5db';">
+                                    onmouseover="this.style.backgroundColor='#EEF2FF'; this.style.color='#1D2B6B';"
+                                    onmouseout="this.style.backgroundColor='white'; this.style.color='#374151';">
                                     Tidak Tersedia
                                 </div>
                             </div>
@@ -233,12 +254,13 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Prasayarat Kendaraan</label>
                     <input type="text" name="prasayarat" placeholder="Contoh: SIM A aktif, usia min. 21 tahun"
                         class="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#1D2B6B] focus:ring-2 focus:ring-[#1D2B6B]/10 transition" />
+                    @error('prasayarat')
+                    <span class="text-red-500 text-xs">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <button type="button"
-                    data-confirm="konfirmasiTambahMobil"
-                    data-target-submit="formTambahMobil"
-                    data-feedback="successTambahMobil"
+                    onclick="cekLaluKonfirmasi('formTambahMobil', 'konfirmasiTambahMobil')"
                     class="mt-7 w-full bg-[#0b1f67] hover:bg-[#0e2781] text-white font-semibold py-3 rounded-xl text-sm transition-all duration-150 shadow-md">
                     Tambah
                 </button>
@@ -246,8 +268,35 @@
         </div>
     </div>
 </div>
+
+{{-- KONFIRMASI TAMBAH MOBIL --}}
+<div id="konfirmasiTambahMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
+        <p class="text-[24px] font-semibold text-[#050E2D]">
+            Apakah kamu yakin ingin menambahkan mobil ini?
+        </p>
+        <div class="flex gap-4 mt-8">
+            <button type="button" data-submit=""
+                class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">Ya</button>
+            <button type="button" data-close="konfirmasiTambahMobil"
+                class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">Tidak</button>
+        </div>
+    </div>
+</div>
+
+{{-- FEEDBACK TAMBAH MOBIL --}}
+<div id="successTambahMobil" class="fixed inset-0 z-[110] hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
+        <div class="flex justify-center">
+            <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24" alt="Success">
+        </div>
+        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
+    </div>
+</div>
+
 <script>
-    // ===== HITUNG TOTAL =====
     function hitungTotal() {
         const sewa = parseInt(document.getElementById('sewa_dasar_input')?.value) || 0;
         const driver = parseInt(document.getElementById('driver_input')?.value) || 0;
@@ -259,7 +308,6 @@
             'Rp ' + (sewa + driver).toLocaleString('id-ID') : '';
     }
 
-    // ===== FOTO PREVIEW =====
     let selectedFiles = [];
 
     function handleFotoPreview(event) {
@@ -318,39 +366,38 @@
             document.getElementById('foto-input').files = dt.files;
         } catch (e) {}
     }
+
+    function cekLaluKonfirmasi(formId, confirmId) {
+        const form = document.getElementById(formId);
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+        const modal = document.getElementById(confirmId);
+        modal.querySelector('[data-submit]').dataset.submit = formId;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    document.addEventListener('click', function(e) {
+        const yaBtn = e.target.closest('[data-submit]');
+        if (yaBtn && yaBtn.dataset.submit) {
+            const modal = yaBtn.closest('.fixed');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.getElementById(yaBtn.dataset.submit)?.submit();
+            return;
+        }
+
+        const closeBtn = e.target.closest('[data-close]');
+        if (closeBtn) {
+            const modal = document.getElementById(closeBtn.dataset.close);
+            if (modal) {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }
+        }
+    });
 </script>
-
-{{-- KONFIRMASI TAMBAH MOBIL --}}
-<div id="konfirmasiEditMobil" class="fixed inset-0 z-[100] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-8 w-full max-w-sm z-10 text-center">
-        <p class="text-[24px] font-semibold text-[#050E2D]">
-            Apakah kamu yakin ingin menyimpan perubahan ini?
-        </p>
-        <div class="flex gap-4 mt-8">
-            <button type="button"
-                onclick="document.getElementById('formEditMobil').submit()"
-                class="flex-1 bg-[#62B33B] hover:bg-green-600 text-white py-3 rounded-xl font-semibold">
-                Ya
-            </button>
-            <button type="button"
-                data-close="konfirmasiEditMobil"
-                class="flex-1 bg-[#B92A44] hover:bg-red-600 text-white py-3 rounded-xl font-semibold">
-                Tidak
-            </button>
-        </div>
-    </div>
-</div>
-
-{{-- FEEDBACK TAMBAH MOBIL --}}
-<div id="successTambahMobil" class="fixed inset-0 z-[110] hidden items-center justify-center">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative bg-white rounded-3xl p-10 w-full max-w-sm z-10 text-center">
-        <div class="flex justify-center">
-            <img src="{{ asset('images/icons/check-circle.svg') }}" class="w-24 h-24" alt="Success">
-        </div>
-        <h2 class="mt-6 text-xl font-bold text-[#0B1F67]">Mobil berhasil ditambahkan</h2>
-    </div>
-</div>
 
 @endsection

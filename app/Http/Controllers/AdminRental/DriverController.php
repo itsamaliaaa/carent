@@ -69,31 +69,29 @@ class DriverController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Cari driver berdasarkan id
         $driver = Driver::find($id);
 
-        if ($request->hasFile('foto')) {
-            // Kalau ada foto baru, hapus foto lama lalu upload yang baru
-            $path = $request->file('foto')->store('drivers');
-            $driver->foto = $path;
-        }
+        session()->flash('edit_error_driver_id', $id);
 
         $request->validate([
-            'nama_driver' => 'required',
-            'umur' => 'required|numeric',
-            'foto' => 'nullable|image|max:2048',
-            'no_telepon' => 'required|regex:/^[+]?[0-9\s\-]+$/',
+            'nama_driver'  => 'required',
+            'umur'         => 'required|numeric',
+            'foto'         => 'nullable|image|max:2048',
+            'no_telepon'   => 'required|regex:/^[+]?[0-9\s\-]+$/',
             'tarif_harian' => 'required|numeric',
-            'status' => 'required'
+            'status'       => 'required'
         ]);
 
-        // Update data driver
-        $driver->nama_driver = $request->nama_driver;
-        $driver->umur = $request->umur;
-        $driver->no_telepon = $request->no_telepon;
-        $driver->tarif_harian = $request->tarif_harian;
-        $driver->status = $request->status;
+        if ($request->hasFile('foto')) {
+            Storage::disk('public')->delete($driver->foto);
+            $driver->foto = $request->file('foto')->store('drivers', 'public');
+        }
 
+        $driver->nama_driver  = $request->nama_driver;
+        $driver->umur         = $request->umur;
+        $driver->no_telepon   = $request->no_telepon;
+        $driver->tarif_harian = $request->tarif_harian;
+        $driver->status       = $request->status;
         $driver->save();
 
         return redirect()->back();

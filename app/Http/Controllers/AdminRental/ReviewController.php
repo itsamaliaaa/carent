@@ -12,6 +12,7 @@ class ReviewController extends Controller
 {
     public function index(Request $request)
     {
+
         $query = Review::with(['user', 'reply']);
 
         if ($request->filled('start_date')) {
