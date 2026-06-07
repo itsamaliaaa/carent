@@ -163,7 +163,7 @@
 
                             <div class="flex items-center gap-4">
                                 <p class="font-semibold text-[#111111]">
-                                    Rp 250.000/hari
+                                   Rp {{ number_format($driverMin ?? 0, 0, ',', '.') }} - {{ number_format($driverMax ?? 0, 0, ',', '.') }}/hari
                                 </p>
 
                                 <input
@@ -597,6 +597,11 @@
                     Telepon:
                     <span id="driverTelepon"></span>
                 </p>
+
+                <p>
+                    Tarif per Hari:
+                    <span id="driverTarif"></span>
+                </p>
             </div>
 
         </div>
@@ -612,6 +617,7 @@
         const driverCheckbox = document.querySelector('input[name="driver"]');
         const driverBiaya = document.getElementById('driverBiaya');
         const totalPembayaran = document.getElementById('totalPembayaran');
+        const totalInput = document.getElementById('totalHargaInput');
 
         const modalDriver = document.getElementById('modalDriver');
         const closeDriverModal = document.getElementById('closeDriverModal');
@@ -620,37 +626,43 @@
         const driverNama = document.getElementById('driverNama');
         const driverUmur = document.getElementById('driverUmur');
         const driverTelepon = document.getElementById('driverTelepon');
+        const driverTarif = document.getElementById('driverTarif');
 
         const namaPengendara = document.getElementById('namaPengendara');
         const teleponPengendara = document.getElementById('teleponPengendara');
         const simPengendara = document.getElementById('simPengendara');
         const tglLahirPengendara = document.getElementById('tglLahirPengendara');
 
+        const judulIdentitas = document.getElementById('judulIdentitas');
+
         const jumlahHari = {{ $jumlahHari }};
-        const driverPerHari = 250000;
+        let driverPerHari = 0;
         const totalAwal = {{ $total }};
 
         // FUNGSI UNTUK MENGHITUNG ULANG TOTAL PEMBAYARAN KETIKA USER PAKAI ATAU TIDAK DRIVERNYA
         function updateBiaya() {
-            if (driverCheckbox.checked) {
-                const biayaDriver = driverPerHari * jumlahHari;
-                const totalBaru = totalAwal + biayaDriver;
+                if (driverCheckbox.checked) {
 
-                document.getElementById('totalHargaInput').value = totalBaru;
-                document.getElementById('totalHargaInput').value = totalAwal;
+                    const biayaDriver = driverPerHari * jumlahHari;
+                    const totalBaru = totalAwal + biayaDriver;
 
-                driverBiaya.innerText =
-                    'Rp ' + biayaDriver.toLocaleString('id-ID');
+                    totalInput.value = totalBaru;
 
-                totalPembayaran.innerText =
-                    'Rp ' + totalBaru.toLocaleString('id-ID');
-            } else {
-                driverBiaya.innerText = '-';
-                totalPembayaran.innerText =
-                    'Rp ' + totalAwal.toLocaleString('id-ID');
-                document.getElementById('driver_id').value = '';
+                    driverBiaya.innerText =
+                        'Rp ' + biayaDriver.toLocaleString('id-ID');
+
+                    totalPembayaran.innerText =
+                        'Rp ' + totalBaru.toLocaleString('id-ID');
+
+                } else {
+
+                    totalInput.value = totalAwal;
+                    driverBiaya.innerText = '-';
+                    totalPembayaran.innerText = 'Rp ' + totalAwal.toLocaleString('id-ID');
+                    document.getElementById('driver_id').value = '';
+                    driverTarif.innerText = '-';
+                }
             }
-        }
 
         // MENONAKTIFKAN IDENTITTAS PENGENDARA KALAU USER PAKAI DRIVER
         function toggleIdentitasPengendara() {
@@ -709,6 +721,8 @@
                             driverNama.innerText = result.driver.nama_driver ?? '-';
                             driverUmur.innerText = result.driver.umur ?? '-';
                             driverTelepon.innerText = result.driver.no_telp ?? '-';
+                            driverTarif.innerText ='Rp ' + Number(result.driver.tarif_harian).toLocaleString('id-ID') + '/hari';
+                            driverPerHari = result.driver.tarif_harian;
                             modalDriver.classList.remove('hidden');
                         } else {
                             alert('Driver tidak tersedia untuk mobil ini.');

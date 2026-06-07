@@ -65,9 +65,18 @@ class BookingController extends Controller
 
         $subtotal = $jumlahHari * $hargaPerHari;
         $total = $subtotal + $deposit;
+
         $driverTersedia = Driver::where('rental_id', $mobil->rental_id)
             ->where('status', 'tersedia')
             ->exists();
+
+        $driverMin = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->min('tarif_harian');
+
+        $driverMax = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->max('tarif_harian');
 
         return view('customer.booking.create', compact(
             'mobil',
@@ -80,7 +89,9 @@ class BookingController extends Controller
             'subtotal',
             'total',
             'deposit',
-            'driverTersedia'
+            'driverTersedia',
+            'driverMin',
+            'driverMax'
         ));
     }
 
@@ -162,8 +173,12 @@ class BookingController extends Controller
         $totalHarga = $mobil->harga_per_hari * $jumlahHari;
 
         // TAMBAH BIAYA DRIVER JIKA DIPILIH
+        $driverTarif = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->value('tarif_harian') ?? 0;
+
         if ($request->has('driver')) {
-            $totalHarga += 250000 * $jumlahHari;
+            $totalHarga += $driverTarif * $jumlahHari;
         }
 
         // TAMBAH DEPOSIT
