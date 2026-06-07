@@ -21,6 +21,13 @@ class DashboardController extends Controller
             abort(403, 'Rental tidak ditemukan');
         }
 
+        // Rating & total penilaian 
+        $reviews     = \App\Models\Review::whereHas('booking', function ($q) use ($rental) {
+            $q->where('rental_id', $rental->rental_id);
+        })->where('status_tampilkan', true)->get();
+        $avgRating   = $reviews->avg('rating') ?? 0;
+        $totalReview = $reviews->count();
+
         $today = Carbon::today();
 
         // Helper
@@ -92,6 +99,8 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'rental',
+            'avgRating',      
+            'totalReview',   
             'pendapatanHariIni',
             'pendapatanBulanIni',
             'pendapatanKeseluruhan',

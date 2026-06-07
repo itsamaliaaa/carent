@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\Driver;
 use App\Models\Pembayaran;
+use App\Models\Kebijakan;
 use App\Models\RiwayatStatusBooking;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -17,15 +18,21 @@ class BookingController extends Controller
 {
     public function check()
     {
-        $bookings = Booking::with(['mobil', 'driver'])
-        ->where('user_id', auth()->user()->user_id)
-        ->latest()
-        ->get();
+        $bookings = Booking::with(['mobil', 'driver', 'review'])
+            ->where('user_id', auth()->user()->user_id)
+            ->latest()
+            ->get();
     
-        return view('customer.riwayat', compact('bookings'));
+        $pembatalan       = Kebijakan::where('tipe', 'pembatalan')->first();
+        $pengembalianDana = Kebijakan::where('tipe', 'pengembalian_dana')->first();
+    
+        return view('customer.riwayat', compact(
+            'bookings',
+            'pembatalan',
+            'pengembalianDana',
+        ));
     }
 
-    // aziza
     public function create(Request $request, $mobil_id)
     {
         $mobil = Mobil::with([
@@ -58,6 +65,9 @@ class BookingController extends Controller
 
         $subtotal = $jumlahHari * $hargaPerHari;
         $total = $subtotal + $deposit;
+        $driverTersedia = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->exists();
 
         return view('customer.booking.create', compact(
             'mobil',
@@ -69,7 +79,8 @@ class BookingController extends Controller
             'jumlahHari',
             'subtotal',
             'total',
-            'deposit'
+            'deposit',
+            'driverTersedia'
         ));
     }
 
@@ -274,6 +285,6 @@ class BookingController extends Controller
             'waktu_perubahan' => now()
         ]);
 
-        return back()->with('success', 'Booking berhasil dibatalkan.');
+        return back()->with('batal_success', 'Booking berhasil dibatalkan.');
     }
 }
