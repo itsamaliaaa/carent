@@ -54,15 +54,12 @@ Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logou
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/booking/{mobil_id}/driver-random', [Customer\BookingController::class, 'getRandomDriver'])->name('booking.driver-random');
     Route::get('/booking/{mobil_id}', [Customer\BookingController::class, 'create'])->name('booking.create');
-
     Route::post('/booking', [Customer\BookingController::class, 'store'])->name('booking.store');
     Route::get('/riwayat', [Customer\BookingController::class, 'check'])->name('booking.riwayat');
     Route::get('/booking/{id}', [Customer\BookingController::class, 'detail'])->name('booking.detail');
     Route::post('/booking/{id}/batal', [Customer\BookingController::class, 'batalkanBooking'])->name('booking.batal');
-    Route::post('/booking/{id}/review', [Customer\ReviewController::class, 'store'])->name('review.store');
-    Route::post('/review/store/{id}', [ReviewController::class, 'store'])->name('review.store');
-    Route::post('/booking/{booking_id}/batal', [BookingController::class, 'batalkanBooking'])->name('booking.batal');
-    Route::post('/booking/{booking_id}/review', [ReviewController::class, 'storeReview'])->name('review.store');
+
+    Route::post('/booking/{booking_id}/review', [Customer\ReviewController::class, 'storeReview'])->name('review.store');
 
     Route::get('/profil', [Customer\ProfileController::class, 'index'])->name('profil');
     Route::put('/profil', [Customer\ProfileController::class, 'update'])->name('profil.update');

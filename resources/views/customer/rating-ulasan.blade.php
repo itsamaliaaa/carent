@@ -55,7 +55,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 items-center">
                         <div class="text-center">
-                            <span class="text-[80px] font-bold leading-none">{{ $averageRating }}</span>
+                            <span class="text-[80px] font-bold leading-none">{{ number_format($averageRating, 1) }}</span>
                             <div class="flex items-center justify-center gap-1.5 my-3">
                                 @for($i = 1; $i <= 5; $i++)
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ $i <= round($averageRating) ? 'var(--star-gold)' : '#E5E7EB' }}" xmlns="http://www.w3.org/2000/svg">
@@ -112,11 +112,11 @@
                         </p>
 
                         {{-- Balasan Section (From reply_review table) --}}
-                        @if($review->replyReview)
+                        @if($review->reply)
                         <div class="bg-gray-100 rounded-lg p-6 border border-gray-200">
                             <h5 class="font-semibold text-[var(--primary)] mb-1">Balasan Admin:</h5>
                             <p class="text-sm text-[var(--text-body)] leading-relaxed">
-                                {{ $review->replyReview->komentar }}
+                                {{ $review->reply->komentar }}
                             </p>
                         </div>
                         @endif
