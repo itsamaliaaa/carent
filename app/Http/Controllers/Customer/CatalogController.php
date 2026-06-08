@@ -29,7 +29,7 @@ class CatalogController extends Controller
 
             $query->whereDoesntHave('bookings', function ($q) use ($request) {
 
-                $q->whereIn('status_booking', ['menunggu', 'dikonfirmasi', 'berjalan'])
+                $q->whereIn('status_booking', ['menunggu_konfirmasi', 'dikonfirmasi', 'berjalan'])
 
                     ->where(function ($query) use ($request) {
 
@@ -126,7 +126,7 @@ class CatalogController extends Controller
 
             $query->whereDoesntHave('bookings', function ($q) use ($request) {
 
-                $q->whereIn('status_booking', ['menunggu', 'dikonfirmasi', 'berjalan'])
+                $q->whereIn('status_booking', ['menunggu_konfirmasi', 'dikonfirmasi', 'berjalan'])
 
                     ->where(function ($query) use ($request) {
 
