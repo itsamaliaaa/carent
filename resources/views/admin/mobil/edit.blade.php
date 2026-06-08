@@ -176,8 +176,8 @@
                     </div>
 
                     {{-- Dropdown Bahan Bakar --}}
-                    <div x-data="{ open: false, selected: '{{ old('bahan_bakar', $mobil->bahan_bakar) }}' }">
-                        <input type="hidden" name="bahan_bakar" :value="selected">
+                    <div x-data="{ open: false, selected: '{{ old('jenis_bahan_bakar', $mobil->jenis_bahan_bakar) }}' }">
+                        <input type="hidden" name="jenis_bahan_bakar" :value="selected">
                         <label class="text-sm font-medium text-gray-700 mb-1 block">Bahan Bakar</label>
                         <div class="relative">
                             <button type="button" @click="open = !open"
