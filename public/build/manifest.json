@@ -1,0 +1,19 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-DRgQKlwT.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Dgl9BL5l.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/search-loading.js": {
+    "file": "assets/search-loading-CkPccWP8.js",
+    "name": "search-loading",
+    "src": "resources/js/search-loading.js",
+    "isEntry": true
+  }
+}
