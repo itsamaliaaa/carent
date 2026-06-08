@@ -62,6 +62,15 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::put('/profil/password', [Customer\ProfileController::class, 'updatePassword'])->name('profil.password');
 });
 
+Route::get('/fix-duplikat', function () {
+    \App\Models\Rental::orderBy('rental_id')->get()
+        ->groupBy('admin_id')
+        ->each(function($group) {
+            $group->skip(1)->each->delete();
+        });
+    return 'Duplikat berhasil dihapus!';
+});
+
 // ADMIN RENTAL ROUTES
 Route::middleware(['auth', 'role:admin_rental'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminRental\DashboardController::class, 'index'])->name('dashboard');
