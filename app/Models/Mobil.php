@@ -11,7 +11,7 @@ class Mobil extends Model
 
     protected $fillable = [
         'rental_id', 'nama_mobil', 'tahun', 'transmisi', 'kategori',
-        'kapasitas_penumpang', 'bahan_bakar', 'harga_per_hari',
+        'kapasitas_penumpang', 'jenis_bahan_bakar', 'harga_per_hari',
         'biaya_admin', 'biaya_over_km', 'batas_km_per_hari',
         'deskripsi', 'status', 'asuransi', 'tarif_driver', 'prasyarat_kendaraan'
     ];
