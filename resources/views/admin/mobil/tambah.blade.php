@@ -159,7 +159,7 @@
 
                     <!-- Dropdown Bahan Bakar -->
                     <div x-data="{ open: false, selected: 'Ditanggung Penyewa' }">
-                        <input type="hidden" name="bahan_bakar" :value="selected">
+                        <input type="hidden" name="jenis_bahan_bakar" :value="selected">
                         <label class="text-sm font-medium text-gray-700 mb-1 block">Bahan Bakar</label>
                         <div class="relative">
                             <button type="button" @click="open = !open"
