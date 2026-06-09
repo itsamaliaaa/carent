@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Driver;
 use App\Models\Rental;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon; // Import Carbon untuk menghitung umur secara real-time
 
 class DriverController extends Controller
 {
@@ -60,14 +61,19 @@ class DriverController extends Controller
 
         $lokasiFoto = $request->file('foto')->store('drivers', 'public');
 
+        // OTOMASI: Hitung umur berdasarkan tgl_lahir yang dikirim form
+        $umur = Carbon::parse($request->tgl_lahir)->age;
+
         Driver::create([
             'nama_driver'  => $request->nama_driver,
             'tgl_lahir'    => $request->tgl_lahir,
+            'umur'         => $umur, // Mengisi field 'umur' agar terhindar dari Error 1364
             'foto'         => $lokasiFoto,
             'no_telp'      => $request->no_telp,
             'tarif_harian' => $request->tarif_harian,
             'status'       => 'tersedia',
             'rental_id'    => $rental->rental_id,
+            'points'       => 0, // Menginisialisasi default point awal untuk sistem Round Robin Anda
         ]);
 
         return redirect()->back()->with('driver_success', 'Driver berhasil ditambahkan.');
@@ -101,8 +107,12 @@ class DriverController extends Controller
             $driver->foto = $request->file('foto')->store('drivers', 'public');
         }
 
+        // OTOMASI: Hitung ulang umur jika admin mengubah tanggal lahir driver
+        $umur = Carbon::parse($request->tgl_lahir)->age;
+
         $driver->nama_driver  = $request->nama_driver;
         $driver->tgl_lahir    = $request->tgl_lahir;
+        $driver->umur         = $umur; // Selalu sinkronkan perubahan umur
         $driver->no_telp      = $request->no_telp;
         $driver->tarif_harian = $request->tarif_harian;
         $driver->status       = $request->status;
