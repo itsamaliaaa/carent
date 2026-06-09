@@ -271,19 +271,6 @@ class BookingController extends Controller
             ->with('success_booking', true);
     }
 
-    public function getRandomDriver($mobil_id)
-    {
-        $mobil = Mobil::findOrFail($mobil_id);
-
-        $driver = Driver::where('rental_id', $mobil->rental_id)
-            ->where('status', 'tersedia')
-            ->inRandomOrder()
-            ->first();
-
-        return response()->json([
-            'mobil' => $mobil,
-            'driver' => $driver
-        ]);
     }
     public function batalkanBooking(Request $request, $booking_id)
     {
