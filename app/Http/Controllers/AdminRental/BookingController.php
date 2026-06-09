@@ -10,22 +10,33 @@ use App\Models\Mobil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class BookingController extends Controller
 {
     /**
-     * Daftar semua booking milik rental yang login
+     * Helper privat untuk mengambil rental terautentikasi secara aman (Mencegah duplikasi kode)
      */
-    public function index(Request $request)
+    private function getAuthenticatedRental()
     {
         $rental = Rental::where('admin_id', auth()->id())->first();
 
         if (!$rental) {
-            abort(403, 'Rental tidak ditemukan.');
+            abort(403, 'Akun Anda tidak terdaftar pada manajemen Rental.');
         }
 
-        $query = Booking::with(['user', 'mobil','driver', 'pembayaran'])
+        return $rental;
+    }
+
+    /**
+     * Daftar semua booking milik rental yang login
+     */
+    public function index(Request $request)
+    {
+        $rental = $this->getAuthenticatedRental();
+
+        $query = Booking::with(['user', 'mobil', 'driver', 'pembayaran'])
             ->where('rental_id', $rental->rental_id)
             ->orderByDesc('created_at');
 
@@ -61,7 +72,7 @@ class BookingController extends Controller
      */
     public function show(string $kodeBooking)
     {
-        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+        $rental = $this->getAuthenticatedRental();
 
         $booking = Booking::with([
             'user',
@@ -81,11 +92,11 @@ class BookingController extends Controller
     }
 
     /**
-     * Update status booking — hanya milik rental yang login
+     * Update status booking — hanya milik rental yang login beserta alokasi driver otomatis
      */
     public function updateStatus(Request $request, string $kodeBooking)
     {
-        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+        $rental = $this->getAuthenticatedRental();
 
         $booking = Booking::where('kode_booking', $kodeBooking)
             ->where('rental_id', $rental->rental_id)
@@ -104,6 +115,7 @@ class BookingController extends Controller
         DB::transaction(function () use ($booking, $validated, $statusLama) {
             $booking->update(['status_booking' => $validated['status_booking']]);
 
+            // 1. Verifikasi Pembayaran Otomatis
             if ($validated['status_booking'] === 'dikonfirmasi' && $booking->pembayaran) {
                 $booking->pembayaran->update([
                     'status_pembayaran' => 'lunas',
@@ -112,6 +124,23 @@ class BookingController extends Controller
                 ]);
             }
 
+            // 2. Automasi Status Ketersediaan & Poin Driver (Round Robin)
+            if ($booking->driver_id) {
+                $driver = $booking->driver;
+
+                if (in_array($validated['status_booking'], ['dikonfirmasi', 'berjalan'])) {
+                    $driver->update(['status' => 'tidak tersedia']);
+                } elseif (in_array($validated['status_booking'], ['dibatalkan', 'ditolak', 'selesai'])) {
+                    $driver->update(['status' => 'tersedia']);
+
+                    // Kompensasi pengurangan poin jika pesanan batal demi keadilan round-robin
+                    if (in_array($validated['status_booking'], ['dibatalkan', 'ditolak']) && $driver->points > 0) {
+                        $driver->decrement('points');
+                    }
+                }
+            }
+
+            // 3. Catatan Pembatalan Pesanan
             if (in_array($validated['status_booking'], ['dibatalkan', 'ditolak'])) {
                 $booking->update([
                     'tanggal_pembatalan' => now(),
@@ -119,6 +148,7 @@ class BookingController extends Controller
                 ]);
             }
 
+            // 4. Log Histori Status Perubahan
             RiwayatStatusBooking::create([
                 'booking_id'      => $booking->booking_id,
                 'status_lama'     => $statusLama,
@@ -133,11 +163,11 @@ class BookingController extends Controller
     }
 
     /**
-     * Download bukti transfer — hanya milik rental yang login
+     * Download bukti transfer menggunakan Storage Facade yang aman
      */
     public function downloadBuktiTransfer(string $kodeBooking)
     {
-        $rental = Rental::where('admin_id', auth()->id())->firstOrFail();
+        $rental = $this->getAuthenticatedRental();
 
         $booking = Booking::with('pembayaran')
             ->where('kode_booking', $kodeBooking)
@@ -150,18 +180,19 @@ class BookingController extends Controller
             return back()->with('error', 'Bukti transfer tidak tersedia.');
         }
 
-        $path = storage_path('app/public/' . $pembayaran->bukti_pembayaran);
-
-        if (!file_exists($path)) {
+        if (!Storage::disk('public')->exists($pembayaran->bukti_pembayaran)) {
             return back()->with('error', 'File bukti transfer tidak ditemukan.');
         }
 
-        return response()->download(
-            $path,
-            'bukti-transfer-' . $booking->kode_booking . '.' . pathinfo($path, PATHINFO_EXTENSION)
+        return Storage::disk('public')->download(
+            $pembayaran->bukti_pembayaran,
+            'bukti-transfer-' . $booking->kode_booking . '.' . pathinfo($pembayaran->bukti_pembayaran, PATHINFO_EXTENSION)
         );
     }
 
+    /**
+     * Opsi status booking
+     */
     private function statusOptions(): array
     {
         return [
@@ -174,4 +205,4 @@ class BookingController extends Controller
             'ditolak'             => 'Ditolak',
         ];
     }
-}
+} // <--- Satu-satunya kurung kurawal penutup Class utama
