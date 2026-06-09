@@ -271,7 +271,6 @@ class BookingController extends Controller
             ->with('success_booking', true);
     }
 
-    }
     public function batalkanBooking(Request $request, $booking_id)
     {
         $request->validate([
