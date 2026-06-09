@@ -22,10 +22,10 @@ class BookingController extends Controller
             ->where('user_id', auth()->user()->user_id)
             ->latest()
             ->get();
-    
+
         $pembatalan       = Kebijakan::where('tipe', 'pembatalan')->first();
         $pengembalianDana = Kebijakan::where('tipe', 'pengembalian_dana')->first();
-    
+
         return view('customer.riwayat', compact(
             'bookings',
             'pembatalan',
@@ -162,7 +162,7 @@ class BookingController extends Controller
                 'bukti' => 'Upload bukti pembayaran gagal.'
             ]);
         }
-                
+
         // HITUNG TOTAL HARGA
         $jumlahHari = ceil(
             (strtotime($request->tglKembali) - strtotime($request->tglAmbil))
@@ -205,7 +205,7 @@ class BookingController extends Controller
             'harga_driver' => $hargaDriver,
             'deposit' => $deposit,
         ];
-        
+
         $booking = Booking::create([
 
             'kode_booking' => Booking::generateKodeBooking(),
@@ -232,7 +232,7 @@ class BookingController extends Controller
             'tgl_lahir_pengendara' => $request->has('driver')
                 ? null
                 : $request->tgl_lahir,
-            
+
             'tanggal_sewa' => $request->tglAmbil,
             'tanggal_kembali' => $request->tglKembali,
             'waktu_ambil' => $request->waktuAmbil,
@@ -254,7 +254,11 @@ class BookingController extends Controller
             'status_pembayaran' => 'pending',
             'tanggal_bayar' => now(),
         ]);
-        
+
+        if ($request->has('driver') && $request->driver_id) {
+            Driver::where('driver_id', $request->driver_id)->increment('points');
+        }
+
         return redirect()
             ->route('customer.booking.create', [
                 'mobil_id' => $mobil->mobil_id,
@@ -303,17 +307,33 @@ class BookingController extends Controller
             'status_booking' => 'dibatalkan',
             'alasan_pembatalan' => $request->alasan_pembatalan,
             'tanggal_pembatalan' => now(),
-            'dibatalkan_oleh' => Auth::id(), 
+            'dibatalkan_oleh' => Auth::id(),
         ]);
 
         RiwayatStatusBooking::create([
             'booking_id' => $booking->booking_id,
             'status_lama' => $statusLama,
             'status_baru' => 'dibatalkan',
-            'diubah_oleh' => Auth::user()->user_id, 
+            'diubah_oleh' => Auth::user()->user_id,
             'waktu_perubahan' => now()
         ]);
 
+        if ($booking->driver_id) {
+            Driver::where('driver_id', $booking->driver_id)->where('points', '>', 0)->decrement('points');
+        }
+
         return back()->with('batal_success', 'Booking berhasil dibatalkan.');
+    }
+    public function getRandomDriver($mobil_id){
+        $mobil = Mobil::findOrFail($mobil_id);
+        $driver = Driver::where('rental_id', $mobil->rental_id)
+            ->where('status', 'tersedia')
+            ->orderBy('points', 'asc')
+            ->first();
+
+        return response()->json([
+            'mobil' => $mobil,
+            'driver' => $driver
+        ]);
     }
 }

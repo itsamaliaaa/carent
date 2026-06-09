@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Driver extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'driver';
     protected $primaryKey = 'driver_id';
 
@@ -19,7 +19,8 @@ class Driver extends Model
         'umur',
         'no_telp',
         'tarif_harian',
-        'status'
+        'status',
+        'points'
     ];
 
     protected $appends = ['umur'];

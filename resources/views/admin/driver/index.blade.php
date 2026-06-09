@@ -103,41 +103,45 @@
         <div class="overflow-x-auto">
             <div class="min-w-[1050px]">
 
-                <div class="grid grid-cols-[1.3fr_1fr_1fr_1.5fr_1.1fr_1.5fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
-                    <div>Nama Driver</div>
-                    <div>Foto</div>
-                    <div>Tanggal Lahir</div>
-                    <div>No. Telepon</div>
-                    <div>Tarif</div>
-                    <div>Status</div>
-                    <div>Aksi</div>
-                </div>
+            <div class="grid grid-cols-[1.3fr_0.8fr_1fr_1.3fr_1fr_0.5fr_1.2fr_0.8fr] bg-[#E8EAF6] rounded-xl py-3 px-5 mb-3 items-center gap-x-4 font-bold text-[13px]">
+                <div>Nama Driver</div>
+                <div>Foto</div>
+                <div>Tanggal Lahir</div>
+                <div>No. Telepon</div>
+                <div>Tarif</div>
+                <div class="text-center">Poin</div> <div>Status</div>
+                <div>Aksi</div>
+            </div>
 
                 <div class="flex flex-col gap-3">
                     @foreach ($drivers as $driver)
-                    <div class="grid grid-cols-[1.3fr_1fr_1fr_1.5fr_1.1fr_1.5fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
+                <div class="grid grid-cols-[1.3fr_0.8fr_1fr_1.3fr_1fr_0.5fr_1.2fr_0.8fr] items-center border border-[#E0E4EC] rounded-2xl p-4 px-6 gap-x-4">
 
-                        <div class="text-[14px] truncate">{{ $driver->nama_driver }}</div>
+                    <div class="text-[14px] truncate">{{ $driver->nama_driver }}</div>
 
-                        <div class="flex justify-start">
-                            <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
-                        </div>
+                    <div class="flex justify-start">
+                        <img src="{{ asset('storage/' . $driver->foto) }}" class="w-[60px] h-[40px] object-cover rounded-lg">
+                    </div>
 
-                        <div class="text-[14px]">
-                            {{ \Carbon\Carbon::parse($driver->tgl_lahir)->translatedFormat('d F Y') }}
-                        </div>
+                    <div class="text-[14px]">
+                        {{ \Carbon\Carbon::parse($driver->tgl_lahir)->translatedFormat('d F Y') }}
+                    </div>
 
-                        <div class="text-[13px] font-normal break-all">
-                            {{ implode(' ', str_split($driver->no_telp, 4)) }}
-                        </div>
+                    <div class="text-[13px] font-normal break-all">
+                        {{ implode(' ', str_split($driver->no_telp, 4)) }}
+                    </div>
 
-                        <div class="text-[14px]">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
+                    <div class="text-[14px]">Rp {{ number_format($driver->tarif_harian, 0, ',', '.') }}</div>
 
-                        <div>
-                            <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
-                                {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
-                            </span>
-                        </div>
+                    <div class="text-[14px] font-bold text-center text-[#1D2B6B]">
+                        {{ $driver->points ?? 0 }}
+                    </div>
+
+                    <div>
+                        <span class="{{ $driver->status == 'tersedia' ? 'bg-[#E8F5E9] text-[#2E7D32]' : 'bg-[#F5E8E8] text-[#712A2A]' }} w-fit inline-block whitespace-nowrap px-4 py-1 rounded-full text-[12px] font-bold">
+                            {{ $driver->status == 'tersedia' ? 'Tersedia' : 'Tidak Tersedia' }}
+                        </span>
+                    </div>
 
                         {{-- Aksi --}}
                         <div class="flex justify-start gap-2"
