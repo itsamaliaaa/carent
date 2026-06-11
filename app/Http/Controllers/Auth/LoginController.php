@@ -105,7 +105,7 @@ class LoginController extends Controller
     // LOGOUT
     public function logout(Request $request)
     {
-        $role = auth()->user()?->role;
+        $role = auth()->user()->role;
 
         auth()->logout();
 
